@@ -17,7 +17,13 @@ export default {
         save: 'Save',
         saveAs: 'Save As',
         export: 'Export',
-        settings: 'Settings'
+        settings: 'Settings',
+        search: 'Search',
+        themeToggle: 'Toggle Theme',
+        exportMarkdown: 'Markdown',
+        exportHtml: 'HTML',
+        exportPdf: 'PDF',
+        exportText: 'Plain Text'
     },
 
     sidebar: {
@@ -81,6 +87,21 @@ export default {
             find: 'Find',
             replace: 'Replace',
             settings: 'Settings'
+        },
+
+        features: {
+            editor: {
+                title: 'Markdown Editing',
+                description: 'Live preview and syntax highlighting'
+            },
+            export: {
+                title: 'Multi-format Export',
+                description: 'PDF, HTML, and plain text'
+            },
+            assets: {
+                title: 'Asset Insertion',
+                description: 'Images, audio, and video support'
+            }
         }
     },
 
@@ -134,6 +155,22 @@ export default {
             enUS: 'English'
         },
 
+        update: {
+            title: 'Updates',
+            autoCheck: 'Auto Check Updates',
+            autoDownload: 'Auto Download Updates',
+            checking: 'Checking for updates...',
+            downloading: 'Downloading update',
+            checkFailed: 'Failed to check for updates',
+            desktopOnly: 'Updates are available only on desktop',
+            updateAvailable: 'A new version is available',
+            updateReady: 'Update is ready to install',
+            downloadNow: 'Download Now',
+            downloadLater: 'Later',
+            restartNow: 'Restart Now',
+            restartLater: 'Later'
+        },
+
         shortcuts: {
             title: 'Keyboard Shortcuts',
             action: 'Action',
@@ -150,6 +187,22 @@ export default {
             docs: 'Documentation',
             docsComingSoon: 'Documentation coming soon...'
         }
+    },
+
+    search: {
+        title: 'Find',
+        replaceTitle: 'Find and Replace',
+        findPlaceholder: 'Find',
+        replacePlaceholder: 'Replace',
+        previous: 'Previous',
+        next: 'Next',
+        matchCount: '{current} / {total}',
+        caseSensitive: 'Match Case',
+        wholeWord: 'Match Whole Word',
+        useRegex: 'Use Regex',
+        replace: 'Replace',
+        replaceAll: 'Replace All',
+        noMatch: 'No matches found'
     },
 
     export: {
@@ -183,6 +236,7 @@ export default {
         unsavedChanges: 'Document has unsaved changes',
         deleteConfirm: 'Are you sure you want to delete?',
         operationSuccess: 'Operation successful',
-        operationFailed: 'Operation failed'
+        operationFailed: 'Operation failed',
+        restoredUnsaved: 'Restored {count} unsaved documents'
     }
 }

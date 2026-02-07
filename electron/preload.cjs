@@ -35,12 +35,21 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onBeforeClose: (callback) => ipcRenderer.on('window:before-close', callback),
     closeConfirmed: (shouldClose) => ipcRenderer.send('window:close-confirmed', shouldClose),
 
-    // 自动更新
-    checkForUpdates: () => ipcRenderer.invoke('updater:check'),
-    downloadUpdate: () => ipcRenderer.invoke('updater:download'),
-    installUpdate: () => ipcRenderer.invoke('updater:install'),
-    getAppVersion: () => ipcRenderer.invoke('updater:get-version'),
-    onUpdateMessage: (callback) => ipcRenderer.on('update-message', (event, data) => callback(data))
+    // 自动更新 API
+    updateAPI: {
+        check: () => ipcRenderer.invoke('updater:check'),
+        download: () => ipcRenderer.invoke('updater:download'),
+        install: () => ipcRenderer.invoke('updater:install'),
+        onUpdateAvailable: (callback) => {
+            ipcRenderer.on('updater:update-available', (event, info) => callback(info))
+        },
+        onDownloadProgress: (callback) => {
+            ipcRenderer.on('updater:download-progress', (event, progress) => callback(progress))
+        },
+        onUpdateDownloaded: (callback) => {
+            ipcRenderer.on('updater:update-downloaded', (event, info) => callback(info))
+        }
+    }
 })
 
 console.log('=== electronAPI exposed successfully ===')

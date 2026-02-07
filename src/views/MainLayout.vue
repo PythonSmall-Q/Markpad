@@ -41,6 +41,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useDocumentsStore } from '@/store/documents'
 import { useSettingsStore } from '@/store/settings'
 import { windowAPI, updateAPI } from '@/utils/electron'
@@ -55,6 +56,7 @@ import SearchDialog from '@/components/SearchDialog.vue'
 
 const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 
 const showSettingsPage = ref(false)
 const showSearchDialog = ref(false)
@@ -71,7 +73,7 @@ onMounted(async () => {
   // 恢复临时保存的文档
   const restoredCount = await documentsStore.restoreTempDocuments()
   if (restoredCount > 0) {
-    ElMessage.info(`已恢复 ${restoredCount} 个未保存的文档`)
+    ElMessage.info(t('messages.restoredUnsaved', { count: restoredCount }))
   }
   
   // Enable auto-save
@@ -102,11 +104,11 @@ function setupAutoUpdate() {
   // Listen for update available
   updateAPI.onUpdateAvailable((info) => {
     ElMessageBox.confirm(
-      `发现新版本 ${info.version}，是否立即下载？`,
-      '更新可用',
+      `${t('settings.update.updateAvailable')}: ${info.version}`,
+      t('settings.update.title'),
       {
-        confirmButtonText: '立即下载',
-        cancelButtonText: '稍后提醒',
+        confirmButtonText: t('settings.update.downloadNow'),
+        cancelButtonText: t('settings.update.downloadLater'),
         type: 'info'
       }
     ).then(() => {
@@ -114,29 +116,29 @@ function setupAutoUpdate() {
       if (settingsStore.autoDownloadUpdates) {
         updateAPI.download()
       } else {
-        ElMessage.info('开始下载更新...')
+        ElMessage.info(t('settings.update.downloading'))
         updateAPI.download()
       }
     }).catch(() => {
       // User chose to remind later
-      ElMessage.info('您可以稍后在设置中检查更新')
+      ElMessage.info(t('settings.update.downloadLater'))
     })
   })
   
   // Listen for download progress
   updateAPI.onDownloadProgress((progress) => {
     const percent = Math.round(progress.percent)
-    ElMessage.info(`正在下载更新: ${percent}%`)
+    ElMessage.info(`${t('settings.update.downloading')}: ${percent}%`)
   })
   
   // Listen for update downloaded
   updateAPI.onUpdateDownloaded(() => {
     ElMessageBox.confirm(
-      '新版本已下载完成，是否立即重启安装？',
-      '更新就绪',
+      t('settings.update.updateReady'),
+      t('settings.update.title'),
       {
-        confirmButtonText: '立即重启',
-        cancelButtonText: '稍后重启',
+        confirmButtonText: t('settings.update.restartNow'),
+        cancelButtonText: t('settings.update.restartLater'),
         type: 'success'
       }
     ).then(() => {
@@ -144,7 +146,7 @@ function setupAutoUpdate() {
       updateAPI.install()
     }).catch(() => {
       // User chose to restart later
-      ElMessage.info('您可以稍后手动重启应用以完成更新')
+      ElMessage.info(t('settings.update.restartLater'))
     })
   })
 }

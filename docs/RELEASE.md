@@ -49,13 +49,23 @@ git push origin v1.0.1
 Release 中包含以下可执行文件：
 
 ### Windows
-- `Markpad-Setup-X.X.X.exe` - NSIS 安装程序
+- `Markpad Setup 1.0.0.exe` - NSIS 安装程序
+- `Markpad Setup 1.0.0.exe.blockmap` - 增量更新映射文件
+- `latest.yml` - 自动更新配置文件（**必需**）
 
 ### macOS
 - `Markpad-X.X.X.dmg` - DMG 镜像文件
+- `Markpad-X.X.X.dmg.blockmap` - 增量更新映射文件
+- `latest-mac.yml` - 自动更新配置文件（**必需**）
 
 ### Linux
 - `Markpad-X.X.X.AppImage` - AppImage 可执行文件
+- `latest-linux.yml` - 自动更新配置文件（**必需**）
+
+**⚠️ 重要**: 
+- `latest.yml` / `latest-mac.yml` / `latest-linux.yml` 文件是应用内自动更新功能所必需的
+- `.blockmap` 文件用于增量更新，可大幅减少更新下载量
+- GitHub Actions 工作流会自动上传这些文件
 
 ## 版本号说明
 
@@ -80,6 +90,11 @@ npm run electron:build:mac
 npm run electron:build:linux
 ```
 
+构建完成后，可以在 `dist-electron/` 目录找到：
+- 安装包文件（.exe / .dmg / .AppImage）
+- `latest.yml` / `latest-mac.yml` / `latest-linux.yml` - 自动更新配置
+- `.blockmap` 文件 - 增量更新映射
+
 ### 仅构建不打包
 
 ```bash
@@ -87,6 +102,19 @@ npm run electron:build:dir
 ```
 
 这将创建未打包的应用程序目录，适合快速测试。
+
+## 手动发布到 GitHub Release
+
+如果需要手动上传构建产物：
+
+1. 构建应用：`npm run electron:build:win`
+2. 在 GitHub 创建新 Release
+3. **必须上传以下文件**：
+   - `Markpad Setup X.X.X.exe` - 安装程序
+   - `Markpad Setup X.X.X.exe.blockmap` - 增量更新映射
+   - `latest.yml` - **自动更新配置（必需）**
+
+**⚠️ 注意**: 如果不上传 `latest.yml`，应用内的自动更新功能将无法工作！
 
 ## 发布注意事项
 

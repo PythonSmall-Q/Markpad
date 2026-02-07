@@ -1,34 +1,29 @@
 <template>
   <div id="app" :class="['app-container', theme]">
     <router-view />
-    <LanguageSelector 
-      v-model="showLanguageSelector" 
-      :is-first-time="isFirstLaunch"
-      @confirm="handleLanguageConfirm"
-    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useSettingsStore } from './store/settings'
-import LanguageSelector from './components/LanguageSelector.vue'
 
 const settingsStore = useSettingsStore()
 const theme = computed(() => settingsStore.theme)
+const { locale } = useI18n()
 
-const showLanguageSelector = ref(false)
-const isFirstLaunch = ref(false)
+watch(
+  () => settingsStore.locale,
+  (newLocale) => {
+    if (newLocale && locale.value !== newLocale) {
+      locale.value = newLocale
+    }
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
-  // Check if this is the first launch
-  const firstLaunch = localStorage.getItem('markpad-first-launch')
-  if (firstLaunch === null) {
-    // First time launching the app
-    isFirstLaunch.value = true
-    showLanguageSelector.value = true
-  }
-  
   // Diagnostic: Check if running in Electron
   if (typeof window !== 'undefined') {
     console.log('=== Application Environment Check ===')
@@ -45,10 +40,6 @@ onMounted(() => {
     }
   }
 })
-
-const handleLanguageConfirm = () => {
-  showLanguageSelector.value = false
-}
 </script>
 
 <style lang="scss">

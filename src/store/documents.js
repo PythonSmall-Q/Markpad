@@ -24,9 +24,10 @@ export const useDocumentsStore = defineStore('documents', () => {
             title: options.title || '未命名文档',
             content: options.content || '',
             filePath: options.filePath || null,
-            isDirty: false,
-            createdAt: new Date(),
-            updatedAt: new Date()
+            isDirty: options.isDirty !== undefined ? options.isDirty : false,
+            language: options.language || 'markdown',
+            createdAt: options.createdAt || new Date(),
+            updatedAt: options.updatedAt || new Date()
         }
 
         documents.value.push(doc)
@@ -134,31 +135,60 @@ export const useDocumentsStore = defineStore('documents', () => {
     // 保存未保存的文档到临时文件
     async function saveTempDocuments() {
         const unsavedDocs = documents.value.filter(doc => !doc.filePath || doc.isDirty)
+        console.log('[Temp] Saving temp documents, count:', unsavedDocs.length)
+
         if (unsavedDocs.length === 0) {
             // 如果没有未保存的文档,清除临时文件
             const { tempAPI } = await import('@/utils/electron')
             await tempAPI.clear()
+            console.log('[Temp] No unsaved documents, cleared temp files')
             return
         }
 
         try {
+            // 只保存必要的字段，避免克隆不可序列化的对象
+            const serializableDocs = unsavedDocs.map(doc => ({
+                id: doc.id,
+                title: doc.title,
+                content: doc.content,
+                filePath: doc.filePath,
+                isDirty: doc.isDirty,
+                language: doc.language,
+                createdAt: doc.createdAt,
+                updatedAt: doc.updatedAt
+            }))
+
+            console.log('[Temp] Serializable docs:', serializableDocs.map(d => ({ id: d.id, title: d.title })))
+
             const { tempAPI } = await import('@/utils/electron')
-            await tempAPI.save(unsavedDocs)
+            const result = await tempAPI.save(serializableDocs)
+            console.log('[Temp] Save result:', result)
         } catch (error) {
-            console.error('Failed to save temp documents:', error)
+            console.error('[Temp] Failed to save temp documents:', error)
         }
     }
 
     // 从临时文件恢复文档
     async function restoreTempDocuments() {
         try {
+            console.log('[Temp] Attempting to restore temp documents...')
             const { tempAPI } = await import('@/utils/electron')
             const result = await tempAPI.load()
+            console.log('[Temp] Load result:', result)
 
             if (result.success && result.documents && result.documents.length > 0) {
-                // 恢复文档
+                console.log('[Temp] Restoring documents:', result.documents.map(d => ({ id: d.id, title: d.title })))
+
+                // 恢复文档，确保日期字段正确转换
                 result.documents.forEach(doc => {
-                    documents.value.push(doc)
+                    const restoredDoc = {
+                        ...doc,
+                        createdAt: doc.createdAt ? new Date(doc.createdAt) : new Date(),
+                        updatedAt: doc.updatedAt ? new Date(doc.updatedAt) : new Date(),
+                        language: doc.language || 'markdown',
+                        isDirty: doc.isDirty !== undefined ? doc.isDirty : true
+                    }
+                    documents.value.push(restoredDoc)
                 })
 
                 // 激活第一个文档
@@ -166,11 +196,13 @@ export const useDocumentsStore = defineStore('documents', () => {
                     activeDocumentId.value = documents.value[0].id
                 }
 
+                console.log('[Temp] Successfully restored', result.documents.length, 'documents')
                 return result.documents.length
             }
+            console.log('[Temp] No documents to restore')
             return 0
         } catch (error) {
-            console.error('Failed to restore temp documents:', error)
+            console.error('[Temp] Failed to restore temp documents:', error)
             return 0
         }
     }

@@ -17,7 +17,13 @@ export default {
         save: '保存',
         saveAs: '另存为',
         export: '导出',
-        settings: '设置'
+        settings: '设置',
+        search: '搜索',
+        themeToggle: '切换主题',
+        exportMarkdown: 'Markdown',
+        exportHtml: 'HTML',
+        exportPdf: 'PDF',
+        exportText: '纯文本'
     },
 
     sidebar: {
@@ -81,6 +87,21 @@ export default {
             find: '查找',
             replace: '替换',
             settings: '设置'
+        },
+
+        features: {
+            editor: {
+                title: 'Markdown 编辑',
+                description: '实时预览、语法高亮'
+            },
+            export: {
+                title: '多格式导出',
+                description: 'PDF、HTML、纯文本'
+            },
+            assets: {
+                title: '文件插入',
+                description: '图片、音视频支持'
+            }
         }
     },
 
@@ -134,6 +155,22 @@ export default {
             enUS: 'English'
         },
 
+        update: {
+            title: '更新',
+            autoCheck: '自动检查更新',
+            autoDownload: '自动下载更新',
+            checking: '正在检查更新...',
+            downloading: '正在下载更新',
+            checkFailed: '检查更新失败',
+            desktopOnly: '更新功能仅在桌面版可用',
+            updateAvailable: '发现新版本',
+            updateReady: '更新已准备完成',
+            downloadNow: '立即下载',
+            downloadLater: '稍后提醒',
+            restartNow: '立即重启',
+            restartLater: '稍后重启'
+        },
+
         shortcuts: {
             title: '快捷键',
             action: '操作',
@@ -150,6 +187,22 @@ export default {
             docs: '文档',
             docsComingSoon: '文档功能开发中...'
         }
+    },
+
+    search: {
+        title: '查找',
+        replaceTitle: '查找和替换',
+        findPlaceholder: '查找',
+        replacePlaceholder: '替换',
+        previous: '上一个',
+        next: '下一个',
+        matchCount: '{current} / {total}',
+        caseSensitive: '区分大小写',
+        wholeWord: '全词匹配',
+        useRegex: '使用正则',
+        replace: '替换',
+        replaceAll: '全部替换',
+        noMatch: '未找到匹配项'
     },
 
     export: {
@@ -183,6 +236,7 @@ export default {
         unsavedChanges: '文档有未保存的修改',
         deleteConfirm: '确定要删除吗？',
         operationSuccess: '操作成功',
-        operationFailed: '操作失败'
+        operationFailed: '操作失败',
+        restoredUnsaved: '已恢复 {count} 个未保存的文档'
     }
 }

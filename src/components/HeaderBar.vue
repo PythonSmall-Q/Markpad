@@ -9,17 +9,17 @@
     
     <div class="header-center">
       <el-button-group>
-        <el-button :icon="FolderOpened" @click="handleNewFile" title="新建 (Ctrl+N)">
-          新建
+        <el-button :icon="FolderOpened" @click="handleNewFile" :title="`${t('header.new')} (Ctrl+N)`">
+          {{ t('header.new') }}
         </el-button>
-        <el-button :icon="Folder" @click="handleOpenFile" title="打开 (Ctrl+O)">
-          打开
+        <el-button :icon="Folder" @click="handleOpenFile" :title="`${t('header.open')} (Ctrl+O)`">
+          {{ t('header.open') }}
         </el-button>
-        <el-button :icon="DocumentCopy" @click="handleSaveFile" title="保存 (Ctrl+S)" :disabled="!activeDocument">
-          保存
+        <el-button :icon="DocumentCopy" @click="handleSaveFile" :title="`${t('header.save')} (Ctrl+S)`" :disabled="!activeDocument">
+          {{ t('header.save') }}
         </el-button>
-        <el-button @click="handleSaveAs" title="另存为 (Ctrl+Shift+S)" :disabled="!activeDocument">
-          另存为
+        <el-button @click="handleSaveAs" :title="`${t('header.saveAs')} (Ctrl+Shift+S)`" :disabled="!activeDocument">
+          {{ t('header.saveAs') }}
         </el-button>
       </el-button-group>
       
@@ -28,21 +28,21 @@
       <el-button-group>
         <el-dropdown @command="handleExport">
           <el-button :icon="Download">
-            导出 <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+            {{ t('header.export') }} <el-icon class="el-icon--right"><ArrowDown /></el-icon>
           </el-button>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="markdown">
-                <el-icon><Document /></el-icon> Markdown
+                <el-icon><Document /></el-icon> {{ t('header.exportMarkdown') }}
               </el-dropdown-item>
               <el-dropdown-item command="html">
-                <el-icon><Document /></el-icon> HTML
+                <el-icon><Document /></el-icon> {{ t('header.exportHtml') }}
               </el-dropdown-item>
               <el-dropdown-item command="pdf">
-                <el-icon><Document /></el-icon> PDF
+                <el-icon><Document /></el-icon> {{ t('header.exportPdf') }}
               </el-dropdown-item>
               <el-dropdown-item command="text">
-                <el-icon><Document /></el-icon> 纯文本
+                <el-icon><Document /></el-icon> {{ t('header.exportText') }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -51,12 +51,12 @@
     </div>
     
     <div class="header-right">
-      <el-button :icon="Search" circle title="搜索 (Ctrl+F)" @click="handleSearch" />
-      <el-button :icon="Setting" circle title="设置 (Ctrl+,)" @click="handleSettings" />
+      <el-button :icon="Search" circle :title="`${t('header.search')} (Ctrl+F)`" @click="handleSearch" />
+      <el-button :icon="Setting" circle :title="`${t('header.settings')} (Ctrl+,)`" @click="handleSettings" />
       <el-button 
         :icon="theme === 'light' ? Moon : Sunny" 
         circle 
-        title="切换主题" 
+        :title="t('header.themeToggle')" 
         @click="toggleTheme" 
       />
     </div>
@@ -65,6 +65,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { 
   Edit, FolderOpened, Folder, DocumentCopy, Download, 
   Document, Search, Setting, Moon, Sunny, ArrowDown 
@@ -79,6 +80,7 @@ import { useRouter } from 'vue-router'
 const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
 const router = useRouter()
+const { t } = useI18n()
 
 const activeDocument = computed(() => documentsStore.activeDocument)
 const theme = computed(() => settingsStore.theme)
@@ -87,7 +89,7 @@ const emit = defineEmits(['openSettings', 'openSearch'])
 
 function handleNewFile() {
   documentsStore.createDocument()
-  ElMessage.success('新建文档')
+  ElMessage.success(t('welcome.newDocument'))
 }
 
 async function handleOpenFile() {
@@ -96,7 +98,7 @@ async function handleOpenFile() {
     const { filePath, content } = result
     documentsStore.openDocument(filePath, content)
     settingsStore.addRecentFile(filePath)
-    ElMessage.success('文件已打开')
+    ElMessage.success(t('messages.fileOpened'))
   }
 }
 
@@ -115,9 +117,9 @@ async function handleSaveFile() {
   
   if (result.success) {
     documentsStore.markAsSaved(activeDocument.value.id)
-    ElMessage.success('保存成功')
+    ElMessage.success(t('messages.fileSaved'))
   } else {
-    ElMessage.error('保存失败: ' + result.error)
+    ElMessage.error(`${t('messages.saveFailed')}: ${result.error}`)
   }
 }
 
@@ -136,7 +138,7 @@ async function handleSaveAs() {
     })
     documentsStore.markAsSaved(activeDocument.value.id)
     settingsStore.addRecentFile(result.filePath)
-    ElMessage.success('保存成功')
+    ElMessage.success(t('messages.fileSaved'))
   }
 }
 
@@ -166,10 +168,10 @@ async function handleExport(format) {
     }
     
     if (result && result.success) {
-      ElMessage.success('导出成功')
+      ElMessage.success(t('export.exportSuccess'))
     }
   } catch (error) {
-    ElMessage.error('导出失败: ' + error.message)
+    ElMessage.error(`${t('export.exportFailed')}: ${error.message}`)
   }
 }
 

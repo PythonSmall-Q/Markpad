@@ -231,42 +231,84 @@ export const windowAPI = {
 }
 
 // Auto Updater
-export const updaterAPI = {
-    async checkForUpdates() {
+export const updateAPI = {
+    async check() {
+        if (!isElectron()) {
+            console.warn('Auto-update is only available in Electron environment')
+            return { success: false, error: 'Not in Electron environment' }
+        }
+        if (!window.electronAPI.updateAPI) {
+            console.warn('updateAPI not available')
+            return { success: false, error: 'updateAPI not available' }
+        }
+        try {
+            return await window.electronAPI.updateAPI.check()
+        } catch (error) {
+            console.error('Check update error:', error)
+            return { success: false, error: error.message }
+        }
+    },
+
+    async download() {
         if (!isElectron()) {
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.checkForUpdates()
+        if (!window.electronAPI.updateAPI) {
+            return { success: false, error: 'updateAPI not available' }
+        }
+        try {
+            return await window.electronAPI.updateAPI.download()
+        } catch (error) {
+            console.error('Download update error:', error)
+            return { success: false, error: error.message }
+        }
     },
 
-    async downloadUpdate() {
+    async install() {
         if (!isElectron()) {
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.downloadUpdate()
-    },
-
-    async installUpdate() {
-        if (!isElectron()) {
-            return { success: false, error: 'Not in Electron environment' }
+        if (!window.electronAPI.updateAPI) {
+            return { success: false, error: 'updateAPI not available' }
         }
-        return await window.electronAPI.installUpdate()
-    },
-
-    async getAppVersion() {
-        if (!isElectron()) {
-            return { version: '1.0.0' }
+        try {
+            return await window.electronAPI.updateAPI.install()
+        } catch (error) {
+            console.error('Install update error:', error)
+            return { success: false, error: error.message }
         }
-        return await window.electronAPI.getAppVersion()
     },
 
-    onUpdateMessage(callback) {
+    onUpdateAvailable(callback) {
         if (!isElectron()) {
             return
         }
-        window.electronAPI.onUpdateMessage(callback)
+        if (window.electronAPI.updateAPI) {
+            window.electronAPI.updateAPI.onUpdateAvailable(callback)
+        }
+    },
+
+    onDownloadProgress(callback) {
+        if (!isElectron()) {
+            return
+        }
+        if (window.electronAPI.updateAPI) {
+            window.electronAPI.updateAPI.onDownloadProgress(callback)
+        }
+    },
+
+    onUpdateDownloaded(callback) {
+        if (!isElectron()) {
+            return
+        }
+        if (window.electronAPI.updateAPI) {
+            window.electronAPI.updateAPI.onUpdateDownloaded(callback)
+        }
     }
 }
+
+// Backward compatibility
+export const updaterAPI = updateAPI
 
 export default {
     isElectron,
@@ -277,5 +319,6 @@ export default {
     settingsAPI,
     tempAPI,
     windowAPI,
+    updateAPI,
     updaterAPI
 }

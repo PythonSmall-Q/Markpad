@@ -1,13 +1,13 @@
 <template>
   <div class="sidebar">
     <div class="sidebar-header">
-      <h3>文件</h3>
+      <h3>{{ t('sidebar.files') }}</h3>
     </div>
     
     <div class="sidebar-content">
       <!-- Recently opened -->
       <div class="section">
-        <div class="section-title">最近打开</div>
+        <div class="section-title">{{ t('sidebar.recentFiles') }}</div>
         <div class="recent-files">
           <div 
             v-for="file in recentFiles" 
@@ -19,14 +19,14 @@
             <span class="file-name">{{ getFileName(file) }}</span>
           </div>
           <div v-if="recentFiles.length === 0" class="empty-text">
-            暂无最近文件
+            {{ t('sidebar.noRecentFiles') }}
           </div>
         </div>
       </div>
       
       <!-- Opened documents -->
       <div class="section">
-        <div class="section-title">已打开</div>
+        <div class="section-title">{{ t('sidebar.openDocuments') }}</div>
         <div class="open-documents">
           <div 
             v-for="doc in documents" 
@@ -45,7 +45,7 @@
             </el-icon>
           </div>
           <div v-if="documents.length === 0" class="empty-text">
-            暂无文档
+            {{ t('sidebar.noDocuments') }}
           </div>
         </div>
       </div>
@@ -55,6 +55,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Document, Close, Setting } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useDocumentsStore } from '@/store/documents'
@@ -63,6 +64,7 @@ import { fileAPI } from '@/utils/electron'
 
 const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 
 const emit = defineEmits(['open-settings'])
 

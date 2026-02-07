@@ -81,8 +81,11 @@ jobs:
           name: markpad-${{ matrix.os }}-${{ env.VERSION }}
           path: |
             dist-electron/*.exe
+            dist-electron/*.exe.blockmap
             dist-electron/*.dmg
+            dist-electron/*.dmg.blockmap
             dist-electron/*.AppImage
+            dist-electron/*.yml
           if-no-files-found: ignore
 
   release:
@@ -124,7 +127,7 @@ jobs:
       - name: Prepare release files
         run: |
           mkdir -p release-files
-          find artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" \) -exec cp {} release-files/ \;
+          find artifacts -type f \( -name "*.exe" -o -name "*.exe.blockmap" -o -name "*.dmg" -o -name "*.dmg.blockmap" -o -name "*.AppImage" -o -name "*.yml" \) -exec cp {} release-files/ \;
           ls -lh release-files/
       
       - name: Create Release

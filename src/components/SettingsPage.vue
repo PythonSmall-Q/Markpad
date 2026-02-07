@@ -1,7 +1,7 @@
 <template>
   <div class="settings-page">
     <div class="settings-header">
-      <h2>设置</h2>
+      <h2>{{ t('settings.title') }}</h2>
       <el-button type="text" @click="emit('close')" class="close-btn">
         <el-icon><Close /></el-icon>
       </el-button>
@@ -13,20 +13,20 @@
         <template #header>
           <div class="card-header">
             <el-icon><Sunny /></el-icon>
-            <span>外观</span>
+            <span>{{ t('settings.appearance.title') }}</span>
           </div>
         </template>
         
         <el-form label-width="120px">
-          <el-form-item label="主题">
+          <el-form-item :label="t('settings.appearance.theme')">
             <el-radio-group v-model="localSettings.theme" @change="handleThemeChange">
-              <el-radio-button label="light">浅色</el-radio-button>
-              <el-radio-button label="dark">深色</el-radio-button>
-              <el-radio-button label="auto">跟随系统</el-radio-button>
+              <el-radio-button label="light">{{ t('settings.appearance.themeLight') }}</el-radio-button>
+              <el-radio-button label="dark">{{ t('settings.appearance.themeDark') }}</el-radio-button>
+              <el-radio-button label="auto">{{ t('settings.appearance.themeAuto') }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
           
-          <el-form-item label="字体大小">
+          <el-form-item :label="t('settings.appearance.fontSize')">
             <el-slider
               v-model="localSettings.fontSize"
               :min="12"
@@ -37,11 +37,11 @@
             />
           </el-form-item>
           
-          <el-form-item label="编辑器宽度">
+          <el-form-item :label="t('settings.appearance.editorWidth')">
             <el-radio-group v-model="localSettings.editorWidth" @change="handleEditorWidthChange">
-              <el-radio-button label="normal">正常</el-radio-button>
-              <el-radio-button label="wide">宽屏</el-radio-button>
-              <el-radio-button label="full">全宽</el-radio-button>
+              <el-radio-button label="normal">{{ t('settings.appearance.widthNormal') }}</el-radio-button>
+              <el-radio-button label="wide">{{ t('settings.appearance.widthWide') }}</el-radio-button>
+              <el-radio-button label="full">{{ t('settings.appearance.widthFull') }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
         </el-form>
@@ -52,30 +52,30 @@
         <template #header>
           <div class="card-header">
             <el-icon><Edit /></el-icon>
-            <span>编辑器</span>
+            <span>{{ t('settings.editor.title') }}</span>
           </div>
         </template>
         
         <el-form label-width="120px">
-          <el-form-item label="默认预览模式">
+          <el-form-item :label="t('settings.editor.defaultPreview')">
             <el-switch
               v-model="localSettings.showPreview"
-              active-text="显示"
-              inactive-text="隐藏"
+              :active-text="t('settings.editor.show')"
+              :inactive-text="t('settings.editor.hide')"
               @change="handleShowPreviewChange"
             />
           </el-form-item>
           
-          <el-form-item label="自动保存">
+          <el-form-item :label="t('settings.editor.autoSave')">
             <el-switch
               v-model="localSettings.autoSave"
-              active-text="开启"
-              inactive-text="关闭"
+              :active-text="t('settings.editor.enable')"
+              :inactive-text="t('settings.editor.disable')"
               @change="handleAutoSaveChange"
             />
           </el-form-item>
           
-          <el-form-item label="自动保存间隔" v-if="localSettings.autoSave">
+          <el-form-item :label="t('settings.editor.autoSaveInterval')" v-if="localSettings.autoSave">
             <el-input-number
               v-model="localSettings.autoSaveInterval"
               :min="1"
@@ -83,23 +83,23 @@
               :step="1"
               @change="handleAutoSaveIntervalChange"
             />
-            <span class="unit-text">秒</span>
+            <span class="unit-text">{{ t('settings.editor.seconds') }}</span>
           </el-form-item>
           
-          <el-form-item label="行号">
+          <el-form-item :label="t('settings.editor.showLineNumbers')">
             <el-switch
               v-model="localSettings.showLineNumbers"
-              active-text="显示"
-              inactive-text="隐藏"
+              :active-text="t('settings.editor.show')"
+              :inactive-text="t('settings.editor.hide')"
               @change="handleLineNumbersChange"
             />
           </el-form-item>
           
-          <el-form-item label="代码高亮">
+          <el-form-item :label="t('settings.editor.syntaxHighlight')">
             <el-switch
               v-model="localSettings.syntaxHighlight"
-              active-text="开启"
-              inactive-text="关闭"
+              :active-text="t('settings.editor.enable')"
+              :inactive-text="t('settings.editor.disable')"
               @change="handleSyntaxHighlightChange"
             />
           </el-form-item>
@@ -111,12 +111,12 @@
         <template #header>
           <div class="card-header">
             <el-icon><Folder /></el-icon>
-            <span>文件</span>
+            <span>{{ t('settings.file.title') }}</span>
           </div>
         </template>
         
         <el-form label-width="120px">
-          <el-form-item label="默认文件名">
+          <el-form-item :label="t('settings.file.defaultFileName')">
             <el-input
               v-model="localSettings.defaultFileName"
               placeholder="未命名文档"
@@ -124,7 +124,7 @@
             />
           </el-form-item>
           
-          <el-form-item label="文件扩展名">
+          <el-form-item :label="t('settings.file.fileExtension')">
             <el-input
               v-model="localSettings.fileExtension"
               placeholder=".md"
@@ -132,7 +132,7 @@
             />
           </el-form-item>
           
-          <el-form-item label="最近文件数量">
+          <el-form-item :label="t('settings.file.recentFilesLimit')">
             <el-input-number
               v-model="localSettings.recentFilesLimit"
               :min="5"
@@ -149,12 +149,12 @@
         <template #header>
           <div class="card-header">
             <el-icon><Reading /></el-icon>
-            <span>语言</span>
+            <span>{{ t('settings.language.title') }}</span>
           </div>
         </template>
         
         <el-form label-width="120px">
-          <el-form-item label="选择语言">
+          <el-form-item :label="t('settings.language.selectLanguage')">
             <el-select v-model="localSettings.locale" @change="handleLocaleChange" style="width: 200px">
               <el-option label="简体中文" value="zh-CN" />
               <el-option label="繁體中文" value="zh-TW" />
@@ -176,25 +176,25 @@
         <template #header>
           <div class="card-header">
             <el-icon><Setting /></el-icon>
-            <span>更新</span>
+            <span>{{ t('settings.update.title') }}</span>
           </div>
         </template>
         
         <el-form label-width="120px">
-          <el-form-item label="自动检查更新">
+          <el-form-item :label="t('settings.update.autoCheck')">
             <el-switch
               v-model="localSettings.autoCheckUpdates"
-              active-text="开启"
-              inactive-text="关闭"
+              :active-text="t('settings.editor.enable')"
+              :inactive-text="t('settings.editor.disable')"
               @change="handleAutoCheckUpdatesChange"
             />
           </el-form-item>
           
-          <el-form-item label="自动下载更新" v-if="localSettings.autoCheckUpdates">
+          <el-form-item :label="t('settings.update.autoDownload')" v-if="localSettings.autoCheckUpdates">
             <el-switch
               v-model="localSettings.autoDownloadUpdates"
-              active-text="开启"
-              inactive-text="关闭"
+              :active-text="t('settings.editor.enable')"
+              :inactive-text="t('settings.editor.disable')"
               @change="handleAutoDownloadUpdatesChange"
             />
           </el-form-item>
@@ -206,13 +206,13 @@
         <template #header>
           <div class="card-header">
             <el-icon><Menu /></el-icon>
-            <span>快捷键</span>
+            <span>{{ t('settings.shortcuts.title') }}</span>
           </div>
         </template>
         
         <el-table :data="shortcuts" style="width: 100%">
-          <el-table-column prop="action" label="操作" width="200" />
-          <el-table-column prop="key" label="快捷键" />
+          <el-table-column prop="action" :label="t('settings.shortcuts.action')" width="200" />
+          <el-table-column prop="key" :label="t('settings.shortcuts.key')" />
         </el-table>
       </el-card>
       
@@ -221,33 +221,33 @@
         <template #header>
           <div class="card-header">
             <el-icon><InfoFilled /></el-icon>
-            <span>关于</span>
+            <span>{{ t('settings.about.title') }}</span>
           </div>
         </template>
         
         <div class="about-content">
           <h3>Markpad</h3>
-          <p>版本: {{ appVersion }}</p>
-          <p>一个强大的 Markdown 笔记本应用</p>
+          <p>{{ t('settings.about.version') }}: {{ appVersion }}</p>
+          <p>{{ t('settings.about.description') }}</p>
           <el-space>
-            <el-button type="primary" link @click="checkUpdate">检查更新</el-button>
-            <el-button type="primary" link @click="openGithub">GitHub</el-button>
-            <el-button type="primary" link @click="openDocs">文档</el-button>
+            <el-button type="primary" link @click="checkUpdate">{{ t('settings.about.checkUpdate') }}</el-button>
+            <el-button type="primary" link @click="openGithub">{{ t('settings.about.github') }}</el-button>
+            <el-button type="primary" link @click="openDocs">{{ t('settings.about.docs') }}</el-button>
           </el-space>
         </div>
       </el-card>
       
       <!-- Footer actions -->
       <div class="settings-footer">
-        <el-button @click="resetSettings">恢复默认设置</el-button>
-        <el-button type="primary" @click="saveSettings">保存设置</el-button>
+        <el-button @click="resetSettings">{{ t('settings.reset') }}</el-button>
+        <el-button type="primary" @click="saveSettings">{{ t('settings.save') }}</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { 
   Sunny, Edit, Folder, InfoFilled, Close, Reading, Menu, Setting 
 } from '@element-plus/icons-vue'
@@ -278,18 +278,18 @@ const localSettings = reactive({
   autoDownloadUpdates: false
 })
 
-const shortcuts = ref([
-  { action: '新建文档', key: 'Ctrl + N' },
-  { action: '打开文件', key: 'Ctrl + O' },
-  { action: '保存', key: 'Ctrl + S' },
-  { action: '另存为', key: 'Ctrl + Shift + S' },
-  { action: '关闭文档', key: 'Ctrl + W' },
-  { action: '加粗', key: 'Ctrl + B' },
-  { action: '斜体', key: 'Ctrl + I' },
-  { action: '查找', key: 'Ctrl + F' },
-  { action: '替换', key: 'Ctrl + H' },
-  { action: '设置', key: 'Ctrl + ,' }
-])
+const shortcuts = computed(() => ([
+  { action: t('welcome.shortcutList.newDoc'), key: 'Ctrl + N' },
+  { action: t('welcome.shortcutList.open'), key: 'Ctrl + O' },
+  { action: t('welcome.shortcutList.save'), key: 'Ctrl + S' },
+  { action: t('welcome.shortcutList.saveAs'), key: 'Ctrl + Shift + S' },
+  { action: t('welcome.shortcutList.close'), key: 'Ctrl + W' },
+  { action: t('welcome.shortcutList.bold'), key: 'Ctrl + B' },
+  { action: t('welcome.shortcutList.italic'), key: 'Ctrl + I' },
+  { action: t('welcome.shortcutList.find'), key: 'Ctrl + F' },
+  { action: t('welcome.shortcutList.replace'), key: 'Ctrl + H' },
+  { action: t('welcome.shortcutList.settings'), key: 'Ctrl + ,' }
+]))
 
 onMounted(() => {
   loadSettings()
@@ -305,9 +305,9 @@ function loadSettings() {
     autoSaveInterval: settingsStore.autoSaveInterval,
     showLineNumbers: settingsStore.showLineNumbers,
     syntaxHighlight: settingsStore.syntaxHighlight,
-    defaultFileName: settingsStore.defaultFileName,,
+    defaultFileName: settingsStore.defaultFileName,
     autoCheckUpdates: settingsStore.autoCheckUpdates,
-    autoDownloadUpdates: settingsStore.autoDownloadUpdates
+    autoDownloadUpdates: settingsStore.autoDownloadUpdates,
     fileExtension: settingsStore.fileExtension,
     recentFilesLimit: settingsStore.recentFilesLimit
   })
@@ -317,7 +317,7 @@ function handleLocaleChange(value) {
   settingsStore.setLocale(value)
   locale.value = value
   localStorage.setItem('markpad-locale', value)
-  ElMessage.success('语言设置已保存')
+  ElMessage.success(t('settings.saveSuccess'))
 }
 
 function handleThemeChange(value) {
@@ -375,40 +375,40 @@ function handleAutoDownloadUpdatesChange(value) {
 async function resetSettings() {
   try {
     await ElMessageBox.confirm(
-      '确定要恢复默认设置吗？此操作无法撤销。',
-      '确认',
+      t('settings.resetConfirm'),
+      t('dialog.confirm'),
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: t('dialog.confirm'),
+        cancelButtonText: t('dialog.cancel'),
         type: 'warning'
       }
     )
     
     settingsStore.resetSettings()
     loadSettings()
-    ElMessage.success('已恢复默认设置')
+    ElMessage.success(t('settings.resetSuccess'))
   } catch {
+    // User cancelled
+  }
+}
+
 async function checkUpdate() {
   if (!window.electronAPI || !window.electronAPI.updateAPI) {
-    ElMessage.warning('更新功能仅在桌面版本中可用')
+    ElMessage.warning(t('settings.update.desktopOnly'))
     return
   }
   
   try {
-    ElMessage.info('正在检查更新...')
+    ElMessage.info(t('settings.update.checking'))
     await window.electronAPI.updateAPI.check()
   } catch (error) {
     console.error('Check update failed:', error)
-    ElMessage.error('检查更新失败')
+    ElMessage.error(t('settings.update.checkFailed'))
   }
 }
 
 function saveSettings() {
-  ElMessage.success('设置已保存')
-}
-
-function checkUpdate() {
-  ElMessage.info('当前已是最新版本')
+  ElMessage.success(t('settings.saveSuccess'))
 }
 
 function openGithub() {
@@ -416,7 +416,7 @@ function openGithub() {
 }
 
 function openDocs() {
-  ElMessage.info('文档功能开发中...')
+  ElMessage.info(t('settings.about.docsComingSoon'))
 }
 </script>
 

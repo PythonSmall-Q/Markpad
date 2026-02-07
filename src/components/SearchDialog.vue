@@ -2,7 +2,7 @@
   <transition name="search-slide">
     <div v-if="visible" class="search-box" :class="{ 'with-replace': showReplace }">
       <div class="search-header">
-        <span class="search-title">{{ showReplace ? '查找和替换' : '查找' }}</span>
+        <span class="search-title">{{ showReplace ? t('search.replaceTitle') : t('search.title') }}</span>
         <el-icon class="close-icon" @click="handleClose">
           <Close />
         </el-icon>
@@ -14,7 +14,7 @@
           <el-input
             ref="searchInputRef"
             v-model="searchText"
-            placeholder="查找"
+            :placeholder="t('search.findPlaceholder')"
             size="small"
             clearable
             @keyup.enter="handleFindNext"
@@ -24,7 +24,7 @@
           >
             <template #suffix>
               <span class="match-count" v-if="searchText && totalMatches >= 0">
-                {{ currentMatchIndex >= 0 ? currentMatchIndex + 1 : 0 }} / {{ totalMatches }}
+                {{ t('search.matchCount', { current: currentMatchIndex >= 0 ? currentMatchIndex + 1 : 0, total: totalMatches }) }}
               </span>
             </template>
           </el-input>
@@ -34,14 +34,14 @@
               :icon="ArrowUp" 
               @click="handleFindPrevious"
               :disabled="!searchText || totalMatches === 0"
-              title="上一个 (Shift+Enter)"
+              :title="`${t('search.previous')} (Shift+Enter)`"
             />
             <el-button 
               size="small" 
               :icon="ArrowDown" 
               @click="handleFindNext"
               :disabled="!searchText || totalMatches === 0"
-              title="下一个 (Enter)"
+              :title="`${t('search.next')} (Enter)`"
             />
           </div>
         </div>
@@ -50,7 +50,7 @@
         <div v-if="showReplace" class="search-row">
           <el-input
             v-model="replaceText"
-            placeholder="替换"
+            :placeholder="t('search.replacePlaceholder')"
             size="small"
             clearable
             @keyup.enter="handleReplace"
@@ -61,17 +61,17 @@
               size="small" 
               @click="handleReplace"
               :disabled="!searchText || !replaceText || totalMatches === 0"
-              title="替换"
+              :title="t('search.replace')"
             >
-              替换
+              {{ t('search.replace') }}
             </el-button>
             <el-button 
               size="small" 
               @click="handleReplaceAll"
               :disabled="!searchText || !replaceText || totalMatches === 0"
-              title="全部替换"
+              :title="t('search.replaceAll')"
             >
-              全部
+              {{ t('search.replaceAll') }}
             </el-button>
           </div>
         </div>
@@ -83,7 +83,7 @@
             size="small"
             @change="onOptionsChange"
           >
-            <el-tooltip content="区分大小写" placement="bottom">
+            <el-tooltip :content="t('search.caseSensitive')" placement="bottom">
               <span class="option-label">Aa</span>
             </el-tooltip>
           </el-checkbox>
@@ -92,7 +92,7 @@
             size="small"
             @change="onOptionsChange"
           >
-            <el-tooltip content="全字匹配" placement="bottom">
+            <el-tooltip :content="t('search.wholeWord')" placement="bottom">
               <span class="option-label">Ab|</span>
             </el-tooltip>
           </el-checkbox>
@@ -101,7 +101,7 @@
             size="small"
             @change="onOptionsChange"
           >
-            <el-tooltip content="使用正则表达式" placement="bottom">
+            <el-tooltip :content="t('search.useRegex')" placement="bottom">
               <span class="option-label">.*</span>
             </el-tooltip>
           </el-checkbox>
@@ -113,6 +113,7 @@
 
 <script setup>
 import { ref, watch, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Close, ArrowUp, ArrowDown } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
@@ -132,6 +133,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+const { t } = useI18n()
 
 const visible = ref(props.modelValue)
 const searchInputRef = ref(null)
@@ -239,18 +241,18 @@ function handleFindNext() {
   updateMatches()
   
   if (matches.value.length === 0) {
-    ElMessage.warning('未找到匹配项')
+    ElMessage.warning(t('search.noMatch'))
     return
   }
   
-  // Get current cursor position to find next match
+  // Get current selection end position
   const editorInstance = props.editorViewRef.getEditorInstance?.()
   if (!editorInstance) return
   
-  const [cursorPos] = editorInstance.getSelection()
+  const [, endPos] = editorInstance.getSelection()
   
-  // Find next match after cursor
-  let nextIndex = matches.value.findIndex(m => m.index > cursorPos)
+  // Find next match after current selection
+  let nextIndex = matches.value.findIndex(m => m.index >= endPos)
   if (nextIndex === -1) {
     // Wrap to beginning
     nextIndex = 0
@@ -260,17 +262,22 @@ function handleFindNext() {
   const targetMatch = matches.value[currentMatchIndex.value]
   
   if (targetMatch) {
-    // Set selection
-    editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
+    // Focus first
+    editorInstance.focus()
     
-    // Scroll to match
+    // Set selection and scroll
     setTimeout(() => {
-      const editor = editorInstance.getCurrentModeEditor()
-      if (editor && editor.cm) {
-        const pos = editor.cm.posFromIndex(targetMatch.index)
-        editor.cm.scrollIntoView(pos, 100)
+      try {
+        editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
+        
+        const editor = editorInstance.getCurrentModeEditor()
+        if (editor && editor.cm) {
+          const pos = editor.cm.posFromIndex(targetMatch.index)
+          editor.cm.scrollIntoView(pos, 100)
+        }
+      } catch (e) {
+        console.debug('Search navigation error:', e)
       }
-      editorInstance.focus()
     }, 10)
   }
 }
@@ -281,39 +288,50 @@ function handleFindPrevious() {
   updateMatches()
   
   if (matches.value.length === 0) {
-    ElMessage.warning('未找到匹配项')
+    ElMessage.warning(t('search.noMatch'))
     return
   }
   
-  // Get current cursor position to find previous match
+  // Get current selection start position
   const editorInstance = props.editorViewRef.getEditorInstance?.()
   if (!editorInstance) return
   
-  const [cursorPos] = editorInstance.getSelection()
+  const [startPos] = editorInstance.getSelection()
   
-  // Find previous match before cursor
-  const reversedMatches = [...matches.value].reverse()
-  let prevMatch = reversedMatches.find(m => m.index < cursorPos)
-  
-  if (!prevMatch) {
-    // Wrap to end
-    prevMatch = matches.value[matches.value.length - 1]
+  // Find previous match before current selection
+  let prevIndex = -1
+  for (let i = matches.value.length - 1; i >= 0; i--) {
+    if (matches.value[i].index < startPos) {
+      prevIndex = i
+      break
+    }
   }
   
-  currentMatchIndex.value = matches.value.indexOf(prevMatch)
+  if (prevIndex === -1) {
+    // Wrap to end
+    prevIndex = matches.value.length - 1
+  }
   
-  if (prevMatch) {
-    // Set selection
-    editorInstance.setSelection([prevMatch.index, prevMatch.index + prevMatch.length])
+  currentMatchIndex.value = prevIndex
+  const targetMatch = matches.value[currentMatchIndex.value]
+  
+  if (targetMatch) {
+    // Focus first
+    editorInstance.focus()
     
-    // Scroll to match
+    // Set selection and scroll
     setTimeout(() => {
-      const editor = editorInstance.getCurrentModeEditor()
-      if (editor && editor.cm) {
-        const pos = editor.cm.posFromIndex(prevMatch.index)
-        editor.cm.scrollIntoView(pos, 100)
+      try {
+        editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
+        
+        const editor = editorInstance.getCurrentModeEditor()
+        if (editor && editor.cm) {
+          const pos = editor.cm.posFromIndex(targetMatch.index)
+          editor.cm.scrollIntoView(pos, 100)
+        }
+      } catch (e) {
+        console.debug('Search navigation error:', e)
       }
-      editorInstance.focus()
     }, 10)
   }
 }
@@ -443,6 +461,18 @@ function handleClose() {
   
   .el-button {
     padding: 4px 8px;
+    border-color: #909399;
+    color: #606266;
+    
+    &:hover:not(:disabled) {
+      border-color: var(--el-color-primary);
+      color: var(--el-color-primary);
+      background-color: var(--el-color-primary-light-9);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+    }
   }
 }
 

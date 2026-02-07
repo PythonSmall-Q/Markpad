@@ -10,8 +10,59 @@ import deDE from './locales/de-DE'
 import ruRU from './locales/ru-RU'
 import ptBR from './locales/pt-BR'
 
-// Get saved language from localStorage, default to English
-const savedLocale = localStorage.getItem('markpad-locale') || 'en-US'
+// Auto-detect system language
+function detectSystemLocale() {
+    const savedLocale = localStorage.getItem('markpad-locale')
+    if (savedLocale) {
+        return savedLocale
+    }
+
+    // Get browser/system language
+    const browserLang = navigator.language || navigator.userLanguage
+
+    // Map browser language to supported locales
+    const localeMap = {
+        'zh-CN': 'zh-CN',
+        'zh-Hans': 'zh-CN',
+        'zh': 'zh-CN',
+        'zh-TW': 'zh-TW',
+        'zh-Hant': 'zh-TW',
+        'zh-HK': 'zh-TW',
+        'en': 'en-US',
+        'en-US': 'en-US',
+        'en-GB': 'en-US',
+        'ja': 'ja-JP',
+        'ja-JP': 'ja-JP',
+        'ko': 'ko-KR',
+        'ko-KR': 'ko-KR',
+        'es': 'es-ES',
+        'es-ES': 'es-ES',
+        'fr': 'fr-FR',
+        'fr-FR': 'fr-FR',
+        'de': 'de-DE',
+        'de-DE': 'de-DE',
+        'ru': 'ru-RU',
+        'ru-RU': 'ru-RU',
+        'pt': 'pt-BR',
+        'pt-BR': 'pt-BR'
+    }
+
+    // Try exact match first
+    if (localeMap[browserLang]) {
+        return localeMap[browserLang]
+    }
+
+    // Try language code only (e.g., 'en' from 'en-US')
+    const langCode = browserLang.split('-')[0]
+    if (localeMap[langCode]) {
+        return localeMap[langCode]
+    }
+
+    // Default to simplified Chinese for Chinese regions, English for others
+    return langCode === 'zh' ? 'zh-CN' : 'en-US'
+}
+
+const savedLocale = detectSystemLocale()
 
 const i18n = createI18n({
     legacy: false, // Use Composition API mode

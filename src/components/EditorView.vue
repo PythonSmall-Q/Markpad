@@ -42,10 +42,10 @@ onUnmounted(() => {
 })
 
 watch(activeDocument, (newDoc, oldDoc) => {
-  if (newDoc && newDoc.id !== oldDoc?.id) {
+  if (newDoc && newDoc.id !== oldDoc?.id && editorInstance) {
     editorInstance.setMarkdown(newDoc.content || '')
   }
-}, { immediate: true })
+})
 
 watch(theme, (newTheme) => {
   // Update editor style based on theme
@@ -81,6 +81,15 @@ function initEditor() {
   // Apply theme
   if (theme.value === 'dark') {
     editorRef.value.classList.add('toastui-editor-dark')
+  }
+  
+  // Load initial content after editor is ready
+  if (activeDocument.value && activeDocument.value.content) {
+    setTimeout(() => {
+      if (editorInstance) {
+        editorInstance.setMarkdown(activeDocument.value.content)
+      }
+    }, 0)
   }
 }
 
@@ -235,29 +244,25 @@ function performSearch(options) {
       
       // Select the match
       if (targetMatch) {
-        // Calculate line and column for scrolling
-        const beforeText = content.substring(0, targetMatch.index)
-        const lines = beforeText.split('\n')
-        const line = lines.length
-        
-        // Set selection
-        editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
-        
-        // Focus editor
+        // Focus editor first
         editorInstance.focus()
         
-        // Try to scroll to the match
-        try {
-          const editorEl = editorInstance.getCurrentModeEditor()
-          if (editorEl && editorEl.cm) {
-            // For CodeMirror
-            const pos = editorEl.cm.posFromIndex(targetMatch.index)
-            editorEl.cm.scrollIntoView(pos, 100)
+        // Set selection with slight delay to ensure editor is ready
+        setTimeout(() => {
+          try {
+            editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
+            
+            // Try to scroll to the match
+            const editorEl = editorInstance.getCurrentModeEditor()
+            if (editorEl && editorEl.cm) {
+              // For CodeMirror
+              const pos = editorEl.cm.posFromIndex(targetMatch.index)
+              editorEl.cm.scrollIntoView(pos, 100)
+            }
+          } catch (e) {
+            console.debug('Could not set selection or scroll:', e)
           }
-        } catch (e) {
-          // Fallback: just focus
-          console.debug('Could not scroll to match:', e)
-        }
+        }, 10)
         
         return { success: true, matchIndex: matches.indexOf(targetMatch), totalMatches: matches.length }
       }

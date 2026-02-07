@@ -205,7 +205,8 @@ export const useSettingsStore = defineStore('settings', () => {
             try {
                 const settings = JSON.parse(saved)
                 theme.value = settings.theme || 'light'
-                locale.value = settings.locale || 'zh-CN'
+                // Use locale from markpad-locale if available, otherwise from settings
+                locale.value = settings.locale || localStorage.getItem('markpad-locale') || 'zh-CN'
                 autoSaveInterval.value = settings.autoSaveInterval || 5
                 defaultExportFormat.value = settings.defaultExportFormat || 'markdown'
                 recentFiles.value = settings.recentFiles || []
@@ -224,6 +225,9 @@ export const useSettingsStore = defineStore('settings', () => {
             } catch (error) {
                 console.error('Failed to load settings:', error)
             }
+        } else {
+            // First time loading, use auto-detected locale
+            locale.value = localStorage.getItem('markpad-locale') || 'zh-CN'
         }
     }
 

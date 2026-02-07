@@ -5,20 +5,20 @@
         <el-icon :size="80"><Edit /></el-icon>
       </div>
       
-      <h1>欢迎使用 Markpad</h1>
-      <p class="subtitle">一个功能强大的 Markdown 笔记本应用</p>
+      <h1>{{ t('welcome.title') }}</h1>
+      <p class="subtitle">{{ t('app.description') }}</p>
       
       <div class="actions">
         <el-button type="primary" size="large" :icon="FolderOpened" @click="handleNewFile">
-          新建文档
+          {{ t('welcome.newDocument') }}
         </el-button>
         <el-button size="large" :icon="Folder" @click="handleOpenFile">
-          打开文件
+          {{ t('welcome.openFile') }}
         </el-button>
       </div>
       
       <div v-if="recentFiles.length > 0" class="recent-section">
-        <h3>最近打开</h3>
+        <h3>{{ t('welcome.recentFiles') }}</h3>
         <div class="recent-list">
           <div 
             v-for="file in recentFiles.slice(0, 5)" 
@@ -35,18 +35,18 @@
       <div class="features">
         <div class="feature-item">
           <el-icon><Edit /></el-icon>
-          <h4>Markdown 编辑</h4>
-          <p>实时预览、语法高亮</p>
+          <h4>{{ t('welcome.features.editor.title') }}</h4>
+          <p>{{ t('welcome.features.editor.description') }}</p>
         </div>
         <div class="feature-item">
           <el-icon><Document /></el-icon>
-          <h4>多格式导出</h4>
-          <p>PDF、HTML、纯文本</p>
+          <h4>{{ t('welcome.features.export.title') }}</h4>
+          <p>{{ t('welcome.features.export.description') }}</p>
         </div>
         <div class="feature-item">
           <el-icon><Picture /></el-icon>
-          <h4>文件插入</h4>
-          <p>图片、音视频支持</p>
+          <h4>{{ t('welcome.features.assets.title') }}</h4>
+          <p>{{ t('welcome.features.assets.description') }}</p>
         </div>
       </div>
     </div>
@@ -55,6 +55,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Edit, FolderOpened, Folder, Document, Picture } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useDocumentsStore } from '@/store/documents'
@@ -63,6 +64,7 @@ import { fileAPI } from '@/utils/electron'
 
 const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 
 const recentFiles = computed(() => settingsStore.recentFiles)
 
