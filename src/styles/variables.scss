@@ -1,0 +1,103 @@
+// CSS 变量
+:root {
+    // 亮色主题
+    --primary-color: #409eff;
+    --success-color: #67c23a;
+    --warning-color: #e6a23c;
+    --danger-color: #f56c6c;
+    --info-color: #909399;
+
+    // 间距
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    // 圆角
+    --border-radius-sm: 2px;
+    --border-radius-md: 4px;
+    --border-radius-lg: 8px;
+
+    // 阴影
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+    // 过渡
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+
+    // Z-index
+    --z-index-dropdown: 1000;
+    --z-index-modal: 2000;
+    --z-index-notification: 3000;
+    --z-index-tooltip: 4000;
+}
+
+// 亮色主题变量
+.light {
+    --bg-color: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-color: #303133;
+    --text-secondary: #606266;
+    --text-tertiary: #909399;
+    --border-color: #dcdfe6;
+    --hover-bg: #f5f7fa;
+    --sidebar-bg: #f8f9fa;
+    --code-bg: #f6f8fa;
+}
+
+// 暗色主题变量
+.dark {
+    --bg-color: #1e1e1e;
+    --bg-secondary: #252526;
+    --text-color: #e4e4e4;
+    --text-secondary: #cccccc;
+    --text-tertiary: #999999;
+    --border-color: #3f3f3f;
+    --hover-bg: #2d2d2d;
+    --sidebar-bg: #252526;
+    --code-bg: #2d2d2d;
+}
+
+// 响应式断点
+$breakpoint-xs: 480px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 1024px;
+$breakpoint-lg: 1280px;
+$breakpoint-xl: 1920px;
+
+// Mixin
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin scrollbar-style {
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+
+        &:hover {
+            background: var(--text-tertiary);
+        }
+    }
+}

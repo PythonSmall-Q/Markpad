@@ -1,0 +1,102 @@
+// 主样式文件
+@use './variables.scss' as *;
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #909399;
+    border-radius: 4px;
+
+    &:hover {
+        background: #606266;
+    }
+}
+
+// 暗色主题滚动条
+.dark {
+    ::-webkit-scrollbar-thumb {
+        background: #606266;
+
+        &:hover {
+            background: #909399;
+        }
+    }
+}
+
+// Element Plus 样式覆盖
+.el-button {
+    font-weight: 500;
+}
+
+.el-message-box {
+    max-width: 500px;
+}
+
+// 禁用用户选择（除了编辑器内容）
+.header-bar,
+.sidebar,
+.document-tabs,
+.editor-toolbar {
+    user-select: none;
+}
+
+// 动画
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+// 打印样式
+@media print {
+
+    .header-bar,
+    .sidebar,
+    .document-tabs,
+    .editor-toolbar {
+        display: none !important;
+    }
+
+    .editor-container {
+        border: none !important;
+    }
+}
