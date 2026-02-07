@@ -14,8 +14,11 @@ on:
         description: '是否创建 git tag'
         required: true
         type: boolean
-        default: true
+        default: false
 
+permissions:
+  contents: write
+  
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -90,6 +93,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
       
       - name: Set version (manual trigger)
         if: github.event_name == 'workflow_dispatch'
@@ -103,11 +109,12 @@ jobs:
       
       - name: Create Git Tag (manual trigger)
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.create_tag == 'true'
+        continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a "v${{ github.event.inputs.version }}" -m "Release v${{ github.event.inputs.version }}"
-          git push origin "v${{ github.event.inputs.version }}"
+          git push origin "v${{ github.event.inputs.version }}" || echo "::warning::无法自动创建 tag。您可以手动运行: git tag -a v${{ github.event.inputs.version }} -m 'Release v${{ github.event.inputs.version }}' && git push origin v${{ github.event.inputs.version }}"
       
       - name: Download all artifacts
         uses: actions/download-artifact@v4
