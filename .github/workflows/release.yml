@@ -5,6 +5,16 @@ on:
     tags:
       - 'v*' # 当推送 v* 标签时触发（如 v1.0.0）
   workflow_dispatch: # 允许手动触发
+    inputs:
+      version:
+        description: '版本号 (如: 1.0.0 或 1.0.0-beta.1)'
+        required: true
+        type: string
+      create_tag:
+        description: '是否创建 git tag'
+        required: true
+        type: boolean
+        default: true
 
 jobs:
   release:
@@ -26,6 +36,26 @@ jobs:
       
       - name: Install dependencies
         run: npm ci
+      
+      - name: Set version (manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+      
+      - name: Set version (tag trigger)
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      
+      - name: Set default version
+        if: github.event_name != 'workflow_dispatch' && !startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          echo "VERSION=unknown" >> $GITHUB_ENV
       
       - name: Build application
         run: npm run build
@@ -58,16 +88,26 @@ jobs:
             dist-electron/*.AppImage
           if-no-files-found: ignore
       
+      - name: Create Git Tag (manual trigger)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.create_tag == 'true' && matrix.os == 'ubuntu-latest'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ github.event.inputs.version }}" -m "Release v${{ github.event.inputs.version }}"
+          git push origin "v${{ github.event.inputs.version }}"
+      
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: (startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch') && matrix.os == 'ubuntu-latest'
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.ref_name }}
+          name: Release ${{ env.VERSION }}
           files: |
             dist-electron/*.exe
             dist-electron/*.dmg
             dist-electron/*.AppImage
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.event.inputs.version, 'beta') || contains(github.event.inputs.version, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
