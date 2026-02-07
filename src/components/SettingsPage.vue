@@ -171,6 +171,36 @@
         </el-form>
       </el-card>
       
+      <!-- Update settings -->
+      <el-card class="settings-card" shadow="never">
+        <template #header>
+          <div class="card-header">
+            <el-icon><Setting /></el-icon>
+            <span>更新</span>
+          </div>
+        </template>
+        
+        <el-form label-width="120px">
+          <el-form-item label="自动检查更新">
+            <el-switch
+              v-model="localSettings.autoCheckUpdates"
+              active-text="开启"
+              inactive-text="关闭"
+              @change="handleAutoCheckUpdatesChange"
+            />
+          </el-form-item>
+          
+          <el-form-item label="自动下载更新" v-if="localSettings.autoCheckUpdates">
+            <el-switch
+              v-model="localSettings.autoDownloadUpdates"
+              active-text="开启"
+              inactive-text="关闭"
+              @change="handleAutoDownloadUpdatesChange"
+            />
+          </el-form-item>
+        </el-form>
+      </el-card>
+      
       <!-- Shortcut settings -->
       <el-card class="settings-card" shadow="never">
         <template #header>
@@ -243,7 +273,9 @@ const localSettings = reactive({
   syntaxHighlight: true,
   defaultFileName: '未命名文档',
   fileExtension: '.md',
-  recentFilesLimit: 20
+  recentFilesLimit: 20,
+  autoCheckUpdates: true,
+  autoDownloadUpdates: false
 })
 
 const shortcuts = ref([
@@ -273,7 +305,9 @@ function loadSettings() {
     autoSaveInterval: settingsStore.autoSaveInterval,
     showLineNumbers: settingsStore.showLineNumbers,
     syntaxHighlight: settingsStore.syntaxHighlight,
-    defaultFileName: settingsStore.defaultFileName,
+    defaultFileName: settingsStore.defaultFileName,,
+    autoCheckUpdates: settingsStore.autoCheckUpdates,
+    autoDownloadUpdates: settingsStore.autoDownloadUpdates
     fileExtension: settingsStore.fileExtension,
     recentFilesLimit: settingsStore.recentFilesLimit
   })
@@ -328,6 +362,14 @@ function handleFileExtensionChange(value) {
 
 function handleRecentFilesLimitChange(value) {
   settingsStore.setRecentFilesLimit(value)
+function handleAutoCheckUpdatesChange(value) {
+  settingsStore.setAutoCheckUpdates(value)
+}
+
+function handleAutoDownloadUpdatesChange(value) {
+  settingsStore.setAutoDownloadUpdates(value)
+}
+
 }
 
 async function resetSettings() {
@@ -346,7 +388,18 @@ async function resetSettings() {
     loadSettings()
     ElMessage.success('已恢复默认设置')
   } catch {
-    // User cancelled
+async function checkUpdate() {
+  if (!window.electronAPI || !window.electronAPI.updateAPI) {
+    ElMessage.warning('更新功能仅在桌面版本中可用')
+    return
+  }
+  
+  try {
+    ElMessage.info('正在检查更新...')
+    await window.electronAPI.updateAPI.check()
+  } catch (error) {
+    console.error('Check update failed:', error)
+    ElMessage.error('检查更新失败')
   }
 }
 

@@ -4,6 +4,10 @@
     "description": "A powerful Markdown notebook application with Vue 3 and Electron",
     "main": "electron/main.js",
     "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PythonSmall-Q/Markpad.git"
+    },
     "scripts": {
         "dev": "vite",
         "build": "vite build",
@@ -87,6 +91,13 @@
             "publisherName": "PythonSmall-Q",
             "verifyUpdateCodeSignature": false
         },
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "PythonSmall-Q",
+                "repo": "Markpad"
+            }
+        ],
         "nsis": {
             "oneClick": false,
             "allowToChangeInstallationDirectory": true,

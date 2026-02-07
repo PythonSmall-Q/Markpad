@@ -243,16 +243,35 @@ function handleFindNext() {
     return
   }
   
-  // Move to next match
-  currentMatchIndex.value = (currentMatchIndex.value + 1) % matches.value.length
+  // Get current cursor position to find next match
+  const editorInstance = props.editorViewRef.getEditorInstance?.()
+  if (!editorInstance) return
   
+  const [cursorPos] = editorInstance.getSelection()
+  
+  // Find next match after cursor
+  let nextIndex = matches.value.findIndex(m => m.index > cursorPos)
+  if (nextIndex === -1) {
+    // Wrap to beginning
+    nextIndex = 0
+  }
+  
+  currentMatchIndex.value = nextIndex
   const targetMatch = matches.value[currentMatchIndex.value]
+  
   if (targetMatch) {
-    const editorInstance = props.editorViewRef.getEditorInstance?.()
-    if (editorInstance) {
-      editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
+    // Set selection
+    editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
+    
+    // Scroll to match
+    setTimeout(() => {
+      const editor = editorInstance.getCurrentModeEditor()
+      if (editor && editor.cm) {
+        const pos = editor.cm.posFromIndex(targetMatch.index)
+        editor.cm.scrollIntoView(pos, 100)
+      }
       editorInstance.focus()
-    }
+    }, 10)
   }
 }
 
@@ -266,18 +285,36 @@ function handleFindPrevious() {
     return
   }
   
-  // Move to previous match
-  currentMatchIndex.value = currentMatchIndex.value <= 0 
-    ? matches.value.length - 1 
-    : currentMatchIndex.value - 1
+  // Get current cursor position to find previous match
+  const editorInstance = props.editorViewRef.getEditorInstance?.()
+  if (!editorInstance) return
   
-  const targetMatch = matches.value[currentMatchIndex.value]
-  if (targetMatch) {
-    const editorInstance = props.editorViewRef.getEditorInstance?.()
-    if (editorInstance) {
-      editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
+  const [cursorPos] = editorInstance.getSelection()
+  
+  // Find previous match before cursor
+  const reversedMatches = [...matches.value].reverse()
+  let prevMatch = reversedMatches.find(m => m.index < cursorPos)
+  
+  if (!prevMatch) {
+    // Wrap to end
+    prevMatch = matches.value[matches.value.length - 1]
+  }
+  
+  currentMatchIndex.value = matches.value.indexOf(prevMatch)
+  
+  if (prevMatch) {
+    // Set selection
+    editorInstance.setSelection([prevMatch.index, prevMatch.index + prevMatch.length])
+    
+    // Scroll to match
+    setTimeout(() => {
+      const editor = editorInstance.getCurrentModeEditor()
+      if (editor && editor.cm) {
+        const pos = editor.cm.posFromIndex(prevMatch.index)
+        editor.cm.scrollIntoView(pos, 100)
+      }
       editorInstance.focus()
-    }
+    }, 10)
   }
 }
 

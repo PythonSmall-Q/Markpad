@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import fs from 'fs/promises'
@@ -92,6 +93,9 @@ function createWindow() {
 app.whenReady().then(async () => {
     await ensureTempDir()
     createWindow()
+
+    // Initialize auto updater
+    initAutoUpdater()
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -335,3 +339,105 @@ ipcMain.on('window:close-confirmed', (event, shouldClose) => {
         }
     }
 })
+
+// ==================== Auto Updater ====================
+
+// 配置自动更新
+autoUpdater.autoDownload = false // 不自动下载，等用户确认
+autoUpdater.autoInstallOnAppQuit = true // 退出时自动安装
+
+function initAutoUpdater() {
+    // 仅在生产环境检查更新
+    if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
+        console.log('Development mode, skipping auto update check')
+        return
+    }
+
+    // 更新检查错误
+    autoUpdater.on('error', (error) => {
+        console.error('Update error:', error)
+        sendUpdateMessage('error', { error: error.message })
+    })
+
+    // 检查更新
+    autoUpdater.on('checking-for-update', () => {
+        console.log('Checking for updates...')
+        sendUpdateMessage('checking')
+    })
+
+    // 发现新版本
+    autoUpdater.on('update-available', (info) => {
+        console.log('Update available:', info)
+        sendUpdateMessage('available', {
+            version: info.version,
+            releaseDate: info.releaseDate,
+            releaseName: info.releaseName,
+            releaseNotes: info.releaseNotes
+        })
+    })
+
+    // 没有新版本
+    autoUpdater.on('update-not-available', (info) => {
+        console.log('Update not available')
+        sendUpdateMessage('not-available', { version: info.version })
+    })
+
+    // 下载进度
+    autoUpdater.on('download-progress', (progressObj) => {
+        sendUpdateMessage('download-progress', {
+            percent: progressObj.percent,
+            transferred: progressObj.transferred,
+            total: progressObj.total,
+            bytesPerSecond: progressObj.bytesPerSecond
+        })
+    })
+
+    // 下载完成
+    autoUpdater.on('update-downloaded', (info) => {
+        console.log('Update downloaded:', info)
+        sendUpdateMessage('downloaded', {
+            version: info.version,
+            releaseDate: info.releaseDate
+        })
+    })
+}
+
+function sendUpdateMessage(action, data = {}) {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('update-message', { action, ...data })
+    }
+}
+
+// IPC 处理器 - 更新相关
+ipcMain.handle('updater:check', async () => {
+    if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
+        return { success: false, error: 'Updates not available in development mode' }
+    }
+
+    try {
+        const result = await autoUpdater.checkForUpdates()
+        return { success: true, updateInfo: result.updateInfo }
+    } catch (error) {
+        return { success: false, error: error.message }
+    }
+})
+
+ipcMain.handle('updater:download', async () => {
+    try {
+        await autoUpdater.downloadUpdate()
+        return { success: true }
+    } catch (error) {
+        return { success: false, error: error.message }
+    }
+})
+
+ipcMain.handle('updater:install', () => {
+    // 退出并安装更新
+    setImmediate(() => autoUpdater.quitAndInstall(false, true))
+    return { success: true }
+})
+
+ipcMain.handle('updater:get-version', () => {
+    return { version: app.getVersion() }
+})
+

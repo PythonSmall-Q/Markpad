@@ -230,6 +230,44 @@ export const windowAPI = {
     }
 }
 
+// Auto Updater
+export const updaterAPI = {
+    async checkForUpdates() {
+        if (!isElectron()) {
+            return { success: false, error: 'Not in Electron environment' }
+        }
+        return await window.electronAPI.checkForUpdates()
+    },
+
+    async downloadUpdate() {
+        if (!isElectron()) {
+            return { success: false, error: 'Not in Electron environment' }
+        }
+        return await window.electronAPI.downloadUpdate()
+    },
+
+    async installUpdate() {
+        if (!isElectron()) {
+            return { success: false, error: 'Not in Electron environment' }
+        }
+        return await window.electronAPI.installUpdate()
+    },
+
+    async getAppVersion() {
+        if (!isElectron()) {
+            return { version: '1.0.0' }
+        }
+        return await window.electronAPI.getAppVersion()
+    },
+
+    onUpdateMessage(callback) {
+        if (!isElectron()) {
+            return
+        }
+        window.electronAPI.onUpdateMessage(callback)
+    }
+}
+
 export default {
     isElectron,
     fileAPI,
@@ -238,5 +276,6 @@ export default {
     systemAPI,
     settingsAPI,
     tempAPI,
-    windowAPI
+    windowAPI,
+    updaterAPI
 }

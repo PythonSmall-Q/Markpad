@@ -43,7 +43,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useDocumentsStore } from '@/store/documents'
 import { useSettingsStore } from '@/store/settings'
-import { windowAPI } from '@/utils/electron'
+import { windowAPI, updateAPI } from '@/utils/electron'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import HeaderBar from '@/components/HeaderBar.vue'
 import Sidebar from '@/components/Sidebar.vue'
@@ -82,7 +82,72 @@ onMounted(async () => {
   
   // 监听窗口关闭事件
   windowAPI.onBeforeClose(handleWindowClose)
+  
+  // Setup auto-update event listeners
+  setupAutoUpdate()
+  
+  // Check for updates if enabled
+  if (settingsStore.autoCheckUpdates && updateAPI) {
+    setTimeout(() => {
+      updateAPI.check().catch(err => {
+        console.error('Auto-update check failed:', err)
+      })
+    }, 3000) // Check after 3 seconds
+  }
 })
+
+function setupAutoUpdate() {
+  if (!updateAPI) return
+  
+  // Listen for update available
+  updateAPI.onUpdateAvailable((info) => {
+    ElMessageBox.confirm(
+      `发现新版本 ${info.version}，是否立即下载？`,
+      '更新可用',
+      {
+        confirmButtonText: '立即下载',
+        cancelButtonText: '稍后提醒',
+        type: 'info'
+      }
+    ).then(() => {
+      // User chose to download
+      if (settingsStore.autoDownloadUpdates) {
+        updateAPI.download()
+      } else {
+        ElMessage.info('开始下载更新...')
+        updateAPI.download()
+      }
+    }).catch(() => {
+      // User chose to remind later
+      ElMessage.info('您可以稍后在设置中检查更新')
+    })
+  })
+  
+  // Listen for download progress
+  updateAPI.onDownloadProgress((progress) => {
+    const percent = Math.round(progress.percent)
+    ElMessage.info(`正在下载更新: ${percent}%`)
+  })
+  
+  // Listen for update downloaded
+  updateAPI.onUpdateDownloaded(() => {
+    ElMessageBox.confirm(
+      '新版本已下载完成，是否立即重启安装？',
+      '更新就绪',
+      {
+        confirmButtonText: '立即重启',
+        cancelButtonText: '稍后重启',
+        type: 'success'
+      }
+    ).then(() => {
+      // User chose to restart
+      updateAPI.install()
+    }).catch(() => {
+      // User chose to restart later
+      ElMessage.info('您可以稍后手动重启应用以完成更新')
+    })
+  })
+}
 
 onUnmounted(() => {
   // Cleanup

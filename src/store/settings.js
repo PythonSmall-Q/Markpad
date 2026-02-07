@@ -18,6 +18,8 @@ export const useSettingsStore = defineStore('settings', () => {
     const defaultFileName = ref('未命名文档')
     const fileExtension = ref('.md')
     const recentFilesLimit = ref(20)
+    const autoCheckUpdates = ref(true)
+    const autoDownloadUpdates = ref(false)
 
     // Methods
     function setTheme(newTheme) {
@@ -130,11 +132,23 @@ export const useSettingsStore = defineStore('settings', () => {
         saveSettings()
     }
 
+    function setAutoCheckUpdates(value) {
+        autoCheckUpdates.value = value
+        saveSettings()
+    }
+
+    function setAutoDownloadUpdates(value) {
+        autoDownloadUpdates.value = value
+        saveSettings()
+    }
+
     function resetSettings() {
         theme.value = 'light'
         locale.value = 'zh-CN'
         autoSaveInterval.value = 5
         defaultExportFormat.value = 'markdown'
+        autoCheckUpdates.value = true
+        autoDownloadUpdates.value = false
         fontSize.value = 14
         lineHeight.value = 1.6
         showPreview.value = true
@@ -171,7 +185,9 @@ export const useSettingsStore = defineStore('settings', () => {
             syntaxHighlight: syntaxHighlight.value,
             defaultFileName: defaultFileName.value,
             fileExtension: fileExtension.value,
-            recentFilesLimit: recentFilesLimit.value
+            recentFilesLimit: recentFilesLimit.value,
+            autoCheckUpdates: autoCheckUpdates.value,
+            autoDownloadUpdates: autoDownloadUpdates.value
         }
 
         localStorage.setItem('markpad-settings', JSON.stringify(settings))
@@ -199,6 +215,8 @@ export const useSettingsStore = defineStore('settings', () => {
                 editorWidth.value = settings.editorWidth || 'normal'
                 autoSave.value = settings.autoSave !== undefined ? settings.autoSave : true
                 showLineNumbers.value = settings.showLineNumbers !== undefined ? settings.showLineNumbers : true
+                autoCheckUpdates.value = settings.autoCheckUpdates !== undefined ? settings.autoCheckUpdates : true
+                autoDownloadUpdates.value = settings.autoDownloadUpdates !== undefined ? settings.autoDownloadUpdates : false
                 syntaxHighlight.value = settings.syntaxHighlight !== undefined ? settings.syntaxHighlight : true
                 defaultFileName.value = settings.defaultFileName || '未命名文档'
                 fileExtension.value = settings.fileExtension || '.md'
@@ -225,6 +243,8 @@ export const useSettingsStore = defineStore('settings', () => {
         defaultFileName,
         fileExtension,
         recentFilesLimit,
+        autoCheckUpdates,
+        autoDownloadUpdates,
         setTheme,
         toggleTheme,
         setLocale,
@@ -244,6 +264,8 @@ export const useSettingsStore = defineStore('settings', () => {
         setDefaultFileName,
         setFileExtension,
         setRecentFilesLimit,
+        setAutoCheckUpdates,
+        setAutoDownloadUpdates,
         resetSettings,
         saveSettings,
         loadSettings
