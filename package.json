@@ -132,8 +132,6 @@
             "darkModeSupport": true
         },
         "dmg": {
-            "icon": "build/icons/icon.icns",
-            "iconSize": 100,
             "contents": [
                 {
                     "x": 380,
