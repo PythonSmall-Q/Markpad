@@ -132,7 +132,6 @@
             "darkModeSupport": true
         },
         "dmg": {
-            "background": "build/icons/dmg-background.png",
             "icon": "build/icons/icon.icns",
             "iconSize": 100,
             "contents": [
