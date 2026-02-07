@@ -189,22 +189,6 @@ export default {
         }
     },
 
-    search: {
-        title: 'Find',
-        replaceTitle: 'Find and Replace',
-        findPlaceholder: 'Find',
-        replacePlaceholder: 'Replace',
-        previous: 'Previous',
-        next: 'Next',
-        matchCount: '{current} / {total}',
-        caseSensitive: 'Match Case',
-        wholeWord: 'Match Whole Word',
-        useRegex: 'Use Regex',
-        replace: 'Replace',
-        replaceAll: 'Replace All',
-        noMatch: 'No matches found'
-    },
-
     export: {
         title: 'Export',
         format: 'Format',
@@ -227,6 +211,11 @@ export default {
         no: 'No'
     },
 
+    document: {
+        save: 'Save',
+        dontSave: "Don't Save"
+    },
+
     messages: {
         fileOpened: 'File opened',
         fileSaved: 'File saved',
@@ -238,5 +227,23 @@ export default {
         operationSuccess: 'Operation successful',
         operationFailed: 'Operation failed',
         restoredUnsaved: 'Restored {count} unsaved documents'
+    },
+
+    search: {
+        title: 'Find',
+        replaceTitle: 'Find and Replace',
+        findPlaceholder: 'Find',
+        replacePlaceholder: 'Replace',
+        previous: 'Previous',
+        next: 'Next',
+        matchCount: '{current} / {total}',
+        caseSensitive: 'Match Case',
+        wholeWord: 'Match Whole Word',
+        useRegex: 'Use Regex',
+        replace: 'Replace',
+        replaceAll: 'Replace All',
+        noMatch: 'No matches found',
+        error: 'Search error',
+        replaced: 'Replaced {count} occurrences'
     }
 }

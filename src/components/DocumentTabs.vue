@@ -22,11 +22,13 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Close } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useDocumentsStore } from '@/store/documents'
 
 const documentsStore = useDocumentsStore()
+const { t } = useI18n()
 
 const documents = computed(() => documentsStore.documents)
 const activeDocumentId = computed(() => documentsStore.activeDocumentId)
@@ -41,11 +43,11 @@ async function handleCloseTab(id) {
   if (doc && doc.isDirty) {
     try {
       await ElMessageBox.confirm(
-        '文档有未保存的更改，是否要保存？',
-        '提示',
+        t('messages.unsavedChanges'),
+        t('dialog.warning'),
         {
-          confirmButtonText: '保存',
-          cancelButtonText: '不保存',
+          confirmButtonText: t('document.save'),
+          cancelButtonText: t('document.dontSave'),
           distinguishCancelAndClose: true,
           type: 'warning'
         }

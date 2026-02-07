@@ -240,11 +240,11 @@ async function handleCloseDocument(id) {
     const { ElMessageBox } = await import('element-plus')
     try {
       await ElMessageBox.confirm(
-        '文档有未保存的更改，是否要保存？',
-        '提示',
+        t('messages.unsavedChanges'),
+        t('dialog.warning'),
         {
-          confirmButtonText: '保存',
-          cancelButtonText: '不保存',
+          confirmButtonText: t('document.save'),
+          cancelButtonText: t('document.dontSave'),
           distinguishCancelAndClose: true,
           type: 'warning'
         }

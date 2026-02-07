@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
-import { autoUpdater } from 'electron-updater'
+import updaterPkg from 'electron-updater'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import fs from 'fs/promises'
@@ -7,6 +7,8 @@ import { existsSync } from 'fs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+
+const { autoUpdater } = updaterPkg
 
 let mainWindow = null
 let willQuitApp = false

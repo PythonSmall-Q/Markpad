@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import i18n from '@/i18n'
 
 export const useSettingsStore = defineStore('settings', () => {
     // State
@@ -15,7 +16,7 @@ export const useSettingsStore = defineStore('settings', () => {
     const autoSave = ref(true)
     const showLineNumbers = ref(true)
     const syntaxHighlight = ref(true)
-    const defaultFileName = ref('未命名文档')
+    const defaultFileName = ref(i18n.global.t('editor.untitled'))
     const fileExtension = ref('.md')
     const recentFilesLimit = ref(20)
     const autoCheckUpdates = ref(true)
@@ -156,7 +157,7 @@ export const useSettingsStore = defineStore('settings', () => {
         autoSave.value = true
         showLineNumbers.value = true
         syntaxHighlight.value = true
-        defaultFileName.value = '未命名文档'
+        defaultFileName.value = i18n.global.t('editor.untitled')
         fileExtension.value = '.md'
         recentFilesLimit.value = 20
         saveSettings()
@@ -219,7 +220,7 @@ export const useSettingsStore = defineStore('settings', () => {
                 autoCheckUpdates.value = settings.autoCheckUpdates !== undefined ? settings.autoCheckUpdates : true
                 autoDownloadUpdates.value = settings.autoDownloadUpdates !== undefined ? settings.autoDownloadUpdates : false
                 syntaxHighlight.value = settings.syntaxHighlight !== undefined ? settings.syntaxHighlight : true
-                defaultFileName.value = settings.defaultFileName || '未命名文档'
+                defaultFileName.value = settings.defaultFileName || i18n.global.t('editor.untitled')
                 fileExtension.value = settings.fileExtension || '.md'
                 recentFilesLimit.value = settings.recentFilesLimit || 20
             } catch (error) {

@@ -228,7 +228,7 @@ function updateMatches() {
       currentMatchIndex.value = -1
     }
   } catch (error) {
-    ElMessage.error('搜索错误: ' + error.message)
+    ElMessage.error(`${t('search.error')}: ${error.message}`)
     matches.value = []
     totalMatches.value = 0
     currentMatchIndex.value = -1
@@ -371,7 +371,7 @@ function handleReplaceAll() {
     useRegex: useRegex.value
   })
   
-  ElMessage.success(`已替换 ${count} 处`)
+  ElMessage.success(t('search.replaced', { count }))
   
   // Update matches after replace
   setTimeout(() => {

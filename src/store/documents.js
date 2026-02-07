@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import i18n from '@/i18n'
 
 export const useDocumentsStore = defineStore('documents', () => {
     // State
@@ -21,7 +22,7 @@ export const useDocumentsStore = defineStore('documents', () => {
         const id = Date.now().toString() + Math.random().toString(36).substr(2, 9)
         const doc = {
             id,
-            title: options.title || '未命名文档',
+            title: options.title || i18n.global.t('editor.untitled'),
             content: options.content || '',
             filePath: options.filePath || null,
             isDirty: options.isDirty !== undefined ? options.isDirty : false,

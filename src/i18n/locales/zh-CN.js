@@ -189,22 +189,6 @@ export default {
         }
     },
 
-    search: {
-        title: '查找',
-        replaceTitle: '查找和替换',
-        findPlaceholder: '查找',
-        replacePlaceholder: '替换',
-        previous: '上一个',
-        next: '下一个',
-        matchCount: '{current} / {total}',
-        caseSensitive: '区分大小写',
-        wholeWord: '全词匹配',
-        useRegex: '使用正则',
-        replace: '替换',
-        replaceAll: '全部替换',
-        noMatch: '未找到匹配项'
-    },
-
     export: {
         title: '导出',
         format: '格式',
@@ -227,6 +211,11 @@ export default {
         no: '否'
     },
 
+    document: {
+        save: '保存',
+        dontSave: '不保存'
+    },
+
     messages: {
         fileOpened: '文件已打开',
         fileSaved: '文件已保存',
@@ -238,5 +227,23 @@ export default {
         operationSuccess: '操作成功',
         operationFailed: '操作失败',
         restoredUnsaved: '已恢复 {count} 个未保存的文档'
+    },
+
+    search: {
+        title: '查找',
+        replaceTitle: '查找和替换',
+        findPlaceholder: '查找',
+        replacePlaceholder: '替换',
+        previous: '上一个',
+        next: '下一个',
+        matchCount: '{current} / {total}',
+        caseSensitive: '区分大小写',
+        wholeWord: '全词匹配',
+        useRegex: '使用正则',
+        replace: '替换',
+        replaceAll: '全部替换',
+        noMatch: '未找到匹配项',
+        error: '搜索错误',
+        replaced: '已替换 {count} 处'
     }
 }

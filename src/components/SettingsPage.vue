@@ -119,7 +119,7 @@
           <el-form-item :label="t('settings.file.defaultFileName')">
             <el-input
               v-model="localSettings.defaultFileName"
-              placeholder="未命名文档"
+              :placeholder="t('editor.untitled')"
               @change="handleDefaultFileNameChange"
             />
           </el-form-item>
@@ -271,7 +271,7 @@ const localSettings = reactive({
   autoSaveInterval: 5,
   showLineNumbers: true,
   syntaxHighlight: true,
-  defaultFileName: '未命名文档',
+  defaultFileName: t('editor.untitled'),
   fileExtension: '.md',
   recentFilesLimit: 20,
   autoCheckUpdates: true,
