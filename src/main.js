@@ -11,7 +11,7 @@ import './styles/main.scss'
 const app = createApp(App)
 const pinia = createPinia()
 
-// 注册所有图标
+// Register all icons
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }

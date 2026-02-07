@@ -8,7 +8,7 @@
     </div>
     
     <div class="settings-content">
-      <!-- 外观设置 -->
+      <!-- Appearance settings -->
       <el-card class="settings-card" shadow="never">
         <template #header>
           <div class="card-header">
@@ -47,7 +47,7 @@
         </el-form>
       </el-card>
       
-      <!-- 编辑器设置 -->
+      <!-- Editor settings -->
       <el-card class="settings-card" shadow="never">
         <template #header>
           <div class="card-header">
@@ -106,7 +106,7 @@
         </el-form>
       </el-card>
       
-      <!-- 文件设置 -->
+      <!-- File settings -->
       <el-card class="settings-card" shadow="never">
         <template #header>
           <div class="card-header">
@@ -144,7 +144,7 @@
         </el-form>
       </el-card>
       
-      <!-- 语言设置 -->
+      <!-- Language settings -->
       <el-card class="settings-card" shadow="never">
         <template #header>
           <div class="card-header">
@@ -163,7 +163,7 @@
         </el-form>
       </el-card>
       
-      <!-- 快捷键设置 -->
+      <!-- Shortcut settings -->
       <el-card class="settings-card" shadow="never">
         <template #header>
           <div class="card-header">
@@ -178,7 +178,7 @@
         </el-table>
       </el-card>
       
-      <!-- 关于 -->
+      <!-- About -->
       <el-card class="settings-card" shadow="never">
         <template #header>
           <div class="card-header">
@@ -199,7 +199,7 @@
         </div>
       </el-card>
       
-      <!-- 底部操作 -->
+      <!-- Footer actions -->
       <div class="settings-footer">
         <el-button @click="resetSettings">恢复默认设置</el-button>
         <el-button type="primary" @click="saveSettings">保存设置</el-button>
@@ -337,7 +337,7 @@ async function resetSettings() {
     loadSettings()
     ElMessage.success('已恢复默认设置')
   } catch {
-    // 用户取消
+    // User cancelled
   }
 }
 

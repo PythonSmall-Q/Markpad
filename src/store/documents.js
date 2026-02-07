@@ -2,12 +2,12 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useDocumentsStore = defineStore('documents', () => {
-    // 状态
+    // State
     const documents = ref([])
     const activeDocumentId = ref(null)
     const autoSaveTimer = ref(null)
 
-    // 计算属性
+    // Computed properties
     const activeDocument = computed(() => {
         return documents.value.find(doc => doc.id === activeDocumentId.value)
     })
@@ -16,7 +16,7 @@ export const useDocumentsStore = defineStore('documents', () => {
         return documents.value.some(doc => doc.isDirty)
     })
 
-    // 方法
+    // Methods
     function createDocument(options = {}) {
         const id = Date.now().toString() + Math.random().toString(36).substr(2, 9)
         const doc = {
@@ -36,7 +36,7 @@ export const useDocumentsStore = defineStore('documents', () => {
     }
 
     function openDocument(filePath, content, title) {
-        // 检查文档是否已打开
+        // Check if document is already open
         const existingDoc = documents.value.find(doc => doc.filePath === filePath)
         if (existingDoc) {
             activeDocumentId.value = existingDoc.id
@@ -57,7 +57,7 @@ export const useDocumentsStore = defineStore('documents', () => {
         if (index !== -1) {
             documents.value.splice(index, 1)
 
-            // 如果关闭的是当前文档，切换到其他文档
+            // If closing the current document, switch to another document
             if (activeDocumentId.value === id) {
                 if (documents.value.length > 0) {
                     activeDocumentId.value = documents.value[index]
@@ -100,7 +100,7 @@ export const useDocumentsStore = defineStore('documents', () => {
         }
     }
 
-    // 自动保存
+    // Auto-save
     function enableAutoSave(interval = 60000) {
         if (autoSaveTimer.value) {
             clearInterval(autoSaveTimer.value)
@@ -109,7 +109,7 @@ export const useDocumentsStore = defineStore('documents', () => {
         autoSaveTimer.value = setInterval(() => {
             documents.value.forEach(doc => {
                 if (doc.isDirty && doc.filePath) {
-                    // 触发自动保存
+                    // Trigger auto-save
                     window.electronAPI.fileSave({
                         filePath: doc.filePath,
                         content: doc.content

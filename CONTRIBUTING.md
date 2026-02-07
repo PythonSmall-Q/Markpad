@@ -1,87 +1,87 @@
 # Contributing to Markpad
 
-感谢你有兴趣为 Markpad 做出贡献！
+Thank you for your interest in contributing to Markpad!
 
-## 行为准则
+## Code of Conduct
 
-我们期望所有贡献者遵守以下准则：
+We expect all contributors to follow these guidelines:
 
-- 尊重和友善地对待他人
-- 接受建设性的批评
-- 关注对社区最有利的事情
-- 对其他社区成员表现出同理心
+- Treat others with respect and kindness
+- Accept constructive criticism
+- Focus on what's best for the community
+- Show empathy towards other community members
 
-## 如何贡献
+## How to Contribute
 
-### 报告 Bug
+### Reporting Bugs
 
-如果你发现了 Bug，请：
+If you find a bug, please:
 
-1. 检查 [Issues](https://github.com/yourusername/markpad/issues) 确保问题尚未被报告
-2. 创建一个新的 Issue，包含：
-   - 清晰的标题
-   - 详细的问题描述
-   - 重现步骤
-   - 期望的行为
-   - 实际的行为
-   - 截图（如果适用）
-   - 环境信息（操作系统、版本等）
+1. Check [Issues](https://github.com/yourusername/markpad/issues) to ensure it hasn't been reported
+2. Create a new Issue with:
+   - Clear title
+   - Detailed description
+   - Steps to reproduce
+   - Expected behavior
+   - Actual behavior
+   - Screenshots (if applicable)
+   - Environment information (OS, version, etc.)
 
-### 建议新功能
+### Suggesting Features
 
-1. 先在 Issues 中讨论你的想法
-2. 说明功能的用途和价值
-3. 提供可能的实现方案（如果有）
+1. Discuss your idea in Issues first
+2. Explain the purpose and value of the feature
+3. Provide possible implementation approaches (if any)
 
-### 提交代码
+### Submitting Code
 
-#### 开发流程
+#### Development Workflow
 
-1. **Fork 仓库**
+1. **Fork the repository**
    ```bash
    git clone https://github.com/yourusername/markpad.git
    cd markpad
    ```
 
-2. **创建分支**
+2. **Create a branch**
    ```bash
    git checkout -b feature/your-feature-name
-   # 或
+   # or
    git checkout -b fix/your-bug-fix
    ```
 
-3. **安装依赖**
+3. **Install dependencies**
    ```bash
    npm install
    ```
 
-4. **开发和测试**
+4. **Develop and test**
    ```bash
    npm run electron:dev
    ```
 
-5. **提交更改**
+5. **Commit changes**
    ```bash
    git add .
    git commit -m "feat: add new feature"
-   # 或
+   # or
    git commit -m "fix: fix某个bug"
    ```
 
-6. **推送到你的 Fork**
+6. **Push to your Fork**
    ```bash
    git push origin feature/your-feature-name
    ```
 
-7. **创建 Pull Request**
-   - 访问 GitHub 上的项目页面
-   - 点击 "New Pull Request"
-   - 选择你的分支
-   - 填写 PR 描述
+7. **Create Pull Request**
+   - Visit the project page on GitHub
+   - Click "New Pull Request"
+   - Select your branch
+   - Fill in the PR description
 
-#### Commit 消息规范
+#### Commit Message Convention
 
-使用以下格式：
+Use the following format:
 
 ```
 <type>: <subject>
@@ -92,15 +92,15 @@
 ```
 
 **Type**:
-- `feat`: 新功能
-- `fix`: Bug 修复
-- `docs`: 文档更新
-- `style`: 代码格式（不影响代码运行）
-- `refactor`: 重构
-- `test`: 测试相关
-- `chore`: 构建过程或辅助工具的变动
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation update
+- `style`: Code formatting (no functional change)
+- `refactor`: Code refactoring
+- `test`: Testing related
+- `chore`: Build process or auxiliary tool changes
 
-**示例**:
+**Example**:
 ```
 feat: add search functionality
 
@@ -110,80 +110,80 @@ Includes UI components and keyboard shortcut Ctrl+F.
 Closes #123
 ```
 
-#### 代码规范
+#### Code Standards
 
-- 使用 ESLint 和 Prettier
-- 运行 `npm run lint` 检查代码
-- 遵循 Vue 3 风格指南
-- 使用 Composition API 和 `<script setup>`
-- 为复杂功能添加注释
-- 保持函数简洁（单一职责）
+- Use ESLint and Prettier
+- Run `npm run lint` to check code
+- Follow Vue 3 Style Guide
+- Use Composition API and `<script setup>`
+- Add comments for complex features
+- Keep functions concise (single responsibility)
 
-#### 测试
+#### Testing
 
-虽然当前没有自动化测试，但请确保：
+While there are no automated tests currently, please ensure:
 
-- 新功能正常工作
-- 没有破坏现有功能
-- 在不同操作系统上测试（如果可能）
-- 测试明暗主题下的显示
+- New features work properly
+- Existing features are not broken
+- Test on different operating systems (if possible)
+- Test display in light and dark themes
 
-### 文档贡献
+### Documentation Contributions
 
-- 修复文档错误
-- 改进说明和示例
-- 添加翻译
-- 更新截图
+- Fix documentation errors
+- Improve instructions and examples
+- Add translations
+- Update screenshots
 
-## Pull Request 审查流程
+## Pull Request Review Process
 
-1. 提交 PR 后，维护者会进行审查
-2. 可能会要求修改
-3. 通过审查后会被合并
-4. 你的贡献会被记录在 CHANGELOG 中
+1. After submitting a PR, maintainers will review it
+2. Changes may be requested
+3. Once approved, it will be merged
+4. Your contribution will be recorded in the CHANGELOG
 
-## 开发环境设置
+## Development Environment Setup
 
-### 必需工具
+### Required Tools
 
-- Node.js 16.x 或更高
-- npm 或 yarn
+- Node.js 16.x or higher
+- npm or yarn
 - Git
 
-### 推荐工具
+### Recommended Tools
 
 - VS Code
 - Vue Language Features (Volar)
-- ESLint 扩展
-- Prettier 扩展
+- ESLint extension
+- Prettier extension
 
-### 项目结构
+### Project Structure
 
 ```
 markpad/
-├── electron/          # Electron 主进程
-├── src/              # Vue 应用源码
-│   ├── components/   # Vue 组件
-│   ├── views/        # 页面
-│   ├── store/        # 状态管理
-│   ├── utils/        # 工具函数
-│   └── styles/       # 样式文件
-├── public/           # 静态资源
-└── docs/            # 文档
+├── electron/          # Electron main process
+├── src/              # Vue application source
+│   ├── components/   # Vue components
+│   ├── views/        # Views
+│   ├── store/        # State management
+│   ├── utils/        # Utility functions
+│   └── styles/       # Style files
+├── public/           # Static resources
+└── docs/            # Documentation
 ```
 
-## 获取帮助
+## Getting Help
 
-如果有任何问题：
+If you have any questions:
 
-- 查看 [DEVELOPMENT.md](DEVELOPMENT.md)
-- 在 Issues 中提问
-- 发送邮件到维护者
+- Check [DEVELOPMENT.md](DEVELOPMENT.md)
+- Ask in Issues
+- Email the maintainers
 
-## 许可证
+## License
 
-通过贡献，你同意你的贡献将按照 [MIT License](LICENSE) 许可。
+By contributing, you agree that your contributions will be licensed under the [MIT License](LICENSE).
 
 ---
 
-再次感谢你的贡献！ 🎉
+Thank you again for your contribution! 🎉

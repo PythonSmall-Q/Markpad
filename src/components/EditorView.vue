@@ -1,9 +1,9 @@
 <template>
   <div class="editor-view">
-    <!-- 工具栏 -->
+    <!-- Toolbar -->
     <EditorToolbar @command="handleToolbarCommand" />
     
-    <!-- 编辑器容器 -->
+    <!-- Editor container -->
     <div class="editor-container">
       <div ref="editorRef" class="editor"></div>
     </div>
@@ -48,7 +48,7 @@ watch(activeDocument, (newDoc, oldDoc) => {
 }, { immediate: true })
 
 watch(theme, (newTheme) => {
-  // 根据主题更新编辑器样式
+  // Update editor style based on theme
   if (editorInstance) {
     const editorEl = editorRef.value
     if (newTheme === 'dark') {
@@ -76,7 +76,7 @@ function initEditor() {
     }
   })
   
-  // 应用主题
+  // Apply theme
   if (theme.value === 'dark') {
     editorRef.value.classList.add('toastui-editor-dark')
   }
@@ -85,7 +85,7 @@ function initEditor() {
 function handleEditorChange() {
   if (!activeDocument.value) return
   
-  // 防抖更新
+  // Debounced update
   if (updateTimer) {
     clearTimeout(updateTimer)
   }
@@ -97,17 +97,17 @@ function handleEditorChange() {
 }
 
 /**
- * 折叠长 base64 图片 URL，保留前后部分用于识别
- * @param {string} url - 图片 URL
- * @returns {string} - 折叠后的 URL 或原 URL
+ * Collapse long base64 image URL, keeping prefix and suffix for identification
+ * @param {string} url - Image URL
+ * @returns {string} - Collapsed URL or original URL
  */
 function collapseBase64Url(url) {
-  // 检测是否为 base64 图片
+  // Check if it's a base64 image
   if (url.startsWith('data:image/') && url.includes('base64,')) {
     const parts = url.split('base64,')
     if (parts.length === 2 && parts[1].length > 100) {
       const base64Data = parts[1]
-      // 保留前50个字符和后20个字符，中间用省略号表示
+      // Keep first 50 and last 20 characters, use ellipsis in between
       const collapsed = `${parts[0]}base64,${base64Data.substring(0, 50)}...${base64Data.substring(base64Data.length - 20)}`
       return collapsed
     }
@@ -156,7 +156,7 @@ function handleToolbarCommand(command) {
       break
     case 'image':
       if (command.url && command.alt) {
-        // 自动折叠 base64 图片 URL
+        // Auto-collapse base64 image URL
         const displayUrl = collapseBase64Url(command.url)
         const markdown = `![${command.alt}](${displayUrl})`
         editor.insertText(markdown)

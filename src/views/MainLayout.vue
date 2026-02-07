@@ -1,26 +1,26 @@
 <template>
   <div class="main-layout">
-    <!-- 顶部菜单栏 -->
+    <!-- Top menu bar -->
     <HeaderBar />
     
-    <!-- 内容区域 -->
+    <!-- Content area -->
     <div class="content-area">
-      <!-- 侧边栏 -->
+      <!-- Sidebar -->
       <Sidebar v-if="showSidebar" @open-settings="showSettingsPage = true" />
       
-      <!-- 主编辑区 -->
+      <!-- Main editing area -->
       <div class="main-area" v-if="!showSettingsPage">
-        <!-- 文档标签 -->
+        <!-- Document tabs -->
         <DocumentTabs />
         
-        <!-- 编辑器 -->
+        <!-- Editor -->
         <EditorView v-if="activeDocument" />
         
-        <!-- 欢迎页 -->
+        <!-- Welcome page -->
         <WelcomePage v-else />
       </div>
       
-      <!-- 设置页面 -->
+      <!-- Settings page -->
       <SettingsPage v-if="showSettingsPage" @close="showSettingsPage = false" />
     </div>
   </div>
@@ -42,57 +42,57 @@ const settingsStore = useSettingsStore()
 
 const showSettingsPage = ref(false)
 const activeDocument = computed(() => documentsStore.activeDocument)
-const showSidebar = computed(() => true) // 可以添加到设置中
+const showSidebar = computed(() => true) // Can be added to settings
 
 onMounted(() => {
-  // 加载设置
+  // Load settings
   settingsStore.loadSettings()
   
-  // 启用自动保存
+  // Enable auto-save
   documentsStore.enableAutoSave(settingsStore.autoSaveInterval)
   
-  // 快捷键
+  // Keyboard shortcuts
   document.addEventListener('keydown', handleKeyDown)
 })
 
 onUnmounted(() => {
-  // 清理
+  // Cleanup
   documentsStore.disableAutoSave()
   document.removeEventListener('keydown', handleKeyDown)
 })
 
 function handleKeyDown(e) {
-  // Ctrl/Cmd + N: 新建文档
+  // Ctrl/Cmd + N: New document
   if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
     e.preventDefault()
     documentsStore.createDocument()
   }
   
-  // Ctrl/Cmd + O: 打开文件
+  // Ctrl/Cmd + O: Open file
   if ((e.ctrlKey || e.metaKey) && e.key === 'o') {
     e.preventDefault()
-    // 触发打开文件对话框
+    // Trigger open file dialog
   }
   
-  // Ctrl/Cmd + S: 保存文件
+  // Ctrl/Cmd + S: Save file
   if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault()
-    // 触发保存文件
+    // Trigger save file
   }
   
-  // Ctrl/Cmd + W: 关闭当前文档
+  // Ctrl/Cmd + W: Close current document
   if ((e.ctrlKey || e.metaKey) && e.key === 'w') {
     e.preventDefault()
     if (activeDocument.value) {
       documentsStore.closeDocument(activeDocument.value.id)
   
-  // Ctrl/Cmd + ,: 打开设置
+  // Ctrl/Cmd + ,: Open settings
   if ((e.ctrlKey || e.metaKey) && e.key === ',') {
     e.preventDefault()
     showSettingsPage.value = true
   }
   
-  // Esc: 关闭设置页面
+  // Esc: Close settings page
   if (e.key === 'Escape' && showSettingsPage.value) {
     e.preventDefault()
     showSettingsPage.value = false

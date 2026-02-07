@@ -7,7 +7,7 @@ const isElectron = () => {
     return window.electronAPI !== undefined
 }
 
-// 文件操作
+// File operations
 export const fileAPI = {
     async open() {
         if (!isElectron()) {
@@ -42,7 +42,7 @@ export const fileAPI = {
     }
 }
 
-// 资源导入
+// Asset import
 export const assetAPI = {
     async import(type = 'file') {
         if (!isElectron()) {
@@ -65,7 +65,7 @@ export const assetAPI = {
     }
 }
 
-// 导出功能
+// Export functionality
 export const exportAPI = {
     async toHtml(content, defaultName = 'export.html') {
         if (!isElectron()) {
@@ -100,7 +100,7 @@ export const exportAPI = {
     }
 }
 
-// 系统功能
+// System functionality
 export const systemAPI = {
     async openExternal(url) {
         if (!isElectron()) {
@@ -111,7 +111,7 @@ export const systemAPI = {
     }
 }
 
-// 设置
+// Settings
 export const settingsAPI = {
     async get() {
         if (!isElectron()) {

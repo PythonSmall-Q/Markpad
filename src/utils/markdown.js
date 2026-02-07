@@ -1,10 +1,10 @@
 import { marked } from 'marked'
 
 /**
- * Markdown 工具函数
+ * Markdown utility functions
  */
 
-// 配置 marked
+// Configure marked
 marked.setOptions({
     breaks: true,
     gfm: true,
@@ -13,7 +13,7 @@ marked.setOptions({
 })
 
 /**
- * 将 Markdown 转换为 HTML
+ * Convert Markdown to HTML
  */
 export function markdownToHtml(markdown) {
     try {
@@ -25,47 +25,47 @@ export function markdownToHtml(markdown) {
 }
 
 /**
- * 将 Markdown 转换为纯文本（去除格式）
+ * Convert Markdown to plain text (remove formatting)
  */
 export function markdownToText(markdown) {
-    // 移除 Markdown 语法
+    // Remove Markdown syntax
     let text = markdown
 
-    // 移除标题标记
+    // Remove heading markers
     text = text.replace(/^#{1,6}\s+/gm, '')
 
-    // 移除粗体和斜体
+    // Remove bold and italic
     text = text.replace(/(\*\*|__)(.*?)\1/g, '$2')
     text = text.replace(/(\*|_)(.*?)\1/g, '$2')
 
-    // 移除删除线
+    // Remove strikethrough
     text = text.replace(/~~(.*?)~~/g, '$1')
 
-    // 移除链接，保留文本
+    // Remove links, keep text
     text = text.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
 
-    // 移除图片
+    // Remove images
     text = text.replace(/!\[([^\]]*)\]\([^\)]+\)/g, '')
 
-    // 移除代码块
+    // Remove code blocks
     text = text.replace(/```[\s\S]*?```/g, '')
     text = text.replace(/`([^`]+)`/g, '$1')
 
-    // 移除引用标记
+    // Remove quote markers
     text = text.replace(/^>\s+/gm, '')
 
-    // 移除列表标记
+    // Remove list markers
     text = text.replace(/^[\*\-\+]\s+/gm, '')
     text = text.replace(/^\d+\.\s+/gm, '')
 
-    // 移除水平线
+    // Remove horizontal rules
     text = text.replace(/^[\-\*_]{3,}\s*$/gm, '')
 
     return text.trim()
 }
 
 /**
- * 生成完整的 HTML 文档
+ * Generate complete HTML document
  */
 export function generateHtmlDocument(markdown, title = 'Document') {
     const htmlContent = markdownToHtml(markdown)
@@ -179,7 +179,7 @@ export function generateHtmlDocument(markdown, title = 'Document') {
 }
 
 /**
- * 插入 Markdown 语法
+ * Insert Markdown syntax
  */
 export const markdownInsert = {
     bold: (text) => `**${text}**`,

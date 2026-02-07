@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useSettingsStore = defineStore('settings', () => {
-    // 状态
+    // State
     const theme = ref('light')
     const locale = ref('zh-CN')
     const autoSaveInterval = ref(5)
@@ -19,7 +19,7 @@ export const useSettingsStore = defineStore('settings', () => {
     const fileExtension = ref('.md')
     const recentFilesLimit = ref(20)
 
-    // 方法
+    // Methods
     function setTheme(newTheme) {
         theme.value = newTheme
         saveSettings()
@@ -41,16 +41,16 @@ export const useSettingsStore = defineStore('settings', () => {
     }
 
     function addRecentFile(filePath) {
-        // 移除重复项
+        // Remove duplicates
         const index = recentFiles.value.indexOf(filePath)
         if (index !== -1) {
             recentFiles.value.splice(index, 1)
         }
 
-        // 添加到开头
+        // Add to beginning
         recentFiles.value.unshift(filePath)
 
-        // 限制最多 10 个
+        // Limit to max 10 items
         if (recentFiles.value.length > 10) {
             recentFiles.value.pop()
         }
@@ -123,7 +123,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
     function setRecentFilesLimit(limit) {
         recentFilesLimit.value = limit
-        // 如果当前文件数超过限制，截断
+        // If current file count exceeds limit, truncate
         if (recentFiles.value.length > limit) {
             recentFiles.value = recentFiles.value.slice(0, limit)
         }
@@ -154,7 +154,7 @@ export const useSettingsStore = defineStore('settings', () => {
         saveSettings()
     }
 
-    // 保存设置到 localStorage
+    // Save settings to localStorage
     function saveSettings() {
         const settings = {
             theme: theme.value,
@@ -176,13 +176,13 @@ export const useSettingsStore = defineStore('settings', () => {
 
         localStorage.setItem('markpad-settings', JSON.stringify(settings))
 
-        // 同时保存到 Electron
+        // Also save to Electron
         if (window.electronAPI) {
             window.electronAPI.setSettings(settings)
         }
     }
 
-    // 从 localStorage 加载设置
+    // Load settings from localStorage
     function loadSettings() {
         const saved = localStorage.getItem('markpad-settings')
         if (saved) {

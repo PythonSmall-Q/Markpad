@@ -141,7 +141,7 @@ async function handleInsertLink() {
     
     emit('command', { type: 'link', url: value, text: text.value || value })
   } catch {
-    // 用户取消
+    // User cancelled
   }
 }
 

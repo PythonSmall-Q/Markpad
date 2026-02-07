@@ -5,7 +5,7 @@
     </div>
     
     <div class="sidebar-content">
-      <!-- 最近打开 -->
+      <!-- Recently opened -->
       <div class="section">
         <div class="section-title">最近打开</div>
         <div class="recent-files">
@@ -24,7 +24,7 @@
         </div>
       </div>
       
-      <!-- 已打开文档 -->
+      <!-- Opened documents -->
       <div class="section">
         <div class="section-title">已打开</div>
         <div class="open-documents">
@@ -51,7 +51,7 @@
       </div>
     </div>
     
-    <!-- 侧边栏底部 -->
+    <!-- Sidebar footer -->
     <div class="sidebar-footer">
       <el-button 
         type="text" 

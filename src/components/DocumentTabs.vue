@@ -51,7 +51,7 @@ async function handleCloseTab(id) {
       )
       documentsStore.closeDocument(id)
     } catch {
-      // 用户取消
+      // User cancelled
     }
   } else {
     documentsStore.closeDocument(id)
