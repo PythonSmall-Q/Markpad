@@ -80,8 +80,6 @@ jobs:
             dist-electron/*.exe
             dist-electron/*.dmg
             dist-electron/*.AppImage
-            dist-electron/*.blockmap
-            dist-electron/*.yml
           if-no-files-found: ignore
 
   release:
@@ -128,8 +126,6 @@ jobs:
             artifacts/**/*.exe
             artifacts/**/*.dmg
             artifacts/**/*.AppImage
-            artifacts/**/*.blockmap
-            artifacts/**/*.yml
           draft: false
           prerelease: ${{ contains(env.VERSION, 'beta') || contains(env.VERSION, 'alpha') }}
           generate_release_notes: true
