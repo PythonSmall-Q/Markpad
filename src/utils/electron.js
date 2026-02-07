@@ -14,7 +14,12 @@ export const fileAPI = {
             console.warn('File operations are only available in Electron environment')
             return null
         }
-        return await window.electronAPI.fileOpen()
+        try {
+            return await window.electronAPI.fileOpen()
+        } catch (error) {
+            console.error('File open error:', error)
+            return null
+        }
     },
 
     async save(filePath, content) {
@@ -22,7 +27,12 @@ export const fileAPI = {
             console.warn('File operations are only available in Electron environment')
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.fileSave({ filePath, content })
+        try {
+            return await window.electronAPI.fileSave({ filePath, content })
+        } catch (error) {
+            console.error('File save error:', error)
+            return { success: false, error: error.message }
+        }
     },
 
     async saveAs(content, defaultName = 'untitled.md') {
@@ -30,7 +40,12 @@ export const fileAPI = {
             console.warn('File operations are only available in Electron environment')
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.fileSaveAs({ content, defaultName })
+        try {
+            return await window.electronAPI.fileSaveAs({ content, defaultName })
+        } catch (error) {
+            console.error('File saveAs error:', error)
+            return { success: false, error: error.message }
+        }
     },
 
     async read(filePath) {
@@ -38,7 +53,12 @@ export const fileAPI = {
             console.warn('File operations are only available in Electron environment')
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.fileRead(filePath)
+        try {
+            return await window.electronAPI.fileRead(filePath)
+        } catch (error) {
+            console.error('File read error:', error)
+            return { success: false, error: error.message }
+        }
     }
 }
 
@@ -72,7 +92,12 @@ export const exportAPI = {
             console.warn('Export operations are only available in Electron environment')
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.exportHtml({ content, defaultName })
+        try {
+            return await window.electronAPI.exportHtml({ content, defaultName })
+        } catch (error) {
+            console.error('Export HTML error:', error)
+            return { success: false, error: error.message }
+        }
     },
 
     async toPdf(defaultName = 'export.pdf') {
@@ -80,7 +105,12 @@ export const exportAPI = {
             console.warn('Export operations are only available in Electron environment')
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.exportPdf(defaultName)
+        try {
+            return await window.electronAPI.exportPdf(defaultName)
+        } catch (error) {
+            console.error('Export PDF error:', error)
+            return { success: false, error: error.message }
+        }
     },
 
     async toMarkdown(content, defaultName = 'export.md') {
@@ -88,7 +118,12 @@ export const exportAPI = {
             console.warn('Export operations are only available in Electron environment')
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.exportMarkdown({ content, defaultName })
+        try {
+            return await window.electronAPI.exportMarkdown({ content, defaultName })
+        } catch (error) {
+            console.error('Export Markdown error:', error)
+            return { success: false, error: error.message }
+        }
     },
 
     async toText(content, defaultName = 'export.txt') {
@@ -96,7 +131,12 @@ export const exportAPI = {
             console.warn('Export operations are only available in Electron environment')
             return { success: false, error: 'Not in Electron environment' }
         }
-        return await window.electronAPI.exportText({ content, defaultName })
+        try {
+            return await window.electronAPI.exportText({ content, defaultName })
+        } catch (error) {
+            console.error('Export Text error:', error)
+            return { success: false, error: error.message }
+        }
     }
 }
 
@@ -128,11 +168,75 @@ export const settingsAPI = {
     }
 }
 
+// Temporary file management
+export const tempAPI = {
+    async save(documents) {
+        if (!isElectron()) {
+            // 在 Web 环境下使用 localStorage
+            try {
+                localStorage.setItem('markpad-temp-documents', JSON.stringify(documents))
+                return { success: true }
+            } catch (error) {
+                return { success: false, error: error.message }
+            }
+        }
+        return await window.electronAPI.tempSave({ documents })
+    },
+
+    async load() {
+        if (!isElectron()) {
+            // 在 Web 环境下使用 localStorage
+            try {
+                const data = localStorage.getItem('markpad-temp-documents')
+                const documents = data ? JSON.parse(data) : []
+                return { success: true, documents }
+            } catch (error) {
+                return { success: false, error: error.message }
+            }
+        }
+        return await window.electronAPI.tempLoad()
+    },
+
+    async clear() {
+        if (!isElectron()) {
+            // 在 Web 环境下使用 localStorage
+            try {
+                localStorage.removeItem('markpad-temp-documents')
+                return { success: true }
+            } catch (error) {
+                return { success: false, error: error.message }
+            }
+        }
+        return await window.electronAPI.tempClear()
+    }
+}
+
+// Window events
+export const windowAPI = {
+    onBeforeClose(callback) {
+        if (!isElectron()) {
+            // 在 Web 环境下使用 beforeunload
+            window.addEventListener('beforeunload', callback)
+            return
+        }
+        window.electronAPI.onBeforeClose(callback)
+    },
+
+    confirmClose(shouldClose) {
+        if (!isElectron()) {
+            return
+        }
+        window.electronAPI.closeConfirmed(shouldClose)
+    }
+}
+
 export default {
     isElectron,
     fileAPI,
     assetAPI,
     exportAPI,
     systemAPI,
-    settingsAPI
+    settingsAPI,
+    tempAPI,
+    windowAPI
 }

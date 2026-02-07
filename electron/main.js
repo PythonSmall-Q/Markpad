@@ -2,22 +2,51 @@ import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import fs from 'fs/promises'
+import { existsSync } from 'fs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 let mainWindow = null
+let willQuitApp = false
+
+// 临时文件目录
+const tempDir = join(app.getPath('userData'), '.temp')
+
+// 确保临时目录存在
+async function ensureTempDir() {
+    if (!existsSync(tempDir)) {
+        await fs.mkdir(tempDir, { recursive: true })
+    }
+}
 
 function createWindow() {
+    // 设置应用图标路径
+    const iconPath = process.platform === 'win32'
+        ? join(__dirname, '../build/icons/icon.ico')
+        : process.platform === 'darwin'
+            ? join(__dirname, '../build/icons/icon.icns')
+            : join(__dirname, '../build/icons/512x512.png')
+
+    // 确定 preload 脚本的正确路径
+    // 使用 .cjs 扩展名以确保 CommonJS 格式被正确识别
+    const preloadPath = join(__dirname, 'preload.cjs')
+
+    console.log('Preload path:', preloadPath)
+    console.log('__dirname:', __dirname)
+    console.log('app.isPackaged:', app.isPackaged)
+
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 900,
         minWidth: 800,
         minHeight: 600,
+        icon: iconPath,
         webPreferences: {
-            preload: join(__dirname, 'preload.js'),
+            preload: preloadPath,
             contextIsolation: true,
-            nodeIntegration: false
+            nodeIntegration: false,
+            sandbox: false
         },
         show: false,
         backgroundColor: '#ffffff'
@@ -25,22 +54,43 @@ function createWindow() {
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show()
+
+        // 诊断信息：检查 preload 是否正确加载
+        mainWindow.webContents.executeJavaScript(`
+            console.log('=== Electron Environment Check ===');
+            console.log('window.electronAPI exists:', typeof window.electronAPI !== 'undefined');
+            if (window.electronAPI) {
+                console.log('electronAPI methods:', Object.keys(window.electronAPI));
+            } else {
+                console.error('⚠️ electronAPI is not available! Preload script may not have loaded correctly.');
+            }
+        `).catch(err => console.error('Failed to check electronAPI:', err))
     })
 
     // 开发环境加载 Vite 服务器，生产环境加载打包文件
-    if (process.env.NODE_ENV === 'development') {
-        mainWindow.loadURL('http://localhost:5173')
+    if (process.env.NODE_ENV === 'development' || !app.isPackaged) {
+        mainWindow.loadURL('http://localhost:5175')
         mainWindow.webContents.openDevTools()
     } else {
+        // 生产环境：从 app.asar 中加载
         mainWindow.loadFile(join(__dirname, '../dist/index.html'))
     }
+
+    // 拦截窗口关闭事件
+    mainWindow.on('close', (e) => {
+        if (!willQuitApp) {
+            e.preventDefault()
+            mainWindow.webContents.send('window:before-close')
+        }
+    })
 
     mainWindow.on('closed', () => {
         mainWindow = null
     })
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+    await ensureTempDir()
     createWindow()
 
     app.on('activate', () => {
@@ -233,4 +283,55 @@ ipcMain.handle('settings:get', async () => {
 ipcMain.handle('settings:set', async (event, settings) => {
     // 保存设置到文件或数据库
     return { success: true }
+})
+
+// 临时文件管理
+ipcMain.handle('temp:save', async (event, { documents }) => {
+    try {
+        await ensureTempDir()
+        const tempFile = join(tempDir, 'unsaved-documents.json')
+        await fs.writeFile(tempFile, JSON.stringify(documents, null, 2), 'utf-8')
+        return { success: true }
+    } catch (error) {
+        console.error('Failed to save temp files:', error)
+        return { success: false, error: error.message }
+    }
+})
+
+ipcMain.handle('temp:load', async () => {
+    try {
+        const tempFile = join(tempDir, 'unsaved-documents.json')
+        if (existsSync(tempFile)) {
+            const content = await fs.readFile(tempFile, 'utf-8')
+            const documents = JSON.parse(content)
+            return { success: true, documents }
+        }
+        return { success: true, documents: [] }
+    } catch (error) {
+        console.error('Failed to load temp files:', error)
+        return { success: false, error: error.message }
+    }
+})
+
+ipcMain.handle('temp:clear', async () => {
+    try {
+        const tempFile = join(tempDir, 'unsaved-documents.json')
+        if (existsSync(tempFile)) {
+            await fs.unlink(tempFile)
+        }
+        return { success: true }
+    } catch (error) {
+        console.error('Failed to clear temp files:', error)
+        return { success: false, error: error.message }
+    }
+})
+
+// 窗口关闭确认
+ipcMain.on('window:close-confirmed', (event, shouldClose) => {
+    if (shouldClose) {
+        willQuitApp = true
+        if (mainWindow) {
+            mainWindow.close()
+        }
+    }
 })

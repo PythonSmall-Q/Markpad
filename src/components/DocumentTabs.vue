@@ -41,17 +41,41 @@ async function handleCloseTab(id) {
   if (doc && doc.isDirty) {
     try {
       await ElMessageBox.confirm(
-        '文档有未保存的修改，确定要关闭吗？',
+        '文档有未保存的更改，是否要保存？',
         '提示',
         {
-          confirmButtonText: '关闭',
-          cancelButtonText: '取消',
+          confirmButtonText: '保存',
+          cancelButtonText: '不保存',
+          distinguishCancelAndClose: true,
           type: 'warning'
         }
       )
+      // 用户选择保存
+      try {
+        const { fileAPI } = await import('@/utils/electron')
+        if (doc.filePath) {
+          await fileAPI.save({ filePath: doc.filePath, content: doc.content })
+          documentsStore.markAsSaved(id)
+        } else {
+          const result = await fileAPI.saveAs({ content: doc.content })
+          if (result.success) {
+            documentsStore.updateDocument(id, { filePath: result.filePath })
+            documentsStore.markAsSaved(id)
+          } else {
+            return // 取消保存，不关闭
+          }
+        }
+      } catch (error) {
+        console.error('Save failed:', error)
+        return // 保存失败，不关闭
+      }
       documentsStore.closeDocument(id)
-    } catch {
-      // User cancelled
+    } catch (action) {
+      if (action === 'cancel') {
+        // 用户选择不保存，直接关闭
+        documentsStore.closeDocument(id)
+      }
+      // 用户点击 X 或按 ESC，不关闭文档
     }
   } else {
     documentsStore.closeDocument(id)

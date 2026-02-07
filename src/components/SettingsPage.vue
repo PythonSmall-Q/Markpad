@@ -149,16 +149,24 @@
         <template #header>
           <div class="card-header">
             <el-icon><Reading /></el-icon>
-            <span>{{ t('settings.language.title') }}</span>
+            <span>语言</span>
           </div>
         </template>
         
         <el-form label-width="120px">
-          <el-form-item :label="t('settings.language.selectLanguage')">
-            <el-radio-group v-model="localSettings.locale" @change="handleLocaleChange">
-              <el-radio-button label="zh-CN">{{ t('settings.language.zhCN') }}</el-radio-button>
-              <el-radio-button label="en-US">{{ t('settings.language.enUS') }}</el-radio-button>
-            </el-radio-group>
+          <el-form-item label="选择语言">
+            <el-select v-model="localSettings.locale" @change="handleLocaleChange" style="width: 200px">
+              <el-option label="简体中文" value="zh-CN" />
+              <el-option label="繁體中文" value="zh-TW" />
+              <el-option label="English" value="en-US" />
+              <el-option label="日本語" value="ja-JP" />
+              <el-option label="한국어" value="ko-KR" />
+              <el-option label="Español" value="es-ES" />
+              <el-option label="Français" value="fr-FR" />
+              <el-option label="Deutsch" value="de-DE" />
+              <el-option label="Русский" value="ru-RU" />
+              <el-option label="Português (Brasil)" value="pt-BR" />
+            </el-select>
           </el-form-item>
         </el-form>
       </el-card>
@@ -274,7 +282,8 @@ function loadSettings() {
 function handleLocaleChange(value) {
   settingsStore.setLocale(value)
   locale.value = value
-  ElMessage.success(t('settings.saveSuccess'))
+  localStorage.setItem('markpad-locale', value)
+  ElMessage.success('语言设置已保存')
 }
 
 function handleThemeChange(value) {
@@ -455,7 +464,7 @@ function openDocs() {
 .settings-footer {
   position: fixed;
   bottom: 0;
-  left: 260px;
+  left: 0;
   right: 0;
   padding: 16px 24px;
   background-color: var(--sidebar-bg);

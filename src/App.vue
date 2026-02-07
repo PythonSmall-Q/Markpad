@@ -28,6 +28,22 @@ onMounted(() => {
     isFirstLaunch.value = true
     showLanguageSelector.value = true
   }
+  
+  // Diagnostic: Check if running in Electron
+  if (typeof window !== 'undefined') {
+    console.log('=== Application Environment Check ===')
+    console.log('Window object exists:', true)
+    console.log('electronAPI exists:', typeof window.electronAPI !== 'undefined')
+    
+    if (window.electronAPI) {
+      console.log('✓ Running in Electron environment')
+      console.log('Available API methods:', Object.keys(window.electronAPI).join(', '))
+    } else {
+      console.warn('⚠ Not running in Electron environment')
+      console.warn('File operations will not work.')
+      console.warn('Please run: npm run electron:dev or use the packaged application')
+    }
+  }
 })
 
 const handleLanguageConfirm = () => {

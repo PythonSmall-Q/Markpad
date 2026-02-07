@@ -118,6 +118,9 @@ export const useDocumentsStore = defineStore('documents', () => {
                     })
                 }
             })
+
+            // 保存未保存的文档到临时文件
+            saveTempDocuments()
         }, interval)
     }
 
@@ -125,6 +128,60 @@ export const useDocumentsStore = defineStore('documents', () => {
         if (autoSaveTimer.value) {
             clearInterval(autoSaveTimer.value)
             autoSaveTimer.value = null
+        }
+    }
+
+    // 保存未保存的文档到临时文件
+    async function saveTempDocuments() {
+        const unsavedDocs = documents.value.filter(doc => !doc.filePath || doc.isDirty)
+        if (unsavedDocs.length === 0) {
+            // 如果没有未保存的文档,清除临时文件
+            const { tempAPI } = await import('@/utils/electron')
+            await tempAPI.clear()
+            return
+        }
+
+        try {
+            const { tempAPI } = await import('@/utils/electron')
+            await tempAPI.save(unsavedDocs)
+        } catch (error) {
+            console.error('Failed to save temp documents:', error)
+        }
+    }
+
+    // 从临时文件恢复文档
+    async function restoreTempDocuments() {
+        try {
+            const { tempAPI } = await import('@/utils/electron')
+            const result = await tempAPI.load()
+
+            if (result.success && result.documents && result.documents.length > 0) {
+                // 恢复文档
+                result.documents.forEach(doc => {
+                    documents.value.push(doc)
+                })
+
+                // 激活第一个文档
+                if (documents.value.length > 0) {
+                    activeDocumentId.value = documents.value[0].id
+                }
+
+                return result.documents.length
+            }
+            return 0
+        } catch (error) {
+            console.error('Failed to restore temp documents:', error)
+            return 0
+        }
+    }
+
+    // 清除所有临时文档
+    async function clearTempDocuments() {
+        try {
+            const { tempAPI } = await import('@/utils/electron')
+            await tempAPI.clear()
+        } catch (error) {
+            console.error('Failed to clear temp documents:', error)
         }
     }
 
@@ -141,6 +198,9 @@ export const useDocumentsStore = defineStore('documents', () => {
         markAsSaved,
         updateContent,
         enableAutoSave,
-        disableAutoSave
+        disableAutoSave,
+        saveTempDocuments,
+        restoreTempDocuments,
+        clearTempDocuments
     }
 })

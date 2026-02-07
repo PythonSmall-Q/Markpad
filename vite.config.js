@@ -3,17 +3,29 @@ import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [
+        vue({
+            template: {
+                compilerOptions: {
+                    // 确保 Element Plus 图标组件被正确识别
+                    isCustomElement: (tag) => false
+                }
+            }
+        })
+    ],
     base: './',
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
         }
     },
+    optimizeDeps: {
+        include: ['element-plus', '@element-plus/icons-vue']
+    },
     server: {
-        host: '0.0.0.0',
-        port: 5174,
-        strictPort: true
+        host: 'localhost',
+        port: 5175,
+        strictPort: false
     },
     build: {
         outDir: 'dist',

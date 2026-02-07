@@ -11,11 +11,12 @@ import './styles/main.scss'
 const app = createApp(App)
 const pinia = createPinia()
 
-// Register all icons
+// Register Element Plus icons globally
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
+// 使用插件
 app.use(pinia)
 app.use(router)
 app.use(i18n)

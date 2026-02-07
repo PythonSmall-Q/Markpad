@@ -66,6 +66,7 @@ body {
 .sidebar,
 .document-tabs,
 .editor-toolbar {
+    -webkit-user-select: none;
     user-select: none;
 }
 

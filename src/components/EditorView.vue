@@ -71,6 +71,8 @@ function initEditor() {
     usageStatistics: false,
     toolbarItems: [],
     hideModeSwitch: false,
+    // 禁用编辑器默认快捷键以避免与应用快捷键冲突
+    useCommandShortcut: false,
     events: {
       change: handleEditorChange
     }
@@ -178,10 +180,147 @@ function handleToolbarCommand(command) {
   editor.focus()
 }
 
+// Search and Replace functions
+function performSearch(options) {
+  if (!editorInstance) return
+  
+  try {
+    const { text, direction, caseSensitive, wholeWord, useRegex } = options
+    const content = editorInstance.getMarkdown()
+    
+    let pattern = text
+    if (!useRegex) {
+      pattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    }
+    if (wholeWord) {
+      pattern = `\\b${pattern}\\b`
+    }
+    
+    const flags = caseSensitive ? 'g' : 'gi'
+    const regex = new RegExp(pattern, flags)
+    
+    // Find matches
+    const matches = []
+    let match
+    while ((match = regex.exec(content)) !== null) {
+      matches.push({
+        index: match.index,
+        length: match[0].length,
+        text: match[0]
+      })
+    }
+    
+    if (matches.length > 0) {
+      // Get current cursor position
+      const [startPos, endPos] = editorInstance.getSelection()
+      
+      // Find next/previous match based on cursor position
+      let targetMatch
+      if (direction === 'next') {
+        // Find first match after current cursor position
+        targetMatch = matches.find(m => m.index > startPos)
+        // If no match found after cursor, wrap to beginning
+        if (!targetMatch) {
+          targetMatch = matches[0]
+        }
+      } else {
+        // Find last match before current cursor position
+        const reversedMatches = [...matches].reverse()
+        targetMatch = reversedMatches.find(m => m.index < startPos)
+        // If no match found before cursor, wrap to end
+        if (!targetMatch) {
+          targetMatch = matches[matches.length - 1]
+        }
+      }
+      
+      // Select the match
+      if (targetMatch) {
+        // Calculate line and column for scrolling
+        const beforeText = content.substring(0, targetMatch.index)
+        const lines = beforeText.split('\n')
+        const line = lines.length
+        
+        // Set selection
+        editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
+        
+        // Focus editor
+        editorInstance.focus()
+        
+        // Try to scroll to the match
+        try {
+          const editorEl = editorInstance.getCurrentModeEditor()
+          if (editorEl && editorEl.cm) {
+            // For CodeMirror
+            const pos = editorEl.cm.posFromIndex(targetMatch.index)
+            editorEl.cm.scrollIntoView(pos, 100)
+          }
+        } catch (e) {
+          // Fallback: just focus
+          console.debug('Could not scroll to match:', e)
+        }
+        
+        return { success: true, matchIndex: matches.indexOf(targetMatch), totalMatches: matches.length }
+      }
+    }
+    
+    return { success: false, matchIndex: -1, totalMatches: 0 }
+  } catch (error) {
+    console.error('Search error:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+function performReplace(options) {
+  if (!editorInstance) return
+  
+  try {
+    const { searchText, replaceText, replaceAll, caseSensitive, wholeWord, useRegex } = options
+    const content = editorInstance.getMarkdown()
+    
+    let pattern = searchText
+    if (!useRegex) {
+      pattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    }
+    if (wholeWord) {
+      pattern = `\\b${pattern}\\b`
+    }
+    
+    const flags = caseSensitive ? 'g' : 'gi'
+    const regex = new RegExp(pattern, flags)
+    
+    if (replaceAll) {
+      // Replace all occurrences
+      const newContent = content.replace(regex, replaceText)
+      editorInstance.setMarkdown(newContent)
+    } else {
+      // Replace current selection only
+      const [startPos, endPos] = editorInstance.getSelection()
+      const selectedText = content.substring(startPos, endPos)
+      
+      if (regex.test(selectedText)) {
+        const before = content.substring(0, startPos)
+        const after = content.substring(endPos)
+        const newContent = before + replaceText + after
+        editorInstance.setMarkdown(newContent)
+        
+        // Select the replaced text
+        editorInstance.setSelection([startPos, startPos + replaceText.length])
+      }
+    }
+    
+    editorInstance.focus()
+  } catch (error) {
+    console.error('Replace error:', error)
+  }
+}
+
 defineExpose({
   getContent: () => editorInstance?.getMarkdown() || '',
   setContent: (content) => editorInstance?.setMarkdown(content || ''),
-  insertText: (text) => editorInstance?.insertText(text)
+  insertText: (text) => editorInstance?.insertText(text),
+  getEditorInstance: () => editorInstance,
+  performSearch,
+  performReplace
 })
 </script>
 

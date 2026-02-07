@@ -50,18 +50,6 @@
         </div>
       </div>
     </div>
-    
-    <!-- Sidebar footer -->
-    <div class="sidebar-footer">
-      <el-button 
-        type="text" 
-        class="settings-btn"
-        @click="handleOpenSettings"
-      >
-        <el-icon><Setting /></el-icon>
-        <span>设置</span>
-      </el-button>
-    </div>
   </div>
 </template>
 
@@ -110,10 +98,6 @@ function handleCloseDocument(id) {
   if (doc && doc.isDirty) {
     ElMessage.warning('文档有未保存的修改')
   }
-
-function handleOpenSettings() {
-  emit('open-settings')
-}
   documentsStore.closeDocument(id)
 }
 </script>
@@ -215,30 +199,6 @@ function handleOpenSettings() {
 
 .empty-text {
   padding: 16px;
-
-.sidebar-footer {
-  padding: 12px 8px;
-  border-top: 1px solid var(--border-color);
-  
-  .settings-btn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px;
-    font-size: 14px;
-    color: var(--text-color);
-    
-    &:hover {
-      background-color: var(--hover-bg);
-    }
-    
-    .el-icon {
-      font-size: 18px;
-    }
-  }
-}
   text-align: center;
   color: #909399;
   font-size: 14px;

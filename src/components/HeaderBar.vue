@@ -18,7 +18,7 @@
         <el-button :icon="DocumentCopy" @click="handleSaveFile" title="保存 (Ctrl+S)" :disabled="!activeDocument">
           保存
         </el-button>
-        <el-button @click="handleSaveAs" title="另存为" :disabled="!activeDocument">
+        <el-button @click="handleSaveAs" title="另存为 (Ctrl+Shift+S)" :disabled="!activeDocument">
           另存为
         </el-button>
       </el-button-group>
@@ -28,7 +28,7 @@
       <el-button-group>
         <el-dropdown @command="handleExport">
           <el-button :icon="Download">
-            导出 <el-icon class="el-icon--right"><arrow-down /></el-icon>
+            导出 <el-icon class="el-icon--right"><ArrowDown /></el-icon>
           </el-button>
           <template #dropdown>
             <el-dropdown-menu>
@@ -52,7 +52,7 @@
     
     <div class="header-right">
       <el-button :icon="Search" circle title="搜索 (Ctrl+F)" @click="handleSearch" />
-      <el-button :icon="Setting" circle title="设置" @click="handleSettings" />
+      <el-button :icon="Setting" circle title="设置 (Ctrl+,)" @click="handleSettings" />
       <el-button 
         :icon="theme === 'light' ? Moon : Sunny" 
         circle 
@@ -74,12 +74,16 @@ import { useDocumentsStore } from '@/store/documents'
 import { useSettingsStore } from '@/store/settings'
 import { fileAPI, exportAPI } from '@/utils/electron'
 import { generateHtmlDocument, markdownToText } from '@/utils/markdown'
+import { useRouter } from 'vue-router'
 
 const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
+const router = useRouter()
 
 const activeDocument = computed(() => documentsStore.activeDocument)
 const theme = computed(() => settingsStore.theme)
+
+const emit = defineEmits(['openSettings', 'openSearch'])
 
 function handleNewFile() {
   documentsStore.createDocument()
@@ -170,16 +174,24 @@ async function handleExport(format) {
 }
 
 function handleSearch() {
-  ElMessage.info('搜索功能')
+  emit('openSearch')
 }
 
 function handleSettings() {
-  ElMessage.info('设置')
+  emit('openSettings')
 }
 
 function toggleTheme() {
   settingsStore.toggleTheme()
 }
+
+// 导出这些函数以供外部调用
+defineExpose({
+  handleSaveFile,
+  handleSaveAs,
+  handleOpenFile,
+  handleNewFile
+})
 </script>
 
 <style lang="scss" scoped>
@@ -216,6 +228,15 @@ function toggleTheme() {
   display: flex;
   align-items: center;
   gap: 8px;
+  
+  :deep(.el-button.is-circle) {
+    border: 1px solid var(--border-color);
+    
+    &:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--el-color-primary);
+    }
+  }
 }
 
 :deep(.el-divider--vertical) {
