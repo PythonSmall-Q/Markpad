@@ -29,7 +29,10 @@
         "notebook",
         "editor"
     ],
-    "author": "PythonSmall-Q",
+    "author": {
+        "name": "PythonSmall-Q",
+        "email": "seanoj_noreply@yeah.net"
+    },
     "license": "MIT",
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",
