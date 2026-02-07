@@ -144,11 +144,30 @@
         </el-form>
       </el-card>
       
+      <!-- 语言设置 -->
+      <el-card class="settings-card" shadow="never">
+        <template #header>
+          <div class="card-header">
+            <el-icon><Reading /></el-icon>
+            <span>{{ t('settings.language.title') }}</span>
+          </div>
+        </template>
+        
+        <el-form label-width="120px">
+          <el-form-item :label="t('settings.language.selectLanguage')">
+            <el-radio-group v-model="localSettings.locale" @change="handleLocaleChange">
+              <el-radio-button label="zh-CN">{{ t('settings.language.zhCN') }}</el-radio-button>
+              <el-radio-button label="en-US">{{ t('settings.language.enUS') }}</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+      </el-card>
+      
       <!-- 快捷键设置 -->
       <el-card class="settings-card" shadow="never">
         <template #header>
           <div class="card-header">
-            <el-icon><Keyboard /></el-icon>
+            <el-icon><Menu /></el-icon>
             <span>快捷键</span>
           </div>
         </template>
@@ -192,17 +211,20 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { 
-  Sunny, Edit, Folder, Keyboard, InfoFilled, Close 
+  Sunny, Edit, Folder, InfoFilled, Close, Reading, Menu, Setting 
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useSettingsStore } from '@/store/settings'
+import { useI18n } from 'vue-i18n'
 
 const emit = defineEmits(['close'])
 
 const settingsStore = useSettingsStore()
+const { t, locale } = useI18n()
 const appVersion = '1.0.0'
 
 const localSettings = reactive({
+  locale: 'zh-CN',
   theme: 'light',
   fontSize: 14,
   editorWidth: 'normal',
@@ -235,7 +257,7 @@ onMounted(() => {
 
 function loadSettings() {
   Object.assign(localSettings, {
-    theme: settingsStore.theme,
+    locale: settingsStore.locale,
     fontSize: settingsStore.fontSize,
     editorWidth: settingsStore.editorWidth,
     showPreview: settingsStore.showPreview,
@@ -247,6 +269,12 @@ function loadSettings() {
     fileExtension: settingsStore.fileExtension,
     recentFilesLimit: settingsStore.recentFilesLimit
   })
+}
+
+function handleLocaleChange(value) {
+  settingsStore.setLocale(value)
+  locale.value = value
+  ElMessage.success(t('settings.saveSuccess'))
 }
 
 function handleThemeChange(value) {

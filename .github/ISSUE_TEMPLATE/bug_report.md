@@ -1,34 +1,35 @@
 ---
 name: Bug Report
-about: 报告一个 Bug
+about: Report a bug or issue
 title: '[BUG] '
 labels: bug
 assignees: ''
 ---
 
-## 描述问题
-<!-- 清晰简洁地描述 Bug -->
+## Description
+<!-- Provide a clear and concise description of the bug -->
 
-## 重现步骤
-<!-- 描述如何重现这个问题 -->
+## Steps to Reproduce
+<!-- Describe how to reproduce this issue -->
 
 1. 
 2. 
 3. 
 
-## 期望行为
-<!-- 描述你期望发生什么 -->
+## Expected Behavior
+<!-- Describe what you expected to happen -->
 
-## 实际行为
-<!-- 描述实际发生了什么 -->
+## Actual Behavior
+<!-- Describe what actually happened -->
 
-## 截图
-<!-- 如果适用，添加截图帮助解释问题 -->
+## Screenshots
+<!-- If applicable, add screenshots to help explain the problem -->
 
-## 环境信息
-- 操作系统: [例如 Windows 11]
-- Markpad 版本: [例如 1.0.0]
-- Node.js 版本: [例如 18.0.0]
+## Environment
+- Operating System: [e.g., Windows 11]
+- Markpad Version: [e.g., 1.0.0]
+- Node.js Version: [e.g., 18.0.0]
+- Electron Version: [e.g., 28.2.0]
 
-## 附加信息
-<!-- 任何其他相关信息 -->
+## Additional Context
+<!-- Add any other relevant information about the problem -->

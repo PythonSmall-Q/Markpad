@@ -10,7 +10,8 @@
 - ✅ **导出功能**：导出为 PDF、HTML、Markdown、纯文本
 - ✅ **搜索替换**：全文搜索与替换
 - ✅ **主题切换**：支持明暗主题切换、跟随系统
-- ✅ **设置中心**：完整的设置页面，支持编辑器、外观、文件等配置
+- ✅ **国际化 (i18n)**：支持简体中文和 English，可扩展更多语言
+- ✅ **设置中心**：完整的设置页面，支持编辑器、外观、文件、语言等配置
 - ✅ **跨平台**：支持 Windows、macOS、Linux
 - ✅ **CI/CD**：GitHub Actions 自动构建和发布
 
@@ -57,23 +58,39 @@ git push origin v1.0.0
 
 ```
 markpad/
-├── electron/          # Electron 主进程
+├── .github/          # GitHub 配置
+│   ├── workflows/    # CI/CD workflows
+│   └── ISSUE_TEMPLATE/ # Issue 模板
+├── build/            # 构建资源
+│   └── icon.*        # 应用图标
+├── electron/         # Electron 主进程
 │   ├── main.js       # 主进程入口
-│   ├── ipc/          # IPC 通信处理
-│   └── utils/        # 工具函数
+│   └── preload.js    # 预加载脚本
 ├── src/              # Vue 应用
 │   ├── components/   # 组件
 │   ├── views/        # 页面
-│   ├── store/        # 状态管理
+│   ├── store/        # 状态管理 (Pinia)
 │   ├── router/       # 路由
+│   ├── i18n/         # 国际化
+│   │   ├── index.js  # i18n 配置
+│   │   └── locales/  # 语言包（zh-CN, en-US）
 │   ├── utils/        # 工具函数
-│   ├── assets/       # 静态资源
+│   ├── styles/       # 全局样式
 │   ├── App.vue       # 根组件
 │   └── main.js       # 入口文件
+├── docs/             # 文档
 ├── public/           # 公共资源
 ├── package.json
 └── vite.config.js
 ```
+
+## 文档
+
+- [用户指南](docs/USER_GUIDE.md)
+- [开发指南](docs/DEVELOPMENT.md)
+- [发布指南](docs/RELEASE.md)
+- [国际化 (i18n)](docs/I18N.md)
+- [快速开始](docs/QUICK_START.md)
 
 ## 许可证
 

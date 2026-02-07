@@ -4,6 +4,7 @@ import { ref } from 'vue'
 export const useSettingsStore = defineStore('settings', () => {
     // 状态
     const theme = ref('light')
+    const locale = ref('zh-CN')
     const autoSaveInterval = ref(5)
     const defaultExportFormat = ref('markdown')
     const recentFiles = ref([])
@@ -131,6 +132,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
     function resetSettings() {
         theme.value = 'light'
+        locale.value = 'zh-CN'
         autoSaveInterval.value = 5
         defaultExportFormat.value = 'markdown'
         fontSize.value = 14
@@ -146,10 +148,17 @@ export const useSettingsStore = defineStore('settings', () => {
         saveSettings()
     }
 
+    function setLocale(newLocale) {
+        locale.value = newLocale
+        localStorage.setItem('markpad-locale', newLocale)
+        saveSettings()
+    }
+
     // 保存设置到 localStorage
     function saveSettings() {
         const settings = {
             theme: theme.value,
+            locale: locale.value,
             autoSaveInterval: autoSaveInterval.value,
             defaultExportFormat: defaultExportFormat.value,
             recentFiles: recentFiles.value,
@@ -180,6 +189,7 @@ export const useSettingsStore = defineStore('settings', () => {
             try {
                 const settings = JSON.parse(saved)
                 theme.value = settings.theme || 'light'
+                locale.value = settings.locale || 'zh-CN'
                 autoSaveInterval.value = settings.autoSaveInterval || 5
                 defaultExportFormat.value = settings.defaultExportFormat || 'markdown'
                 recentFiles.value = settings.recentFiles || []
@@ -201,6 +211,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
     return {
         theme,
+        locale,
         autoSaveInterval,
         defaultExportFormat,
         recentFiles,
@@ -216,6 +227,7 @@ export const useSettingsStore = defineStore('settings', () => {
         recentFilesLimit,
         setTheme,
         toggleTheme,
+        setLocale,
         setAutoSaveInterval,
         setDefaultExportFormat,
         addRecentFile,

@@ -1,32 +1,39 @@
 ## Description
-<!-- 请简要描述这个 PR 的目的和内容 -->
+<!-- Provide a clear and concise description of the changes -->
 
-## Changes
-<!-- 列出主要的更改 -->
+## Type of Change
+<!-- Mark the relevant option with an "x" -->
 
-- [ ] 新功能
-- [ ] Bug 修复
-- [ ] 文档更新
-- [ ] 性能优化
-- [ ] 代码重构
-- [ ] 其他
+- [ ] New feature
+- [ ] Bug fix
+- [ ] Documentation update
+- [ ] Performance improvement
+- [ ] Code refactoring
+- [ ] Other
 
 ## Related Issues
-<!-- 如果相关，请链接到相关的 Issues -->
+<!-- Link to related issues: Fixes #123, Closes #456 -->
 
 Closes #
 
 ## Screenshots
-<!-- 如果有 UI 变化，请提供截图 -->
+<!-- Add screenshots to demonstrate UI/UX changes if applicable -->
+
+## Testing
+<!-- Describe the tests you ran to verify your changes -->
+
+- [ ] Tested locally
+- [ ] Tested in production build
+- [ ] All existing tests pass
 
 ## Checklist
-<!-- 请确认以下项目 -->
+<!-- Mark completed items with an "x" -->
 
-- [ ] 代码遵循项目的代码规范
-- [ ] 已经测试过更改
-- [ ] 文档已更新（如果需要）
-- [ ] 没有破坏现有功能
-- [ ] 提交消息遵循规范
+- [ ] My code follows the project's coding style
+- [ ] I have tested my changes
+- [ ] Documentation has been updated (if needed)
+- [ ] No breaking changes to existing functionality
+- [ ] Commit messages follow project conventions
 
 ## Additional Notes
-<!-- 任何额外的说明或注意事项 -->
+<!-- Any additional information or context about this PR -->
