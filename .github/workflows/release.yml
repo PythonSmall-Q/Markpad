@@ -121,22 +121,21 @@ jobs:
         with:
           path: artifacts
       
-      - name: Display structure of downloaded files
-        run: ls -R artifacts
+      - name: Prepare release files
+        run: |
+          mkdir -p release-files
+          find artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" \) -exec cp {} release-files/ \;
+          ls -lh release-files/
       
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', github.event.inputs.version) || github.ref_name }}
           name: Release ${{ env.VERSION }}
-          files: |
-            artifacts/**/*.exe
-            artifacts/**/*.dmg
-            artifacts/**/*.AppImage
+          files: release-files/*
           draft: false
           prerelease: ${{ contains(env.VERSION, 'beta') || contains(env.VERSION, 'alpha') }}
           generate_release_notes: true
-          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  
