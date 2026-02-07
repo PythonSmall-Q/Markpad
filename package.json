@@ -61,7 +61,6 @@
     "build": {
         "appId": "com.markpad.app",
         "productName": "Markpad",
-        "publish": "always",
         "directories": {
             "output": "dist-electron"
         },
