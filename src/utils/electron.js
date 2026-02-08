@@ -3,7 +3,7 @@
  * 提供统一的 API 接口，处理 Electron 和 Web 环境的兼容性
  */
 
-const isElectron = () => {
+export const isElectron = () => {
     return window.electronAPI !== undefined
 }
 
