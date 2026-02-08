@@ -51,6 +51,8 @@ export default {
             video: 'Insert Video',
             audio: 'Insert Audio',
             table: 'Insert Table',
+            inlineMath: 'Inline Formula',
+            blockMath: 'Block Formula',
             hr: 'Horizontal Rule',
             preview: 'Preview',
             hidePreview: 'Hide Preview',
@@ -65,6 +67,9 @@ export default {
             linkUrl: 'Link URL',
             linkText: 'Link Text',
             invalidUrl: 'Please enter a valid URL',
+            enterFormula: 'Enter Math Formula',
+            inlineMath: 'Inline Formula',
+            blockMath: 'Block Formula',
             confirm: 'Confirm',
             cancel: 'Cancel'
         }

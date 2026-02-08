@@ -287,6 +287,11 @@ function createMenu() {
                     click: () => mainWindow?.webContents.send('menu:help')
                 },
                 {
+                    label: 'Math Tutorial',
+                    accelerator: 'F2',
+                    click: () => mainWindow?.webContents.send('menu:math-tutorial')
+                },
+                {
                     label: 'Documentation',
                     click: () => shell.openExternal('https://github.com/PythonSmall-Q/Markpad')
                 },

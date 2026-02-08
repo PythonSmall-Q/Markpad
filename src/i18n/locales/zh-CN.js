@@ -51,6 +51,8 @@ export default {
             video: '插入视频',
             audio: '插入音频',
             table: '插入表格',
+            inlineMath: '行内公式',
+            blockMath: '块级公式',
             hr: '分隔线',
             preview: '预览',
             hidePreview: '隐藏预览',
@@ -65,6 +67,9 @@ export default {
             linkUrl: '链接地址',
             linkText: '链接文本',
             invalidUrl: '请输入有效的链接地址',
+            enterFormula: '输入数学公式',
+            inlineMath: '行内公式',
+            blockMath: '块级公式',
             confirm: '确定',
             cancel: '取消'
         }

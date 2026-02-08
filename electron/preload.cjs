@@ -69,6 +69,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
         // 帮助菜单
         ipcRenderer.on('menu:help', () => callback('help'))
+        ipcRenderer.on('menu:math-tutorial', () => callback('math-tutorial'))
         ipcRenderer.on('menu:check-updates', () => callback('check-updates'))
         ipcRenderer.on('menu:about', () => callback('about'))
     },

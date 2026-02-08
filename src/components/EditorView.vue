@@ -76,25 +76,12 @@ function initEditor() {
     hideModeSwitch: false,
     // 禁用编辑器默认快捷键，使用自定义的快捷键处理
     useCommandShortcut: false,
-    // 启用数学公式支持
-    customHTMLRenderer: {
-      latex(node) {
-        const generator = node.literal ? katex.renderToString(node.literal, {
-          displayMode: false,
-          throwOnError: false
-        }) : ''
-        return [{ type: 'html', content: generator }]
-      },
-      latexBlock(node) {
-        const generator = node.literal ? katex.renderToString(node.literal, {
-          displayMode: true,
-          throwOnError: false
-        }) : ''
-        return [{ type: 'html', content: generator }]
-      }
-    },
     events: {
-      change: handleEditorChange
+      change: () => {
+        handleEditorChange()
+        // 延迟渲染数学公式，等待预览更新
+        setTimeout(renderMathInPreview, 100)
+      }
     }
   })
   
@@ -110,8 +97,65 @@ function initEditor() {
     setTimeout(() => {
       if (editorInstance) {
         editorInstance.setMarkdown(activeDocument.value.content)
+        // 初始渲染数学公式
+        setTimeout(renderMathInPreview, 200)
       }
     }, 0)
+  }
+}
+
+// 在预览面板中渲染数学公式
+function renderMathInPreview() {
+  if (!editorRef.value) return
+  
+  try {
+    const previewEl = editorRef.value.querySelector('.toastui-editor-md-preview')
+    if (!previewEl) return
+    
+    // 查找所有包含 $ 符号的段落和文本
+    const elements = previewEl.querySelectorAll('p, li, td, th, h1, h2, h3, h4, h5, h6')
+    
+    elements.forEach(element => {
+      // 跳过已经处理过的元素
+      if (element.hasAttribute('data-math-rendered')) return
+      
+      let html = element.innerHTML
+      const originalHtml = html
+      
+      // 先处理块级公式 $$...$$ (必须独占一行)
+      html = html.replace(/\$\$([\s\S]+?)\$\$/g, (match, formula) => {
+        try {
+          return katex.renderToString(formula.trim(), {
+            displayMode: true,
+            throwOnError: false
+          })
+        } catch (e) {
+          console.warn('KaTeX block render error:', e)
+          return match
+        }
+      })
+      
+      // 再处理行内公式 $...$
+      html = html.replace(/\$([^\$\n]+?)\$/g, (match, formula) => {
+        try {
+          return katex.renderToString(formula.trim(), {
+            displayMode: false,
+            throwOnError: false
+          })
+        } catch (e) {
+          console.warn('KaTeX inline render error:', e)
+          return match
+        }
+      })
+      
+      // 如果内容有变化，更新并标记
+      if (html !== originalHtml) {
+        element.innerHTML = html
+        element.setAttribute('data-math-rendered', 'true')
+      }
+    })
+  } catch (e) {
+    console.warn('Math rendering error:', e)
   }
 }
 
