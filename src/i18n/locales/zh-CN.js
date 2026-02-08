@@ -247,5 +247,117 @@ export default {
         noMatch: '未找到匹配项',
         error: '搜索错误',
         replaced: '已替换 {count} 处'
+    },
+
+    help: {
+        title: '帮助',
+        quickStart: {
+            title: '快速开始',
+            desc: '欢迎使用 Markpad！按照以下步骤开始使用：',
+            step1: '点击"新建"按钮或按 Ctrl+N 创建新文档',
+            step2: '在编辑器中输入 Markdown 文本',
+            step3: '使用工具栏或快捷键进行格式化',
+            step4: '保存或导出你的文档'
+        },
+        editor: {
+            title: '编辑器功能',
+            formatting: '文本格式化',
+            bold: '加粗',
+            italic: '斜体',
+            strikethrough: '删除线',
+            toolbar: '使用工具栏',
+            lists: '列表',
+            unordered: '无序列表：点击工具栏按钮',
+            ordered: '有序列表：点击工具栏按钮',
+            other: '其他功能',
+            links: '链接：点击工具栏链接按钮',
+            images: '图片：点击工具栏图片按钮',
+            tables: '表格：点击工具栏表格按钮',
+            code: '代码：行内代码和代码块'
+        },
+        shortcuts: {
+            title: '快捷键',
+            action: '操作',
+            key: '快捷键',
+            newDoc: '新建文档',
+            saveDoc: '保存文档',
+            openDoc: '打开文档',
+            bold: '加粗',
+            italic: '斜体',
+            find: '查找',
+            replace: '替换',
+            undo: '撤销',
+            redo: '重做'
+        },
+        documents: {
+            title: '文档管理',
+            desc: 'Markpad 支持多文档管理：',
+            create: '创建多个文档，每个文档都有独立的标签页',
+            save: '文档会自动保存到临时位置',
+            open: '打开文件将作为新标签页显示',
+            tabs: '通过标签页快速切换文档'
+        },
+        export: {
+            title: '导出功能',
+            desc: '导出你的文档为多种格式：',
+            html: 'HTML：完整的网页文件',
+            pdf: 'PDF：适合打印和分享',
+            markdown: 'Markdown：保留原始格式',
+            text: '纯文本：移除所有格式'
+        },
+        faq: {
+            title: '常见问题',
+            q1: '如何插入图片？',
+            a1: '点击工具栏的图片按钮，然后选择一张图片。图片路径会自动插入到文档中。',
+            q2: '文档会自动保存吗？',
+            a2: '是的，所有未保存的文档会自动保存到临时位置，下次打开应用时会自动恢复。',
+            q3: '支持哪些 Markdown 语法？',
+            a3: 'Markpad 支持标准的 CommonMark 语法，包括标题、列表、链接、图片、表格、代码块等。'
+        }
+    },
+
+    about: {
+        title: '关于 Markpad',
+        version: '版本',
+        description: '一个强大的 Markdown 笔记本应用，使用 Vue 3 和 Electron 构建',
+        license: '许可证',
+        github: 'GitHub 仓库',
+        issues: '问题反馈',
+        tabs: {
+            about: '关于',
+            system: '系统信息',
+            logs: '日志'
+        },
+        system: {
+            os: '操作系统',
+            platform: '平台',
+            arch: '架构',
+            node: 'Node 版本',
+            electron: 'Electron 版本',
+            chrome: 'Chrome 版本',
+            memory: '总内存',
+            copy: '复制信息',
+            copied: '已复制到剪贴板',
+            copyError: '复制失败',
+            loadError: '加载系统信息失败'
+        },
+        logs: {
+            all: '全部',
+            info: '信息',
+            success: '成功',
+            warn: '警告',
+            error: '错误',
+            refresh: '刷新',
+            clear: '清空',
+            export: '导出',
+            empty: '暂无日志',
+            confirmClear: '确定要清空所有日志吗？',
+            clearTitle: '清空日志',
+            confirm: '确定',
+            cancel: '取消',
+            cleared: '日志已清空',
+            exported: '日志已导出',
+            exportError: '导出日志失败'
+        }
     }
 }

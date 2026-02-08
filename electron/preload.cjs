@@ -69,6 +69,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
         // 帮助菜单
         ipcRenderer.on('menu:welcome', () => callback('welcome'))
+        ipcRenderer.on('menu:help', () => callback('help'))
         ipcRenderer.on('menu:check-updates', () => callback('check-updates'))
         ipcRenderer.on('menu:about', () => callback('about'))
     },
@@ -100,7 +101,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     },
 
     // 系统信息 API
-    getSystemInfo: () => ipcRenderer.invoke('system:get-info')
+    getSystemInfo: () => ipcRenderer.invoke('system:getInfo'),
+    exportLogs: (content) => ipcRenderer.invoke('system:exportLogs', content)
 })
 
 console.log('=== electronAPI exposed successfully ===')

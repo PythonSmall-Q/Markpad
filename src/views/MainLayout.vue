@@ -30,6 +30,16 @@
       <SettingsPage @close="showSettingsPage = false" />
     </div>
     
+    <!-- Help page (full screen overlay) -->
+    <div v-if="showHelpPage" class="settings-overlay">
+      <HelpPage @close="showHelpPage = false" />
+    </div>
+    
+    <!-- About page (full screen overlay) -->
+    <div v-if="showAboutPage" class="settings-overlay">
+      <AboutPage @close="showAboutPage = false" />
+    </div>
+    
     <!-- Search Dialog -->
     <SearchDialog 
       v-model="showSearchDialog"
@@ -52,13 +62,18 @@ import DocumentTabs from '@/components/DocumentTabs.vue'
 import EditorView from '@/components/EditorView.vue'
 import WelcomePage from '@/components/WelcomePage.vue'
 import SettingsPage from '@/components/SettingsPage.vue'
+import HelpPage from '@/components/HelpPage.vue'
+import AboutPage from '@/components/AboutPage.vue'
 import SearchDialog from '@/components/SearchDialog.vue'
+import logger from '@/utils/logger'
 
 const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
 const { t } = useI18n()
 
 const showSettingsPage = ref(false)
+const showHelpPage = ref(false)
+const showAboutPage = ref(false)
 const showSearchDialog = ref(false)
 const showReplaceMode = ref(false)
 const headerBarRef = ref(null)
@@ -181,15 +196,22 @@ function setupMenuListeners() {
         if (activeDocument.value) {
           documentsStore.closeDocument(activeDocument.value.id)
         }
+        logger.info('Menu action', 'Show welcome page')
+        break
+      case 'help':
+        showHelpPage.value = true
+        logger.info('Menu action', 'Show help page')
         break
       case 'check-updates':
         if (updateAPI) {
           window.__manualUpdateCheck = true
           updateAPI.check()
+          logger.info('Menu action', 'Check for updates')
         }
         break
       case 'about':
-        showSettingsPage.value = true
+        showAboutPage.value = true
+        logger.info('Menu action', 'Show about page')
         break
     }
   })

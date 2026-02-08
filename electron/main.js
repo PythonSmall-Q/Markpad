@@ -286,6 +286,11 @@ function createMenu() {
                     click: () => mainWindow?.webContents.send('menu:welcome')
                 },
                 {
+                    label: 'Help',
+                    accelerator: 'F1',
+                    click: () => mainWindow?.webContents.send('menu:help')
+                },
+                {
                     label: 'Documentation',
                     click: () => shell.openExternal('https://github.com/PythonSmall-Q/Markpad')
                 },
@@ -478,6 +483,38 @@ ipcMain.handle('export:markdown', async (event, { content, defaultName }) => {
 ipcMain.handle('export:text', async (event, { content, defaultName }) => {
     const result = await dialog.showSaveDialog(mainWindow, {
         defaultPath: defaultName || 'export.txt',
+        filters: [{ name: 'Text Files', extensions: ['txt'] }]
+    })
+
+    if (!result.canceled && result.filePath) {
+        try {
+            await fs.writeFile(result.filePath, content, 'utf-8')
+            return { success: true, filePath: result.filePath }
+        } catch (error) {
+            return { success: false, error: error.message }
+        }
+    }
+
+    return { success: false, canceled: true }
+})
+
+// 获取系统信息
+ipcMain.handle('system:getInfo', async () => {
+    return {
+        os: `${os.type()} ${os.release()}`,
+        platform: process.platform,
+        arch: process.arch,
+        nodeVersion: process.versions.node,
+        electronVersion: process.versions.electron,
+        chromeVersion: process.versions.chrome,
+        totalMemory: `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB`
+    }
+})
+
+// 导出日志
+ipcMain.handle('system:exportLogs', async (event, content) => {
+    const result = await dialog.showSaveDialog(mainWindow, {
+        defaultPath: `markpad-logs-${Date.now()}.txt`,
         filters: [{ name: 'Text Files', extensions: ['txt'] }]
     })
 

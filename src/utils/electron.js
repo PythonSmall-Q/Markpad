@@ -148,6 +148,36 @@ export const systemAPI = {
             return
         }
         await window.electronAPI.openExternal(url)
+    },
+
+    async getSystemInfo() {
+        if (!isElectron()) {
+            return {
+                os: navigator.platform || 'Unknown',
+                platform: 'Web',
+                arch: 'Unknown',
+                nodeVersion: 'N/A',
+                electronVersion: 'N/A',
+                chromeVersion: navigator.userAgent.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/)?.[1] || 'N/A',
+                totalMemory: navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Unknown'
+            }
+        }
+        return await window.electronAPI.getSystemInfo()
+    },
+
+    async exportLogs(content) {
+        if (!isElectron()) {
+            // Web 环境下载到本地
+            const blob = new Blob([content], { type: 'text/plain' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `markpad-logs-${Date.now()}.txt`
+            a.click()
+            URL.revokeObjectURL(url)
+            return { success: true, filePath: a.download }
+        }
+        return await window.electronAPI.exportLogs(content)
     }
 }
 

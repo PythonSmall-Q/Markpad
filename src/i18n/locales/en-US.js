@@ -247,5 +247,117 @@ export default {
         noMatch: 'No matches found',
         error: 'Search error',
         replaced: 'Replaced {count} occurrences'
+    },
+
+    help: {
+        title: 'Help',
+        quickStart: {
+            title: 'Quick Start',
+            desc: 'Welcome to Markpad! Follow these steps to get started:',
+            step1: 'Click "New" button or press Ctrl+N to create a new document',
+            step2: 'Type your Markdown text in the editor',
+            step3: 'Use toolbar or shortcuts for formatting',
+            step4: 'Save or export your document'
+        },
+        editor: {
+            title: 'Editor Features',
+            formatting: 'Text Formatting',
+            bold: 'Bold',
+            italic: 'Italic',
+            strikethrough: 'Strikethrough',
+            toolbar: 'Use toolbar',
+            lists: 'Lists',
+            unordered: 'Unordered list: Click toolbar button',
+            ordered: 'Ordered list: Click toolbar button',
+            other: 'Other Features',
+            links: 'Links: Click toolbar link button',
+            images: 'Images: Click toolbar image button',
+            tables: 'Tables: Click toolbar table button',
+            code: 'Code: Inline code and code blocks'
+        },
+        shortcuts: {
+            title: 'Keyboard Shortcuts',
+            action: 'Action',
+            key: 'Shortcut',
+            newDoc: 'New Document',
+            saveDoc: 'Save Document',
+            openDoc: 'Open Document',
+            bold: 'Bold',
+            italic: 'Italic',
+            find: 'Find',
+            replace: 'Replace',
+            undo: 'Undo',
+            redo: 'Redo'
+        },
+        documents: {
+            title: 'Document Management',
+            desc: 'Markpad supports multiple document management:',
+            create: 'Create multiple documents, each with its own tab',
+            save: 'Documents are automatically saved to temporary location',
+            open: 'Opening files will display as new tabs',
+            tabs: 'Quickly switch between documents using tabs'
+        },
+        export: {
+            title: 'Export Functionality',
+            desc: 'Export your documents to various formats:',
+            html: 'HTML: Complete web page file',
+            pdf: 'PDF: Suitable for printing and sharing',
+            markdown: 'Markdown: Preserve original format',
+            text: 'Plain Text: Remove all formatting'
+        },
+        faq: {
+            title: 'Frequently Asked Questions',
+            q1: 'How do I insert an image?',
+            a1: 'Click the image button in the toolbar, then select an image. The image path will be automatically inserted into the document.',
+            q2: 'Are documents auto-saved?',
+            a2: 'Yes, all unsaved documents are automatically saved to a temporary location and will be restored when you reopen the application.',
+            q3: 'What Markdown syntax is supported?',
+            a3: 'Markpad supports standard CommonMark syntax, including headings, lists, links, images, tables, code blocks, and more.'
+        }
+    },
+
+    about: {
+        title: 'About Markpad',
+        version: 'Version',
+        description: 'A powerful Markdown notebook application built with Vue 3 and Electron',
+        license: 'License',
+        github: 'GitHub Repository',
+        issues: 'Report Issues',
+        tabs: {
+            about: 'About',
+            system: 'System Info',
+            logs: 'Logs'
+        },
+        system: {
+            os: 'Operating System',
+            platform: 'Platform',
+            arch: 'Architecture',
+            node: 'Node Version',
+            electron: 'Electron Version',
+            chrome: 'Chrome Version',
+            memory: 'Total Memory',
+            copy: 'Copy Info',
+            copied: 'Copied to clipboard',
+            copyError: 'Failed to copy',
+            loadError: 'Failed to load system information'
+        },
+        logs: {
+            all: 'All',
+            info: 'Info',
+            success: 'Success',
+            warn: 'Warning',
+            error: 'Error',
+            refresh: 'Refresh',
+            clear: 'Clear',
+            export: 'Export',
+            empty: 'No logs available',
+            confirmClear: 'Are you sure you want to clear all logs?',
+            clearTitle: 'Clear Logs',
+            confirm: 'Confirm',
+            cancel: 'Cancel',
+            cleared: 'Logs cleared',
+            exported: 'Logs exported',
+            exportError: 'Failed to export logs'
+        }
     }
 }
