@@ -213,7 +213,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy cloudflare-deploy --project-name=markpad --branch=main
+          command: pages deploy cloudflare-deploy --project-name=mark-pad --branch=main
       
       - name: Output deployment URL
         run: |

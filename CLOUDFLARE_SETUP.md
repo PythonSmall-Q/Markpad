@@ -56,7 +56,7 @@ npm install -g wrangler
 wrangler login
 
 # 创建项目（首次部署时会自动创建）
-wrangler pages deploy cloudflare-pages --project-name=markpad
+wrangler pages deploy cloudflare-pages --project-name=mark-pad
 ```
 
 #### 方式 B: 通过 Dashboard 手动创建
@@ -64,7 +64,7 @@ wrangler pages deploy cloudflare-pages --project-name=markpad
 1. 进入 [Cloudflare Pages](https://dash.cloudflare.com/pages)
 2. 点击 **Create a project**
 3. 选择 **Direct Upload** 方式
-4. 项目名称设置为: `markpad`
+4. 项目名称设置为: `mark-pad`
 5. 上传 `cloudflare-pages` 目录的文件
 
 ### 第四步：获取部署 URL
@@ -83,7 +83,7 @@ https://download.markpad.app
 
 ### 第五步：更新项目配置
 
-如果你的 Cloudflare Pages URL 不是 `markpad.pages.dev`，需要修改以下文件：
+如果你的 Cloudflare Pages URL 不是 `mark-pad.pages.dev`，需要修改以下文件：
 
 #### 1. 修改 package.json
 
@@ -160,7 +160,7 @@ graph LR
 
 ### 2. 测试下载页面
 
-打开浏览器访问: `https://markpad.pages.dev`
+打开浏览器访问: `https://mark-pad.pages.dev`
 
 应该能看到 Markpad 下载中心页面。
 
@@ -168,10 +168,10 @@ graph LR
 
 ```bash
 # 方式 1: 直接访问 latest.yml
-curl https://markpad.pages.dev/latest.yml
+curl https://mark-pad.pages.dev/latest.yml
 
 # 方式 2: 检查安装包是否存在
-curl -I https://markpad.pages.dev/Markpad.Setup.1.2.2.exe
+curl -I https://mark-pad.pages.dev/Markpad.Setup.1.2.2.exe
 ```
 
 ### 4. 测试应用内更新
@@ -209,7 +209,7 @@ Error: Could not find project "markpad"
 ### 问题 3: CORS 错误
 
 ```
-Access to fetch at 'https://markpad.pages.dev/latest.yml' has been blocked by CORS policy
+Access to fetch at 'https://mark-pad.pages.dev/latest.yml' has been blocked by CORS policy
 ```
 
 **解决方案:**
@@ -236,7 +236,7 @@ Access to fetch at 'https://markpad.pages.dev/latest.yml' has been blocked by CO
 # macOS: Cmd+Option+I
 
 # 应该看到类似输出:
-# Update feed URL set to: https://markpad.pages.dev
+# Update feed URL set to: https://mark-pad.pages.dev
 # Checking for updates...
 ```
 
