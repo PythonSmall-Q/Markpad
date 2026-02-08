@@ -1,6 +1,6 @@
 {
     "name": "markpad",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "description": "A powerful Markdown notebook application with Vue 3 and Electron",
     "main": "electron/main.js",
     "type": "module",
