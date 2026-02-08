@@ -112,8 +112,8 @@ https://download.markpad.app
 2. GitHub Actions 构建应用（Windows、macOS、Linux）
 3. 创建 GitHub Release
 4. **自动上传到 Cloudflare Pages**:
-   - **Windows**: `Markpad-Setup-x.x.x.exe`, `*.exe.blockmap`, `latest.yml`
-   - **macOS**: `Markpad-x.x.x.dmg`, `*.dmg.blockmap`, `latest-mac.yml`
+   - **Windows**: `Markpad.Setup.x.x.x.exe`, `*.exe.blockmap`, `latest.yml`
+   - **macOS**: `Markpad-x.x.x-arm64.dmg`, `*.dmg.blockmap`, `latest-mac.yml`
    - **Linux**: `Markpad-x.x.x.AppImage`, `latest-linux.yml`
    - **网页**: `index.html` (主页), `features.html` (功能详情)
 5. Electron 应用从 Cloudflare Pages 检查更新
@@ -148,7 +148,7 @@ Electron App (1.2.1)
     ↓
 发现新版本 (1.2.2)
     ↓
-下载: GET https://mark-pad.pages.dev/Markpad-Setup-1.2.2.exe
+下载: GET https://mark-pad.pages.dev/Markpad.Setup.1.2.2.exe
     ↓
 安装并重启
 ```

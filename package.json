@@ -135,7 +135,8 @@
             "multiLanguageInstaller": false,
             "packElevateHelper": true,
             "runAfterFinish": true,
-            "menuCategory": false
+            "menuCategory": false,
+            "artifactName": "${productName}.Setup.${version}.${ext}"
         },
         "mac": {
             "icon": "build/icons/icon.icns",

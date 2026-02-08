@@ -146,8 +146,10 @@ graph LR
 2. ✅ 创建 GitHub Release 并上传安装包
 3. ✅ 自动部署到 Cloudflare Pages:
    - `index.html` - 下载页面
-   - `Markpad-Setup-x.x.x.exe` - Windows 安装包
-   - `latest.yml` - 版本信息
+   - `Markpad.Setup.x.x.x.exe` - Windows 安装包
+   - `Markpad-x.x.x-arm64.dmg` - macOS 安装包
+   - `Markpad-x.x.x.AppImage` - Linux 安装包
+   - `latest.yml`, `latest-mac.yml`, `latest-linux.yml` - 版本信息
 4. ✅ Electron 应用自动检测更新
 
 ## 🔍 验证部署
@@ -169,7 +171,7 @@ graph LR
 curl https://markpad.pages.dev/latest.yml
 
 # 方式 2: 检查安装包是否存在
-curl -I https://markpad.pages.dev/Markpad-Setup-1.2.2.exe
+curl -I https://markpad.pages.dev/Markpad.Setup.1.2.2.exe
 ```
 
 ### 4. 测试应用内更新
