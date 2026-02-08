@@ -4,17 +4,7 @@ on:
   push:
     tags:
       - 'v*' # 当推送 v* 标签时触发（如 v1.0.0）
-  workflow_dispatch: # 允许手动触发
-    inputs:
-      version:
-        description: '版本号 (如: 1.0.0 或 1.0.0-beta.1)'
-        required: true
-        type: string
-      create_tag:
-        description: '是否创建 git tag'
-        required: true
-        type: boolean
-        default: false
+  workflow_dispatch: # 允许手动触发，将自动使用 package.json 中的版本号
 
 permissions:
   contents: write
@@ -40,65 +30,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Set version (manual trigger)
-        if: github.event_name == 'workflow_dispatch'
+      - name: Set version from package.json
         shell: bash
         run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          INPUT_VERSION="${{ github.event.inputs.version }}"
-          EFFECTIVE_VERSION=$(node -e "
-            const pkg = process.env.PACKAGE_VERSION || '';
-            const input = process.env.INPUT_VERSION || '';
-            function splitVer(v) {
-              const parts = v.split('-', 2);
-              const main = parts[0] || '';
-              const pre = parts[1] || '';
-              const mainParts = main.split('.').map((n) => parseInt(n || '0', 10));
-              const preParts = pre ? pre.split('.') : [];
-              return { mainParts, preParts };
-            }
-            function cmpId(a, b) {
-              const aNum = /^\\d+$/.test(a);
-              const bNum = /^\\d+$/.test(b);
-              if (aNum && bNum) return parseInt(a, 10) - parseInt(b, 10);
-              if (aNum && !bNum) return -1;
-              if (!aNum && bNum) return 1;
-              if (a === b) return 0;
-              return a < b ? -1 : 1;
-            }
-            function cmp(a, b) {
-              const A = splitVer(a);
-              const B = splitVer(b);
-              for (let i = 0; i < 3; i += 1) {
-                const diff = (A.mainParts[i] || 0) - (B.mainParts[i] || 0);
-                if (diff !== 0) return diff;
-              }
-              const aPre = A.preParts.length > 0;
-              const bPre = B.preParts.length > 0;
-              if (!aPre && !bPre) return 0;
-              if (!aPre && bPre) return 1;
-              if (aPre && !bPre) return -1;
-              const max = Math.max(A.preParts.length, B.preParts.length);
-              for (let i = 0; i < max; i += 1) {
-                if (A.preParts[i] === undefined) return -1;
-                if (B.preParts[i] === undefined) return 1;
-                const diff = cmpId(A.preParts[i], B.preParts[i]);
-                if (diff !== 0) return diff;
-              }
-              return 0;
-            }
-            const effective = cmp(pkg, input) >= 0 ? pkg : input;
-            process.stdout.write(effective);
-          " PACKAGE_VERSION="$PACKAGE_VERSION" INPUT_VERSION="$INPUT_VERSION")
-          npm version "$EFFECTIVE_VERSION" --no-git-tag-version
-          echo "VERSION=$EFFECTIVE_VERSION" >> $GITHUB_ENV
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Using version: $VERSION"
       
-      - name: Set version (tag trigger)
+      - name: Override version from tag
         if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Override version from tag: $VERSION"
       
       - name: Build application
         run: npm run build
@@ -146,74 +91,39 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
       
-      - name: Set version (manual trigger)
-        if: github.event_name == 'workflow_dispatch'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Set version from package.json
         shell: bash
         run: |
-          PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          INPUT_VERSION="${{ github.event.inputs.version }}"
-          EFFECTIVE_VERSION=$(node -e "
-            const pkg = process.env.PACKAGE_VERSION || '';
-            const input = process.env.INPUT_VERSION || '';
-            function splitVer(v) {
-              const parts = v.split('-', 2);
-              const main = parts[0] || '';
-              const pre = parts[1] || '';
-              const mainParts = main.split('.').map((n) => parseInt(n || '0', 10));
-              const preParts = pre ? pre.split('.') : [];
-              return { mainParts, preParts };
-            }
-            function cmpId(a, b) {
-              const aNum = /^\\d+$/.test(a);
-              const bNum = /^\\d+$/.test(b);
-              if (aNum && bNum) return parseInt(a, 10) - parseInt(b, 10);
-              if (aNum && !bNum) return -1;
-              if (!aNum && bNum) return 1;
-              if (a === b) return 0;
-              return a < b ? -1 : 1;
-            }
-            function cmp(a, b) {
-              const A = splitVer(a);
-              const B = splitVer(b);
-              for (let i = 0; i < 3; i += 1) {
-                const diff = (A.mainParts[i] || 0) - (B.mainParts[i] || 0);
-                if (diff !== 0) return diff;
-              }
-              const aPre = A.preParts.length > 0;
-              const bPre = B.preParts.length > 0;
-              if (!aPre && !bPre) return 0;
-              if (!aPre && bPre) return 1;
-              if (aPre && !bPre) return -1;
-              const max = Math.max(A.preParts.length, B.preParts.length);
-              for (let i = 0; i < max; i += 1) {
-                if (A.preParts[i] === undefined) return -1;
-                if (B.preParts[i] === undefined) return 1;
-                const diff = cmpId(A.preParts[i], B.preParts[i]);
-                if (diff !== 0) return diff;
-              }
-              return 0;
-            }
-            const effective = cmp(pkg, input) >= 0 ? pkg : input;
-            process.stdout.write(effective);
-          " PACKAGE_VERSION="$PACKAGE_VERSION" INPUT_VERSION="$INPUT_VERSION")
-          echo "VERSION=$EFFECTIVE_VERSION" >> $GITHUB_ENV
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Using version: $VERSION"
       
-      - name: Set version (tag trigger)
+      - name: Override version from tag
         if: startsWith(github.ref, 'refs/tags/')
         shell: bash
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Override version from tag: $VERSION"
       
       - name: Create Git Tag (manual trigger)
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.create_tag == 'true'
+        if: github.event_name == 'workflow_dispatch'
         continue-on-error: true
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a "v${VERSION}" -m "Release v${VERSION}"
-          git push origin "v${VERSION}" || echo "::warning::无法自动创建 tag。您可以手动运行: git tag -a v${VERSION} -m 'Release v${VERSION}' && git push origin v${VERSION}"
+          git push origin "v${VERSION}" || echo "::warning::Tag v${VERSION} already exists or cannot be created"
       
       - name: Download all artifacts
         uses: actions/download-artifact@v4
@@ -229,7 +139,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', env.VERSION) || github.ref_name }}
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', env.VERSION) }}
           name: Release ${{ env.VERSION }}
           files: release-files/*
           draft: false

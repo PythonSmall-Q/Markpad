@@ -50,7 +50,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
         onUpdateDownloaded: (callback) => {
             ipcRenderer.on('updater:update-downloaded', (event, info) => callback(info))
         }
-    }
+    },
+
+    // 系统信息 API
+    getSystemInfo: () => ipcRenderer.invoke('system:get-info')
 })
 
 console.log('=== electronAPI exposed successfully ===')

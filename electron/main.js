@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog, shell, Menu } from 'electron'
 import updaterPkg from 'electron-updater'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
@@ -92,9 +92,223 @@ function createWindow() {
     })
 }
 
+// 创建应用菜单
+function createMenu() {
+    const isMac = process.platform === 'darwin'
+
+    const template = [
+        // macOS 应用菜单
+        ...(isMac ? [{
+            label: app.name,
+            submenu: [
+                { role: 'about', label: 'About Markpad' },
+                { type: 'separator' },
+                { role: 'services' },
+                { type: 'separator' },
+                { role: 'hide' },
+                { role: 'hideOthers' },
+                { role: 'unhide' },
+                { type: 'separator' },
+                { role: 'quit' }
+            ]
+        }] : []),
+        // File 菜单
+        {
+            label: 'File',
+            submenu: [
+                {
+                    label: 'New Document',
+                    accelerator: 'CmdOrCtrl+N',
+                    click: () => mainWindow?.webContents.send('menu:new-document')
+                },
+                { type: 'separator' },
+                {
+                    label: 'Open...',
+                    accelerator: 'CmdOrCtrl+O',
+                    click: () => mainWindow?.webContents.send('menu:open-file')
+                },
+                { type: 'separator' },
+                {
+                    label: 'Save',
+                    accelerator: 'CmdOrCtrl+S',
+                    click: () => mainWindow?.webContents.send('menu:save-file')
+                },
+                {
+                    label: 'Save As...',
+                    accelerator: 'CmdOrCtrl+Shift+S',
+                    click: () => mainWindow?.webContents.send('menu:save-file-as')
+                },
+                { type: 'separator' },
+                {
+                    label: 'Export',
+                    submenu: [
+                        {
+                            label: 'Export as HTML',
+                            click: () => mainWindow?.webContents.send('menu:export-html')
+                        },
+                        {
+                            label: 'Export as PDF',
+                            click: () => mainWindow?.webContents.send('menu:export-pdf')
+                        },
+                        {
+                            label: 'Export as Markdown',
+                            click: () => mainWindow?.webContents.send('menu:export-markdown')
+                        }
+                    ]
+                },
+                { type: 'separator' },
+                {
+                    label: 'Close Document',
+                    accelerator: 'CmdOrCtrl+W',
+                    click: () => mainWindow?.webContents.send('menu:close-document')
+                },
+                ...(!isMac ? [
+                    { type: 'separator' },
+                    { role: 'quit', label: 'Exit' }
+                ] : [])
+            ]
+        },
+        // Edit 菜单
+        {
+            label: 'Edit',
+            submenu: [
+                { role: 'undo', label: 'Undo' },
+                { role: 'redo', label: 'Redo' },
+                { type: 'separator' },
+                { role: 'cut', label: 'Cut' },
+                { role: 'copy', label: 'Copy' },
+                { role: 'paste', label: 'Paste' },
+                { role: 'selectAll', label: 'Select All' },
+                { type: 'separator' },
+                {
+                    label: 'Find',
+                    accelerator: 'CmdOrCtrl+F',
+                    click: () => mainWindow?.webContents.send('menu:find')
+                },
+                {
+                    label: 'Replace',
+                    accelerator: 'CmdOrCtrl+H',
+                    click: () => mainWindow?.webContents.send('menu:replace')
+                }
+            ]
+        },
+        // View 菜单
+        {
+            label: 'View',
+            submenu: [
+                {
+                    label: 'Toggle Sidebar',
+                    accelerator: 'CmdOrCtrl+B',
+                    click: () => mainWindow?.webContents.send('menu:toggle-sidebar')
+                },
+                {
+                    label: 'Toggle Preview',
+                    accelerator: 'CmdOrCtrl+P',
+                    click: () => mainWindow?.webContents.send('menu:toggle-preview')
+                },
+                { type: 'separator' },
+                { role: 'reload', label: 'Reload' },
+                { role: 'forceReload', label: 'Force Reload' },
+                { role: 'toggleDevTools', label: 'Toggle Developer Tools' },
+                { type: 'separator' },
+                { role: 'resetZoom', label: 'Actual Size' },
+                { role: 'zoomIn', label: 'Zoom In' },
+                { role: 'zoomOut', label: 'Zoom Out' },
+                { type: 'separator' },
+                { role: 'togglefullscreen', label: 'Toggle Full Screen' }
+            ]
+        },
+        // Format 菜单
+        {
+            label: 'Format',
+            submenu: [
+                {
+                    label: 'Bold',
+                    accelerator: 'CmdOrCtrl+B',
+                    click: () => mainWindow?.webContents.send('menu:format-bold')
+                },
+                {
+                    label: 'Italic',
+                    accelerator: 'CmdOrCtrl+I',
+                    click: () => mainWindow?.webContents.send('menu:format-italic')
+                },
+                {
+                    label: 'Strikethrough',
+                    click: () => mainWindow?.webContents.send('menu:format-strikethrough')
+                },
+                { type: 'separator' },
+                {
+                    label: 'Heading 1',
+                    click: () => mainWindow?.webContents.send('menu:format-heading', 1)
+                },
+                {
+                    label: 'Heading 2',
+                    click: () => mainWindow?.webContents.send('menu:format-heading', 2)
+                },
+                {
+                    label: 'Heading 3',
+                    click: () => mainWindow?.webContents.send('menu:format-heading', 3)
+                },
+                { type: 'separator' },
+                {
+                    label: 'Insert Link',
+                    click: () => mainWindow?.webContents.send('menu:insert-link')
+                },
+                {
+                    label: 'Insert Image',
+                    click: () => mainWindow?.webContents.send('menu:insert-image')
+                },
+                {
+                    label: 'Insert Code Block',
+                    click: () => mainWindow?.webContents.send('menu:insert-code')
+                },
+                {
+                    label: 'Insert Table',
+                    click: () => mainWindow?.webContents.send('menu:insert-table')
+                }
+            ]
+        },
+        // Help 菜单
+        {
+            label: 'Help',
+            submenu: [
+                {
+                    label: 'Welcome Guide',
+                    click: () => mainWindow?.webContents.send('menu:welcome')
+                },
+                {
+                    label: 'Documentation',
+                    click: () => shell.openExternal('https://github.com/PythonSmall-Q/Markpad')
+                },
+                { type: 'separator' },
+                {
+                    label: 'Check for Updates',
+                    click: () => mainWindow?.webContents.send('menu:check-updates')
+                },
+                { type: 'separator' },
+                {
+                    label: 'Report Issue',
+                    click: () => shell.openExternal('https://github.com/PythonSmall-Q/Markpad/issues')
+                },
+                ...(!isMac ? [
+                    { type: 'separator' },
+                    {
+                        label: 'About Markpad',
+                        click: () => mainWindow?.webContents.send('menu:about')
+                    }
+                ] : [])
+            ]
+        }
+    ]
+
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
+}
+
 app.whenReady().then(async () => {
     await ensureTempDir()
     createWindow()
+    createMenu()
 
     // Initialize auto updater
     initAutoUpdater()
@@ -442,4 +656,37 @@ ipcMain.handle('updater:install', () => {
 ipcMain.handle('updater:get-version', () => {
     return { version: app.getVersion() }
 })
+
+// 系统信息
+ipcMain.handle('system:get-info', () => {
+    const os = require('os')
+
+    return {
+        platform: process.platform,
+        platformName: getPlatformName(),
+        arch: process.arch,
+        appVersion: app.getVersion(),
+        electronVersion: process.versions.electron,
+        nodeVersion: process.versions.node,
+        chromeVersion: process.versions.chrome,
+        v8Version: process.versions.v8,
+        osRelease: os.release(),
+        osType: os.type(),
+        totalMemory: os.totalmem(),
+        freeMemory: os.freemem()
+    }
+})
+
+function getPlatformName() {
+    switch (process.platform) {
+        case 'win32':
+            return 'Windows'
+        case 'darwin':
+            return 'macOS'
+        case 'linux':
+            return 'Linux'
+        default:
+            return process.platform
+    }
+}
 

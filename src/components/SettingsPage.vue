@@ -234,6 +234,29 @@
             <el-button type="primary" link @click="openGithub">{{ t('settings.about.github') }}</el-button>
             <el-button type="primary" link @click="openDocs">{{ t('settings.about.docs') }}</el-button>
           </el-space>
+          
+          <!-- 系统信息 -->
+          <div class="system-info" v-if="systemInfo.platformName">
+            <el-divider />
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Operating System:</span>
+                <span class="info-value">{{ systemInfo.platformName }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Markpad Version:</span>
+                <span class="info-value">{{ systemInfo.appVersion || appVersion }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Node.js Version:</span>
+                <span class="info-value">{{ systemInfo.nodeVersion }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Electron Version:</span>
+                <span class="info-value">{{ systemInfo.electronVersion }}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </el-card>
       
@@ -261,6 +284,13 @@ const emit = defineEmits(['close'])
 const settingsStore = useSettingsStore()
 const { t, locale } = useI18n()
 const appVersion = ref('')
+const systemInfo = ref({
+  platform: '',
+  platformName: '',
+  appVersion: '',
+  electronVersion: '',
+  nodeVersion: ''
+})
 
 const localSettings = reactive({
   locale: 'zh-CN',
@@ -295,6 +325,7 @@ const shortcuts = computed(() => ([
 onMounted(() => {
   loadSettings()
   loadAppVersion()
+  loadSystemInfo()
 })
 
 async function loadAppVersion() {
@@ -317,6 +348,27 @@ async function loadAppVersion() {
   }
 
   appVersion.value = version || 'unknown'
+}
+
+async function loadSystemInfo() {
+  if (window.electronAPI && window.electronAPI.getSystemInfo) {
+    try {
+      const info = await window.electronAPI.getSystemInfo()
+      systemInfo.value = {
+        platform: info.platform || '',
+        platformName: info.platformName || 'Unknown',
+        appVersion: info.appVersion || appVersion.value,
+        electronVersion: info.electronVersion || 'Unknown',
+        nodeVersion: info.nodeVersion || 'Unknown'
+      }
+      // 如果 appVersion 还没有值，使用系统信息中的版本
+      if (!appVersion.value || appVersion.value === 'unknown') {
+        appVersion.value = info.appVersion || 'unknown'
+      }
+    } catch (error) {
+      console.warn('Failed to load system info:', error)
+    }
+  }
 }
 
 function loadSettings() {
@@ -535,6 +587,41 @@ function openDocs() {
   
   .el-space {
     margin-top: 16px;
+  }
+  
+  .system-info {
+    margin-top: 16px;
+    
+    .el-divider {
+      margin: 16px 0;
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto;
+      
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        
+        .info-label {
+          font-size: 12px;
+          color: var(--el-text-color-secondary);
+          font-weight: 500;
+        }
+        
+        .info-value {
+          font-size: 13px;
+          color: var(--el-text-color-regular);
+          font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+      }
+    }
   }
 }
 
