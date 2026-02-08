@@ -570,12 +570,8 @@ function initAutoUpdater() {
         return
     }
 
-    // 设置更新源为 Cloudflare Pages (优先) 和 GitHub (备用)
-    autoUpdater.setFeedURL({
-        provider: 'generic',
-        url: 'https://mark-pad.pages.dev'
-    })
-    console.log('Update feed URL set to: https://mark-pad.pages.dev')
+    // 使用 GitHub Releases 作为更新源
+    console.log('Using GitHub Releases for auto-updates')
 
     // 更新检查错误
     autoUpdater.on('error', (error) => {

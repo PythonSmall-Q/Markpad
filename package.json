@@ -101,17 +101,11 @@
                 "publisherName": "PythonSmall-Q"
             }
         },
-        "publish": [
-            {
-                "provider": "generic",
-                "url": "https://mark-pad.pages.dev"
-            },
-            {
-                "provider": "github",
-                "owner": "PythonSmall-Q",
-                "repo": "Markpad"
-            }
-        ],
+        "publish": {
+            "provider": "github",
+            "owner": "PythonSmall-Q",
+            "repo": "Markpad"
+        },
         "nsis": {
             "oneClick": false,
             "allowToChangeInstallationDirectory": true,

@@ -190,19 +190,8 @@ jobs:
           cp cloudflare-pages/features.html cloudflare-deploy/
           cp cloudflare-pages/_headers cloudflare-deploy/
           
-          # 复制所有平台的发布文件
-          # Windows
-          find artifacts -type f -name "*.exe" -exec cp {} cloudflare-deploy/ \;
-          find artifacts -type f -name "*.exe.blockmap" -exec cp {} cloudflare-deploy/ \;
-          
-          # macOS
-          find artifacts -type f -name "*.dmg" -exec cp {} cloudflare-deploy/ \;
-          find artifacts -type f -name "*.dmg.blockmap" -exec cp {} cloudflare-deploy/ \;
-          
-          # Linux
-          find artifacts -type f -name "*.AppImage" -exec cp {} cloudflare-deploy/ \;
-          
-          # 复制所有 yml 更新文件
+          # 只复制 yml 更新文件（小文件）
+          # 不复制安装包文件（超过 Cloudflare Pages 25MB 限制）
           find artifacts -type f -name "latest*.yml" -exec cp {} cloudflare-deploy/ \;
           
           echo "Files to deploy:"

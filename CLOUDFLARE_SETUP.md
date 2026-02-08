@@ -1,14 +1,32 @@
-# Cloudflare Pages 自动部署配置指南
+# Cloudflare Pages 混合托管配置指南
 
-本项目已集成 Cloudflare Pages 作为发布文件托管和自动更新服务。
+本项目采用 **Cloudflare Pages + GitHub Releases 混合托管方案**，充分利用两个平台的优势。
 
-## 🎯 为什么使用 Cloudflare Pages？
+## 🎯 混合托管架构
 
-- ✅ **全球 CDN 加速** - 更快的下载速度
-- ✅ **免费托管** - 无限流量和带宽
-- ✅ **高可用性** - 99.99% SLA
-- ✅ **自动 HTTPS** - 内置 SSL 证书
-- ✅ **无需依赖 GitHub Releases** - 独立的更新服务
+### Cloudflare Pages 托管
+
+- ✅ **网站页面** - 产品主页、功能介绍（通过全球 CDN 快速加载）
+- ✅ **更新配置文件** - latest.yml 等小文件（< 1 KB）
+
+### GitHub Releases 托管
+
+- 📦 **安装包文件** - exe、dmg、AppImage（50-150 MB）
+
+### 为什么采用混合方案？
+
+**Cloudflare Pages 限制**:
+
+- 单个文件最大 25 MiB
+- Markpad 安装包实际大小：92-125 MB
+
+**解决方案优势**:
+
+- ✅ 突破文件大小限制
+- ✅ 快速的网页加载（CDN）
+- ✅ 可靠的大文件下载（GitHub）
+- ✅ 降低带宽成本
+- ✅ 简化部署流程
 
 ## 📋 配置步骤
 
@@ -39,10 +57,10 @@
 2. 进入 **Settings > Secrets and variables > Actions**
 3. 点击 **New repository secret** 添加以下两个密钥：
 
-| Name | Value | 说明 |
-|------|-------|------|
+| Name                      | Value               | 说明        |
+| ------------------------- | ------------------- | ----------- |
 | `CLOUDFLARE_ACCOUNT_ID` | `your-account-id` | 从步骤1获取 |
-| `CLOUDFLARE_API_TOKEN` | `your-api-token` | 从步骤2获取 |
+| `CLOUDFLARE_API_TOKEN`  | `your-api-token`  | 从步骤2获取 |
 
 ### 第三步：创建 Cloudflare Pages 项目
 
@@ -81,39 +99,23 @@ https://markpad.pages.dev
 https://download.markpad.app
 ```
 
-### 第五步：更新项目配置
+### 第五步：了解部署内容
 
-如果你的 Cloudflare Pages URL 不是 `mark-pad.pages.dev`，需要修改以下文件：
+Cloudflare Pages 部署内容：
 
-#### 1. 修改 package.json
-
-```json
-{
-  "build": {
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "https://your-project.pages.dev"  // 修改这里
-      }
-    ]
-  }
-}
+```
+cloudflare-deploy/
+├── index.html              # 产品主页（下载中心）
+├── features.html           # 功能详情页
+├── _headers                # CORS 和缓存配置
+├── latest.yml              # Windows 更新配置
+├── latest-mac.yml          # macOS 更新配置（如果有）
+└── latest-linux.yml        # Linux 更新配置（如果有）
 ```
 
-#### 2. 修改 electron/main.js
+**注意**: 安装包文件（.exe、.dmg、.AppImage）不会部署到 Cloudflare Pages，它们由 GitHub Releases 托管。
 
-```javascript
-autoUpdater.setFeedURL({
-    provider: 'generic',
-    url: 'https://your-project.pages.dev'  // 修改这里
-})
-```
-
-#### 3. 修改 .github/workflows/release.yml
-
-```yaml
-command: pages deploy cloudflare-deploy --project-name=your-project  # 修改项目名
-```
+下载页面会自动从 latest.yml 读取版本号，并生成指向 GitHub Releases 的下载链接。
 
 ## 🚀 使用方法
 
@@ -143,14 +145,14 @@ graph LR
 实际流程：
 
 1. ✅ GitHub Actions 构建 Windows/macOS/Linux 版本
-2. ✅ 创建 GitHub Release 并上传安装包
+2. ✅ 创建 GitHub Release 并上传安装包（.exe、.dmg、.AppImage）
 3. ✅ 自动部署到 Cloudflare Pages:
    - `index.html` - 下载页面
-   - `Markpad.Setup.x.x.x.exe` - Windows 安装包
-   - `Markpad-x.x.x-arm64.dmg` - macOS 安装包
-   - `Markpad-x.x.x.AppImage` - Linux 安装包
-   - `latest.yml`, `latest-mac.yml`, `latest-linux.yml` - 版本信息
-4. ✅ Electron 应用自动检测更新
+   - `features.html` - 功能介绍页
+   - `_headers` - HTTP 头配置
+   - `latest.yml`, `latest-mac.yml`, `latest-linux.yml` - 版本信息文件
+4. ✅ 下载页面自动生成指向 GitHub Releases 的下载链接
+5. ✅ Electron 应用从 GitHub Releases 检测并下载更新
 
 ## 🔍 验证部署
 
@@ -164,14 +166,14 @@ graph LR
 
 应该能看到 Markpad 下载中心页面。
 
-### 3. 测试更新检测
+### 3. 测试文件访问
 
 ```bash
-# 方式 1: 直接访问 latest.yml
+# 检查 latest.yml（应该在 Cloudflare Pages）
 curl https://mark-pad.pages.dev/latest.yml
 
-# 方式 2: 检查安装包是否存在
-curl -I https://mark-pad.pages.dev/Markpad.Setup.1.2.2.exe
+# 检查安装包（应该在 GitHub Releases）
+curl -I https://github.com/PythonSmall-Q/Markpad/releases/download/v1.2.3/Markpad.Setup.1.2.3.exe
 ```
 
 ### 4. 测试应用内更新
@@ -223,8 +225,7 @@ Access to fetch at 'https://mark-pad.pages.dev/latest.yml' has been blocked by C
 **检查清单:**
 
 - [ ] 应用是否为生产打包版本（不是开发模式）
-- [ ] `package.json` 中的 `publish.url` 是否正确
-- [ ] Cloudflare Pages 上是否有 `latest.yml` 文件
+- [ ] GitHub Release 是否已创建并包含安装包文件
 - [ ] `latest.yml` 中的版本号是否大于当前版本
 - [ ] 网络连接是否正常
 
@@ -236,9 +237,11 @@ Access to fetch at 'https://mark-pad.pages.dev/latest.yml' has been blocked by C
 # macOS: Cmd+Option+I
 
 # 应该看到类似输出:
-# Update feed URL set to: https://mark-pad.pages.dev
+# Using GitHub Releases for auto-updates
 # Checking for updates...
 ```
+
+**说明**: 应用现在直接从 GitHub Releases 检查更新，不再使用 Cloudflare Pages 作为更新源。
 
 ## 📊 监控和分析
 
@@ -262,15 +265,16 @@ Access to fetch at 'https://mark-pad.pages.dev/latest.yml' has been blocked by C
 ## 🔐 安全最佳实践
 
 1. ✅ **保护 API Token**
+
    - 仅通过 GitHub Secrets 存储
    - 定期轮换 Token
    - 使用最小权限原则
-
 2. ✅ **启用 HTTPS**
+
    - Cloudflare 默认启用
    - 不要使用 HTTP
-
 3. ✅ **验证文件完整性**
+
    - electron-updater 自动验证 SHA512
    - blockmap 文件确保增量更新安全
 
@@ -289,7 +293,3 @@ Access to fetch at 'https://mark-pad.pages.dev/latest.yml' has been blocked by C
 2. 查看 GitHub Actions 执行日志
 3. 查看 Cloudflare Pages 部署日志
 4. 提交 Issue: https://github.com/PythonSmall-Q/Markpad/issues
-
----
-
-配置完成后，你的应用将使用 Cloudflare Pages 作为主要更新源，享受全球 CDN 加速！🚀

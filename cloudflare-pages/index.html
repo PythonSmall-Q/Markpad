@@ -414,48 +414,35 @@
                 const version = versionMatch ? versionMatch[1].trim() : 'Unknown';
                 const releaseDate = releaseDateMatch ? new Date(releaseDateMatch[1]).toLocaleDateString('zh-CN') : new Date().toLocaleDateString('zh-CN');
 
-                // 尝试加载各平台文件
-                const baseUrl = window.location.origin;
+                // GitHub Releases 下载链接
+                const githubReleaseUrl = `https://github.com/PythonSmall-Q/Markpad/releases/download/v${version}`;
+
+                // 所有平台（下载链接指向 GitHub Releases）
                 const platforms = [
                     {
                         name: 'Windows',
                         icon: '🪟',
                         file: `Markpad.Setup.${version}.exe`,
+                        downloadUrl: `${githubReleaseUrl}/Markpad.Setup.${version}.exe`,
                         color: '#0078D4'
                     },
                     {
                         name: 'macOS',
                         icon: '🍎',
                         file: `Markpad-${version}-arm64.dmg`,
+                        downloadUrl: `${githubReleaseUrl}/Markpad-${version}-arm64.dmg`,
                         color: '#555'
                     },
                     {
                         name: 'Linux',
                         icon: '🐧',
                         file: `Markpad-${version}.AppImage`,
+                        downloadUrl: `${githubReleaseUrl}/Markpad-${version}.AppImage`,
                         color: '#FCC624'
                     }
                 ];
 
-                // 检查文件是否存在
-                const availablePlatforms = [];
-                for (const platform of platforms) {
-                    try {
-                        const checkResponse = await fetch(`${baseUrl}/${platform.file}`, { method: 'HEAD' });
-                        if (checkResponse.ok) {
-                            const size = checkResponse.headers.get('content-length');
-                            platform.size = size ? formatFileSize(parseInt(size)) : '未知';
-                            availablePlatforms.push(platform);
-                        }
-                    } catch (e) {
-                        console.log(`Platform ${platform.name} not available`);
-                    }
-                }
-
-                // 如果没有找到任何平台，至少显示 Windows（因为 workflow 保证了 Windows）
-                if (availablePlatforms.length === 0) {
-                    availablePlatforms.push(platforms[0]);
-                }
+                const availablePlatforms = platforms;
 
                 // 生成下载卡片
                 const downloadCards = availablePlatforms.map(platform => `
@@ -463,8 +450,7 @@
                         <div class="platform-icon">${platform.icon}</div>
                         <h3>${platform.name}</h3>
                         <div class="file-info">版本: v${version}</div>
-                        ${platform.size ? `<div class="file-info">大小: ${platform.size}</div>` : ''}
-                        <a href="${baseUrl}/${platform.file}" class="btn btn-download">
+                        <a href="${platform.downloadUrl}" class="btn btn-download">
                             下载 ${platform.name} 版
                         </a>
                     </div>
@@ -480,7 +466,7 @@
                 document.getElementById('version-info').innerHTML = `
                     <strong>当前版本:</strong> v${version}<br>
                     <strong>更新日期:</strong> ${releaseDate}<br>
-                    <strong>托管服务:</strong> Cloudflare Pages + Global CDN
+                    <strong>下载源:</strong> GitHub Releases
                 `;
             } catch (error) {
                 console.error('Failed to load release info:', error);
