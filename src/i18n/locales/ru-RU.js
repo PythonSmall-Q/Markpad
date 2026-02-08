@@ -164,5 +164,17 @@ export default {
         invalidFile: 'Недопустимый файл',
         exportSuccess: 'Экспорт выполнен',
         exportFailed: 'Ошибка экспорта'
+    },
+
+    mathTutorial: {
+        title: 'Учебник по математическим формулам',
+        basics: { title: 'Базовый синтаксис', desc: 'LaTeX поддерживает встроенные и блочные формулы', inline: { title: 'Встроенная формула' }, block: { title: 'Блочная формула' } },
+        symbols: { title: 'Символы', name: 'Имя', code: 'Код', result: 'Результат', greek: { title: 'Греческие буквы' }, operators: { title: 'Операторы' } },
+        fractions: { title: 'Дроби и корни', fraction: { title: 'Дробь' }, root: { title: 'Корень' } },
+        scripts: { title: 'Верхние и нижние индексы', superscript: { title: 'Верхний индекс' }, subscript: { title: 'Нижний индекс' } },
+        functions: { title: 'Функции', trig: { title: 'Тригонометрические функции' }, log: { title: 'Логарифм' }, limits: { title: 'Пределы' } },
+        matrices: { title: 'Матрицы', bracket: { title: 'Круглые скобки' }, square: { title: 'Квадратные скобки' }, determinant: { title: 'Определитель' } },
+        equations: { title: 'Уравнения', system: { title: 'Система уравнений' }, align: { title: 'Выравнивание' } },
+        examples: { title: 'Примеры', quadratic: 'Квадратное уравнение', integral: 'Интеграл', summation: 'Суммирование', limit: 'Предел', matrix: 'Матрица', system: 'Система', derivative: 'Производная', partial: 'Частная производная', vector: 'Вектор', set: 'Множество', logic: 'Логика', copy: 'Копировать', copied: 'Скопировано' }
     }
 }

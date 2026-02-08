@@ -165,5 +165,17 @@ export default {
         invalidFile: '잘못된 파일입니다',
         exportSuccess: '내보내기 성공',
         exportFailed: '내보내기 실패'
+    },
+
+    mathTutorial: {
+        title: '수학 수식 튜토리얼',
+        basics: { title: '기본 구문', desc: 'LaTeX는 인라인 및 블록 수식을 지원합니다', inline: { title: '인라인 수식' }, block: { title: '블록 수식' } },
+        symbols: { title: '기호', name: '이름', code: '코드', result: '결과', greek: { title: '그리스 문자' }, operators: { title: '연산자' } },
+        fractions: { title: '분수와 근호', fraction: { title: '분수' }, root: { title: '근호' } },
+        scripts: { title: '위 첨자와 아래 첨자', superscript: { title: '위 첨자' }, subscript: { title: '아래 첨자' } },
+        functions: { title: '함수', trig: { title: '삼각 함수' }, log: { title: '로그' }, limits: { title: '극한' } },
+        matrices: { title: '행렬', bracket: { title: '소괄호' }, square: { title: '대괄호' }, determinant: { title: '행렬식' } },
+        equations: { title: '방정식', system: { title: '연립방정식' }, align: { title: '정렬' } },
+        examples: { title: '예제', quadratic: '이차방정식', integral: '적분', summation: '합', limit: '극한', matrix: '행렬', system: '연립', derivative: '도함수', partial: '편미분', vector: '벡터', set: '집합', logic: '논리', copy: '복사', copied: '복사됨' }
     }
 }

@@ -165,5 +165,17 @@ export default {
         invalidFile: 'Arquivo inválido',
         exportSuccess: 'Exportação bem-sucedida',
         exportFailed: 'Falha na exportação'
+    },
+
+    mathTutorial: {
+        title: 'Tutorial de Fórmulas Matemáticas',
+        basics: { title: 'Sintaxe Básica', desc: 'LaTeX suporta fórmulas em linha e em bloco', inline: { title: 'Fórmula em Linha' }, block: { title: 'Fórmula em Bloco' } },
+        symbols: { title: 'Símbolos', name: 'Nome', code: 'Código', result: 'Resultado', greek: { title: 'Letras Gregas' }, operators: { title: 'Operadores' } },
+        fractions: { title: 'Frações e Raízes', fraction: { title: 'Fração' }, root: { title: 'Raiz' } },
+        scripts: { title: 'Sobrescritos e Subscritos', superscript: { title: 'Sobrescrito' }, subscript: { title: 'Subscrito' } },
+        functions: { title: 'Funções', trig: { title: 'Funções Trigonométricas' }, log: { title: 'Logaritmo' }, limits: { title: 'Limites' } },
+        matrices: { title: 'Matrizes', bracket: { title: 'Parênteses' }, square: { title: 'Colchetes' }, determinant: { title: 'Determinante' } },
+        equations: { title: 'Equações', system: { title: 'Sistema de Equações' }, align: { title: 'Alinhamento' } },
+        examples: { title: 'Exemplos', quadratic: 'Equação Quadrática', integral: 'Integral', summation: 'Somatório', limit: 'Limite', matrix: 'Matriz', system: 'Sistema', derivative: 'Derivada', partial: 'Derivada Parcial', vector: 'Vetor', set: 'Conjunto', logic: 'Lógica', copy: 'Copiar', copied: 'Copiado' }
     }
 }

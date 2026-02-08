@@ -364,5 +364,98 @@ export default {
             exported: '日志已导出',
             exportError: '导出日志失败'
         }
+    },
+
+    mathTutorial: {
+        title: '数学公式教程',
+        basics: {
+            title: '基础语法',
+            desc: 'LaTeX 数学公式支持行内和块级两种形式',
+            inline: {
+                title: '行内公式'
+            },
+            block: {
+                title: '块级公式'
+            }
+        },
+        symbols: {
+            title: '常用符号',
+            name: '名称',
+            code: '代码',
+            result: '结果',
+            greek: {
+                title: '希腊字母'
+            },
+            operators: {
+                title: '运算符'
+            }
+        },
+        fractions: {
+            title: '分数和根式',
+            fraction: {
+                title: '分数'
+            },
+            root: {
+                title: '根式'
+            }
+        },
+        scripts: {
+            title: '上下标',
+            superscript: {
+                title: '上标'
+            },
+            subscript: {
+                title: '下标'
+            }
+        },
+        functions: {
+            title: '函数',
+            trig: {
+                title: '三角函数'
+            },
+            log: {
+                title: '对数'
+            },
+            limits: {
+                title: '极限'
+            }
+        },
+        matrices: {
+            title: '矩阵',
+            bracket: {
+                title: '圆括号矩阵'
+            },
+            square: {
+                title: '方括号矩阵'
+            },
+            determinant: {
+                title: '行列式'
+            }
+        },
+        equations: {
+            title: '方程组',
+            system: {
+                title: '方程组'
+            },
+            align: {
+                title: '对齐'
+            }
+        },
+        examples: {
+            title: '常用公式示例',
+            quadratic: '二次方程',
+            integral: '积分',
+            summation: '求和',
+            limit: '极限',
+            matrix: '矩阵',
+            system: '方程组',
+            derivative: '导数',
+            partial: '偏导数',
+            vector: '向量',
+            set: '集合',
+            logic: '逻辑',
+            copy: '复制',
+            copied: '已复制'
+        }
     }
 }

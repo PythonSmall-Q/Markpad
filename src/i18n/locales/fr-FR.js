@@ -165,5 +165,17 @@ export default {
         invalidFile: 'Fichier non valide',
         exportSuccess: 'Exportation réussie',
         exportFailed: 'Échec de l\'exportation'
+    },
+
+    mathTutorial: {
+        title: 'Tutoriel de Formules Mathématiques',
+        basics: { title: 'Syntaxe de Base', desc: 'LaTeX prend en charge les formules en ligne et en bloc', inline: { title: 'Formule en Ligne' }, block: { title: 'Formule en Bloc' } },
+        symbols: { title: 'Symboles', name: 'Nom', code: 'Code', result: 'Résultat', greek: { title: 'Lettres Grecques' }, operators: { title: 'Opérateurs' } },
+        fractions: { title: 'Fractions et Racines', fraction: { title: 'Fraction' }, root: { title: 'Racine' } },
+        scripts: { title: 'Exposants et Indices', superscript: { title: 'Exposant' }, subscript: { title: 'Indice' } },
+        functions: { title: 'Fonctions', trig: { title: 'Fonctions Trigonométriques' }, log: { title: 'Logarithme' }, limits: { title: 'Limites' } },
+        matrices: { title: 'Matrices', bracket: { title: 'Parenthèses' }, square: { title: 'Crochets' }, determinant: { title: 'Déterminant' } },
+        equations: { title: 'Équations', system: { title: 'Système d\'\u00c9quations' }, align: { title: 'Alignement' } },
+        examples: { title: 'Exemples', quadratic: 'Équation Quadratique', integral: 'Intégrale', summation: 'Sommation', limit: 'Limite', matrix: 'Matrice', system: 'Système', derivative: 'Dérivée', partial: 'Dérivée Partielle', vector: 'Vecteur', set: 'Ensemble', logic: 'Logique', copy: 'Copier', copied: 'Copié' }
     }
 }

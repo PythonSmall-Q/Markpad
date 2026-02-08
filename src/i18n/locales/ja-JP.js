@@ -162,5 +162,17 @@ export default {
         invalidFile: '無効なファイルです',
         exportSuccess: 'エクスポートに成功しました',
         exportFailed: 'エクスポートに失敗しました'
+    },
+
+    mathTutorial: {
+        title: '数式チュートリアル',
+        basics: { title: '基本構文', desc: 'LaTeXはインラインとブロック数式をサポート', inline: { title: 'インライン数式' }, block: { title: 'ブロック数式' } },
+        symbols: { title: '記号', name: '名前', code: 'コード', result: '結果', greek: { title: 'ギリシャ文字' }, operators: { title: '演算子' } },
+        fractions: { title: '分数と根号', fraction: { title: '分数' }, root: { title: '根号' } },
+        scripts: { title: '上付きと下付き', superscript: { title: '上付き' }, subscript: { title: '下付き' } },
+        functions: { title: '関数', trig: { title: '三角関数' }, log: { title: '対数' }, limits: { title: '極限' } },
+        matrices: { title: '行列', bracket: { title: '丸括弧' }, square: { title: '角括弧' }, determinant: { title: '行列式' } },
+        equations: { title: '方程式', system: { title: '連立方程式' }, align: { title: '配置' } },
+        examples: { title: '例', quadratic: '二次方程式', integral: '積分', summation: '総和', limit: '極限', matrix: '行列', system: '連立', derivative: '導関数', partial: '偏導関数', vector: 'ベクトル', set: '集合', logic: '論理', copy: 'コピー', copied: 'コピー完了' }
     }
 }

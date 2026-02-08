@@ -364,5 +364,98 @@ export default {
             exported: 'Logs exported',
             exportError: 'Failed to export logs'
         }
+    },
+
+    mathTutorial: {
+        title: 'Math Formula Tutorial',
+        basics: {
+            title: 'Basic Syntax',
+            desc: 'LaTeX math formulas support inline and block modes',
+            inline: {
+                title: 'Inline Formula'
+            },
+            block: {
+                title: 'Block Formula'
+            }
+        },
+        symbols: {
+            title: 'Common Symbols',
+            name: 'Name',
+            code: 'Code',
+            result: 'Result',
+            greek: {
+                title: 'Greek Letters'
+            },
+            operators: {
+                title: 'Operators'
+            }
+        },
+        fractions: {
+            title: 'Fractions and Roots',
+            fraction: {
+                title: 'Fraction'
+            },
+            root: {
+                title: 'Root'
+            }
+        },
+        scripts: {
+            title: 'Superscripts and Subscripts',
+            superscript: {
+                title: 'Superscript'
+            },
+            subscript: {
+                title: 'Subscript'
+            }
+        },
+        functions: {
+            title: 'Functions',
+            trig: {
+                title: 'Trigonometric Functions'
+            },
+            log: {
+                title: 'Logarithm'
+            },
+            limits: {
+                title: 'Limits'
+            }
+        },
+        matrices: {
+            title: 'Matrices',
+            bracket: {
+                title: 'Parentheses Matrix'
+            },
+            square: {
+                title: 'Square Bracket Matrix'
+            },
+            determinant: {
+                title: 'Determinant'
+            }
+        },
+        equations: {
+            title: 'Equations',
+            system: {
+                title: 'System of Equations'
+            },
+            align: {
+                title: 'Alignment'
+            }
+        },
+        examples: {
+            title: 'Common Formula Examples',
+            quadratic: 'Quadratic Equation',
+            integral: 'Integral',
+            summation: 'Summation',
+            limit: 'Limit',
+            matrix: 'Matrix',
+            system: 'System of Equations',
+            derivative: 'Derivative',
+            partial: 'Partial Derivative',
+            vector: 'Vector',
+            set: 'Set',
+            logic: 'Logic',
+            copy: 'Copy',
+            copied: 'Copied'
+        }
     }
 }

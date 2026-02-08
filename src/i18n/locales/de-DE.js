@@ -165,5 +165,17 @@ export default {
         invalidFile: 'Ungültige Datei',
         exportSuccess: 'Export erfolgreich',
         exportFailed: 'Export fehlgeschlagen'
+    },
+
+    mathTutorial: {
+        title: 'Mathe-Formel-Tutorial',
+        basics: { title: 'Grundlagen', desc: 'LaTeX unterstützt Inline- und Block-Formeln', inline: { title: 'Inline-Formel' }, block: { title: 'Block-Formel' } },
+        symbols: { title: 'Symbole', name: 'Name', code: 'Code', result: 'Ergebnis', greek: { title: 'Griechische Buchstaben' }, operators: { title: 'Operatoren' } },
+        fractions: { title: 'Brüche und Wurzeln', fraction: { title: 'Bruch' }, root: { title: 'Wurzel' } },
+        scripts: { title: 'Hoch- und Tiefstellung', superscript: { title: 'Hochstellung' }, subscript: { title: 'Tiefstellung' } },
+        functions: { title: 'Funktionen', trig: { title: 'Trigonometrische Funktionen' }, log: { title: 'Logarithmus' }, limits: { title: 'Grenzwerte' } },
+        matrices: { title: 'Matrizen', bracket: { title: 'Runde Klammern' }, square: { title: 'Eckige Klammern' }, determinant: { title: 'Determinante' } },
+        equations: { title: 'Gleichungen', system: { title: 'Gleichungssystem' }, align: { title: 'Ausrichtung' } },
+        examples: { title: 'Beispiele', quadratic: 'Quadratische Gleichung', integral: 'Integral', summation: 'Summation', limit: 'Grenzwert', matrix: 'Matrix', system: 'Gleichungssystem', derivative: 'Ableitung', partial: 'Partielle Ableitung', vector: 'Vektor', set: 'Menge', logic: 'Logik', copy: 'Kopieren', copied: 'Kopiert' }
     }
 }

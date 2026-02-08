@@ -162,5 +162,17 @@ export default {
         invalidFile: '無效的檔案',
         exportSuccess: '匯出成功',
         exportFailed: '匯出失敗'
+    },
+
+    mathTutorial: {
+        title: '數學公式教學',
+        basics: { title: '基本語法', desc: 'LaTeX 支持行內和區塊公式', inline: { title: '行內公式' }, block: { title: '區塊公式' } },
+        symbols: { title: '常用符號', name: '名稱', code: '代碼', result: '結果', greek: { title: '希臘字母' }, operators: { title: '運算子' } },
+        fractions: { title: '分數和根式', fraction: { title: '分數' }, root: { title: '根式' } },
+        scripts: { title: '上下標', superscript: { title: '上標' }, subscript: { title: '下標' } },
+        functions: { title: '函數', trig: { title: '三角函數' }, log: { title: '對數' }, limits: { title: '極限' } },
+        matrices: { title: '矩陣', bracket: { title: '圓括號' }, square: { title: '方括號' }, determinant: { title: '行列式' } },
+        equations: { title: '方程式', system: { title: '方程組' }, align: { title: '對齊' } },
+        examples: { title: '常用公式示例', quadratic: '二次方程', integral: '積分', summation: '求和', limit: '極限', matrix: '矩陣', system: '方程組', derivative: '導數', partial: '偏導數', vector: '向量', set: '集合', logic: '邏輯', copy: '複製', copied: '已複製' }
     }
 }
