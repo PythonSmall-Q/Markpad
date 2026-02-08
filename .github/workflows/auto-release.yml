@@ -1,0 +1,103 @@
+name: Auto Release on Version Change
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'package.json'
+
+permissions:
+  contents: write
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version-changed: ${{ steps.check.outputs.changed }}
+      new-version: ${{ steps.check.outputs.version }}
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - name: Check version change
+        id: check
+        run: |
+          # 获取当前版本
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "Current version: $CURRENT_VERSION"
+          
+          # 获取前一次提交的版本
+          git checkout HEAD~1 -- package.json 2>/dev/null || echo "No previous version"
+          PREVIOUS_VERSION=$(node -p "require('./package.json').version" 2>/dev/null || echo "0.0.0")
+          echo "Previous version: $PREVIOUS_VERSION"
+          
+          # 恢复当前 package.json
+          git checkout HEAD -- package.json
+          
+          # 检查版本是否变更
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            echo "✅ Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+            echo "❌ Version not changed: $CURRENT_VERSION"
+          fi
+
+  create-tag:
+    needs: check-version
+    if: needs.check-version.outputs.version-changed == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Create and push tag
+        env:
+          VERSION: ${{ needs.check-version.outputs.new-version }}
+        run: |
+          TAG_NAME="v${VERSION}"
+          
+          # 检查标签是否已存在
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "⚠️  Tag $TAG_NAME already exists"
+            exit 0
+          fi
+          
+          # 创建标签
+          git tag -a "$TAG_NAME" -m "Release v${VERSION}"
+          
+          # 推送标签
+          git push origin "$TAG_NAME"
+          
+          echo "✅ Created and pushed tag: $TAG_NAME"
+          echo "🚀 This will trigger the release workflow"
+
+  trigger-release:
+    needs: [check-version, create-tag]
+    if: needs.check-version.outputs.version-changed == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Wait for release workflow
+        run: |
+          echo "⏳ Waiting for release workflow to start..."
+          echo "📦 Version: ${{ needs.check-version.outputs.new-version }}"
+          echo "🏷️  Tag: v${{ needs.check-version.outputs.new-version }}"
+          echo ""
+          echo "The release workflow will be triggered by the tag push."
+          echo "Check the Actions tab for progress: https://github.com/${{ github.repository }}/actions"
