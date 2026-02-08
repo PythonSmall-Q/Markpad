@@ -404,85 +404,125 @@
 
         async function loadReleaseInfo() {
             try {
+                console.log('开始加载 latest.yml...');
+
                 // 加载 latest.yml 获取版本信息
                 const response = await fetch('/latest.yml');
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+                }
                 const text = await response.text();
+                console.log('latest.yml 内容:', text);
 
                 // 解析 YAML
                 const versionMatch = text.match(/version:\s*(.+)/);
                 const releaseDateMatch = text.match(/releaseDate:\s*'(.+)'/);
-                const version = versionMatch ? versionMatch[1].trim() : 'Unknown';
+                const version = versionMatch ? versionMatch[1].trim() : '1.2.3'; // 默认版本
                 const releaseDate = releaseDateMatch ? new Date(releaseDateMatch[1]).toLocaleDateString('zh-CN') : new Date().toLocaleDateString('zh-CN');
 
+                console.log('解析的版本号:', version);
+                console.log('发布日期:', releaseDate);
+
                 // GitHub Releases 下载链接
-                const githubReleaseUrl = `https://github.com/PythonSmall-Q/Markpad/releases/download/v${version}`;
+                const githubReleaseUrl = 'https://github.com/PythonSmall-Q/Markpad/releases/download/v' + version;
+                console.log('GitHub Release URL:', githubReleaseUrl);
 
                 // 所有平台（下载链接指向 GitHub Releases）
                 const platforms = [
                     {
                         name: 'Windows',
                         icon: '🪟',
-                        file: `Markpad.Setup.${version}.exe`,
-                        downloadUrl: `${githubReleaseUrl}/Markpad.Setup.${version}.exe`,
+                        file: 'Markpad.Setup.' + version + '.exe',
+                        downloadUrl: githubReleaseUrl + '/Markpad.Setup.' + version + '.exe',
                         color: '#0078D4'
                     },
                     {
                         name: 'macOS',
                         icon: '🍎',
-                        file: `Markpad-${version}-arm64.dmg`,
-                        downloadUrl: `${githubReleaseUrl}/Markpad-${version}-arm64.dmg`,
+                        file: 'Markpad-' + version + '-arm64.dmg',
+                        downloadUrl: githubReleaseUrl + '/Markpad-' + version + '-arm64.dmg',
                         color: '#555'
                     },
                     {
                         name: 'Linux',
                         icon: '🐧',
-                        file: `Markpad-${version}.AppImage`,
-                        downloadUrl: `${githubReleaseUrl}/Markpad-${version}.AppImage`,
+                        file: 'Markpad-' + version + '.AppImage',
+                        downloadUrl: githubReleaseUrl + '/Markpad-' + version + '.AppImage',
                         color: '#FCC624'
                     }
                 ];
 
                 const availablePlatforms = platforms;
+                console.log('生成的平台列表:', availablePlatforms);
 
                 // 生成下载卡片
-                const downloadCards = availablePlatforms.map(platform => `
-                    <div class="download-card">
-                        <div class="platform-icon">${platform.icon}</div>
-                        <h3>${platform.name}</h3>
-                        <div class="file-info">版本: v${version}</div>
-                        <a href="${platform.downloadUrl}" class="btn btn-download">
-                            下载 ${platform.name} 版
-                        </a>
-                    </div>
-                `).join('');
+                const downloadCards = availablePlatforms.map(function (platform) {
+                    return '<div class="download-card">' +
+                        '<div class="platform-icon">' + platform.icon + '</div>' +
+                        '<h3>' + platform.name + '</h3>' +
+                        '<div class="file-info">版本: v' + version + '</div>' +
+                        '<a href="' + platform.downloadUrl + '" class="btn btn-download">' +
+                        '下载 ' + platform.name + ' 版' +
+                        '</a>' +
+                        '</div>';
+                }).join('');
 
-                document.getElementById('download-content').innerHTML = `
-                    <div class="download-grid">
-                        ${downloadCards}
-                    </div>
-                `;
+                document.getElementById('download-content').innerHTML =
+                    '<div class="download-grid">' + downloadCards + '</div>';
 
                 // 更新版本信息
-                document.getElementById('version-info').innerHTML = `
-                    <strong>当前版本:</strong> v${version}<br>
-                    <strong>更新日期:</strong> ${releaseDate}<br>
-                    <strong>下载源:</strong> GitHub Releases
-                `;
+                document.getElementById('version-info').innerHTML =
+                    '<strong>当前版本:</strong> v' + version + '<br>' +
+                    '<strong>更新日期:</strong> ' + releaseDate + '<br>' +
+                    '<strong>下载源:</strong> GitHub Releases';
             } catch (error) {
                 console.error('Failed to load release info:', error);
-                document.getElementById('download-content').innerHTML = `
-                    <p style="color: rgba(255,255,255,0.8);">
-                        加载失败，请访问 
-                        <a href="https://github.com/PythonSmall-Q/Markpad/releases" 
-                           style="color: white; text-decoration: underline;">
-                            GitHub Releases
-                        </a> 
-                        下载
-                    </p>
-                `;
-                document.getElementById('version-info').innerHTML = `
-                    <p>无法加载版本信息</p>
-                `;
+
+                // 无法加载 latest.yml 时，使用默认版本
+                const defaultVersion = '1.2.3';
+                const githubReleaseUrl = 'https://github.com/PythonSmall-Q/Markpad/releases/download/v' + defaultVersion;
+
+                console.log('使用默认版本:', defaultVersion);
+
+                const platforms = [
+                    {
+                        name: 'Windows',
+                        icon: '🪟',
+                        downloadUrl: githubReleaseUrl + '/Markpad.Setup.' + defaultVersion + '.exe'
+                    },
+                    {
+                        name: 'macOS',
+                        icon: '🍎',
+                        downloadUrl: githubReleaseUrl + '/Markpad-' + defaultVersion + '-arm64.dmg'
+                    },
+                    {
+                        name: 'Linux',
+                        icon: '🐧',
+                        downloadUrl: githubReleaseUrl + '/Markpad-' + defaultVersion + '.AppImage'
+                    }
+                ];
+
+                const downloadCards = platforms.map(function (platform) {
+                    return '<div class="download-card">' +
+                        '<div class="platform-icon">' + platform.icon + '</div>' +
+                        '<h3>' + platform.name + '</h3>' +
+                        '<div class="file-info">版本: v' + defaultVersion + '</div>' +
+                        '<a href="' + platform.downloadUrl + '" class="btn btn-download">' +
+                        '下载 ' + platform.name + ' 版' +
+                        '</a>' +
+                        '</div>';
+                }).join('');
+
+                document.getElementById('download-content').innerHTML =
+                    '<div class="download-grid">' + downloadCards + '</div>' +
+                    '<p style="color: rgba(255,255,255,0.7); margin-top: 20px; font-size: 0.9em;">' +
+                    '无法加载版本信息，显示默认版本。如有问题请访问 ' +
+                    '<a href="https://github.com/PythonSmall-Q/Markpad/releases" style="color: white; text-decoration: underline;">GitHub Releases</a>' +
+                    '</p>';
+
+                document.getElementById('version-info').innerHTML =
+                    '<strong>当前版本:</strong> v' + defaultVersion + '<br>' +
+                    '<strong>下载源:</strong> GitHub Releases';
             }
         }
 
