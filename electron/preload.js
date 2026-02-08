@@ -33,7 +33,24 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
     // 窗口事件
     onBeforeClose: (callback) => ipcRenderer.on('window:before-close', callback),
-    closeConfirmed: (shouldClose) => ipcRenderer.send('window:close-confirmed', shouldClose)
+    closeConfirmed: (shouldClose) => ipcRenderer.send('window:close-confirmed', shouldClose),
+
+    // 自动更新 API
+    updateAPI: {
+        check: () => ipcRenderer.invoke('updater:check'),
+        download: () => ipcRenderer.invoke('updater:download'),
+        install: () => ipcRenderer.invoke('updater:install'),
+        getVersion: () => ipcRenderer.invoke('updater:get-version'),
+        onUpdateAvailable: (callback) => {
+            ipcRenderer.on('updater:update-available', (event, info) => callback(info))
+        },
+        onDownloadProgress: (callback) => {
+            ipcRenderer.on('updater:download-progress', (event, progress) => callback(progress))
+        },
+        onUpdateDownloaded: (callback) => {
+            ipcRenderer.on('updater:update-downloaded', (event, info) => callback(info))
+        }
+    }
 })
 
 console.log('=== electronAPI exposed successfully ===')

@@ -366,8 +366,8 @@ defineExpose({
     
     .toastui-editor-md-container,
     .toastui-editor-md-preview {
-      background-color: #1e1e1e;
-      color: #e4e4e4;
+      background-color: #ffffff;
+      color: #303133;
     }
     
     .toastui-editor-md-tab-container {

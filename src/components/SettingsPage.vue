@@ -254,12 +254,13 @@ import {
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useSettingsStore } from '@/store/settings'
 import { useI18n } from 'vue-i18n'
+import { updateAPI } from '@/utils/electron'
 
 const emit = defineEmits(['close'])
 
 const settingsStore = useSettingsStore()
 const { t, locale } = useI18n()
-const appVersion = '1.0.0'
+const appVersion = ref('')
 
 const localSettings = reactive({
   locale: 'zh-CN',
@@ -293,7 +294,30 @@ const shortcuts = computed(() => ([
 
 onMounted(() => {
   loadSettings()
+  loadAppVersion()
 })
+
+async function loadAppVersion() {
+  let version = ''
+
+  if (updateAPI?.getVersion) {
+    const result = await updateAPI.getVersion()
+    if (result && result.version) {
+      version = result.version
+    }
+  }
+
+  if (!version) {
+    try {
+      const pkg = await import('../../package.json')
+      version = pkg?.default?.version || pkg?.version || ''
+    } catch (error) {
+      console.warn('Failed to load package.json version:', error)
+    }
+  }
+
+  appVersion.value = version || 'unknown'
+}
 
 function loadSettings() {
   Object.assign(localSettings, {
@@ -412,7 +436,7 @@ function saveSettings() {
 }
 
 function openGithub() {
-  window.open('https://github.com/yourusername/markpad', '_blank')
+  window.open('https://github.com/PythonSmall-Q/Markpad', '_blank')
 }
 
 function openDocs() {

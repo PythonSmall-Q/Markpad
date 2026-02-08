@@ -279,6 +279,21 @@ export const updateAPI = {
         }
     },
 
+    async getVersion() {
+        if (!isElectron()) {
+            return { success: false, error: 'Not in Electron environment' }
+        }
+        if (!window.electronAPI.updateAPI) {
+            return { success: false, error: 'updateAPI not available' }
+        }
+        try {
+            return await window.electronAPI.updateAPI.getVersion()
+        } catch (error) {
+            console.error('Get version error:', error)
+            return { success: false, error: error.message }
+        }
+    },
+
     onUpdateAvailable(callback) {
         if (!isElectron()) {
             return

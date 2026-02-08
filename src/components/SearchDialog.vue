@@ -145,6 +145,7 @@ const useRegex = ref(false)
 const currentMatchIndex = ref(-1)
 const totalMatches = ref(0)
 const matches = ref([])
+let highlightMarkers = []
 
 watch(() => props.modelValue, (val) => {
   visible.value = val
@@ -170,11 +171,89 @@ function onOptionsChange() {
   updateMatches()
 }
 
+function getCodeMirror() {
+  const editorInstance = props.editorViewRef?.getEditorInstance?.()
+  const editor = editorInstance?.getCurrentModeEditor?.()
+  return editor?.cm || null
+}
+
+function getSelectionIndices() {
+  const editorInstance = props.editorViewRef?.getEditorInstance?.()
+  if (!editorInstance) return null
+
+  const cm = getCodeMirror()
+  if (cm) {
+    const from = cm.getCursor('from')
+    const to = cm.getCursor('to')
+    return {
+      start: cm.indexFromPos(from),
+      end: cm.indexFromPos(to)
+    }
+  }
+
+  const selection = editorInstance.getSelection?.()
+  if (!selection || selection.length !== 2) return null
+
+  const [startPos, endPos] = selection
+  if (typeof startPos === 'number' && typeof endPos === 'number') {
+    return { start: startPos, end: endPos }
+  }
+
+  const content = props.editorViewRef?.getContent?.() || ''
+  const lines = content.split('\n')
+
+  function indexFromLineCh(pos) {
+    if (!pos || typeof pos.line !== 'number' || typeof pos.ch !== 'number') return 0
+    let index = 0
+    for (let i = 0; i < pos.line && i < lines.length; i++) {
+      index += lines[i].length + 1
+    }
+    return index + pos.ch
+  }
+
+  return {
+    start: indexFromLineCh(startPos),
+    end: indexFromLineCh(endPos)
+  }
+}
+
+function selectionInMatch(selection, match) {
+  if (!selection || !match) return false
+  const start = selection.start
+  const end = selection.end
+  return start >= match.index && start < match.index + match.length && end <= match.index + match.length
+}
+
+function clearHighlights() {
+  if (highlightMarkers.length === 0) return
+  highlightMarkers.forEach(marker => marker.clear?.())
+  highlightMarkers = []
+}
+
+function applyHighlights() {
+  clearHighlights()
+  if (!matches.value.length) return
+
+  const cm = getCodeMirror()
+  if (!cm) return
+
+  matches.value.forEach((match, index) => {
+    const from = cm.posFromIndex(match.index)
+    const to = cm.posFromIndex(match.index + match.length)
+    const className = index === currentMatchIndex.value
+      ? 'search-highlight-current'
+      : 'search-highlight'
+    const marker = cm.markText(from, to, { className })
+    highlightMarkers.push(marker)
+  })
+}
+
 function updateMatches() {
   if (!props.editorViewRef || !searchText.value) {
     matches.value = []
     totalMatches.value = 0
     currentMatchIndex.value = -1
+    clearHighlights()
     return
   }
   
@@ -184,6 +263,7 @@ function updateMatches() {
       matches.value = []
       totalMatches.value = 0
       currentMatchIndex.value = -1
+      clearHighlights()
       return
     }
     
@@ -214,12 +294,16 @@ function updateMatches() {
     
     if (totalMatches.value > 0) {
       // Find current match based on cursor position
-      const editorInstance = props.editorViewRef.getEditorInstance?.()
-      if (editorInstance) {
-        const [cursorPos] = editorInstance.getSelection()
-        currentMatchIndex.value = matches.value.findIndex(m => m.index >= cursorPos)
-        if (currentMatchIndex.value === -1) {
-          currentMatchIndex.value = 0
+      const selection = getSelectionIndices()
+      if (selection) {
+        const inMatchIndex = matches.value.findIndex(m => selectionInMatch(selection, m))
+        if (inMatchIndex !== -1) {
+          currentMatchIndex.value = inMatchIndex
+        } else {
+          currentMatchIndex.value = matches.value.findIndex(m => m.index >= selection.end)
+          if (currentMatchIndex.value === -1) {
+            currentMatchIndex.value = 0
+          }
         }
       } else {
         currentMatchIndex.value = 0
@@ -227,11 +311,14 @@ function updateMatches() {
     } else {
       currentMatchIndex.value = -1
     }
+
+    applyHighlights()
   } catch (error) {
     ElMessage.error(`${t('search.error')}: ${error.message}`)
     matches.value = []
     totalMatches.value = 0
     currentMatchIndex.value = -1
+    clearHighlights()
   }
 }
 
@@ -245,16 +332,19 @@ function handleFindNext() {
     return
   }
   
-  // Get current selection end position
   const editorInstance = props.editorViewRef.getEditorInstance?.()
   if (!editorInstance) return
-  
-  const [, endPos] = editorInstance.getSelection()
-  
-  // Find next match after current selection
-  let nextIndex = matches.value.findIndex(m => m.index >= endPos)
-  if (nextIndex === -1) {
-    // Wrap to beginning
+
+  const selection = getSelectionIndices()
+  let nextIndex
+  if (selection && currentMatchIndex.value >= 0 && selectionInMatch(selection, matches.value[currentMatchIndex.value])) {
+    nextIndex = (currentMatchIndex.value + 1) % matches.value.length
+  } else if (selection) {
+    nextIndex = matches.value.findIndex(m => m.index >= selection.end)
+    if (nextIndex === -1) {
+      nextIndex = 0
+    }
+  } else {
     nextIndex = 0
   }
   
@@ -268,13 +358,16 @@ function handleFindNext() {
     // Set selection and scroll
     setTimeout(() => {
       try {
-        editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
-        
-        const editor = editorInstance.getCurrentModeEditor()
-        if (editor && editor.cm) {
-          const pos = editor.cm.posFromIndex(targetMatch.index)
-          editor.cm.scrollIntoView(pos, 100)
+        const cm = getCodeMirror()
+        if (cm) {
+          const from = cm.posFromIndex(targetMatch.index)
+          const to = cm.posFromIndex(targetMatch.index + targetMatch.length)
+          cm.setSelection(from, to)
+          cm.scrollIntoView(from, 100)
+        } else {
+          editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
         }
+        applyHighlights()
       } catch (e) {
         console.debug('Search navigation error:', e)
       }
@@ -292,23 +385,25 @@ function handleFindPrevious() {
     return
   }
   
-  // Get current selection start position
   const editorInstance = props.editorViewRef.getEditorInstance?.()
   if (!editorInstance) return
-  
-  const [startPos] = editorInstance.getSelection()
-  
-  // Find previous match before current selection
-  let prevIndex = -1
-  for (let i = matches.value.length - 1; i >= 0; i--) {
-    if (matches.value[i].index < startPos) {
-      prevIndex = i
-      break
+
+  const selection = getSelectionIndices()
+  let prevIndex
+  if (selection && currentMatchIndex.value >= 0 && selectionInMatch(selection, matches.value[currentMatchIndex.value])) {
+    prevIndex = (currentMatchIndex.value - 1 + matches.value.length) % matches.value.length
+  } else if (selection) {
+    prevIndex = -1
+    for (let i = matches.value.length - 1; i >= 0; i--) {
+      if (matches.value[i].index < selection.start) {
+        prevIndex = i
+        break
+      }
     }
-  }
-  
-  if (prevIndex === -1) {
-    // Wrap to end
+    if (prevIndex === -1) {
+      prevIndex = matches.value.length - 1
+    }
+  } else {
     prevIndex = matches.value.length - 1
   }
   
@@ -322,13 +417,16 @@ function handleFindPrevious() {
     // Set selection and scroll
     setTimeout(() => {
       try {
-        editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
-        
-        const editor = editorInstance.getCurrentModeEditor()
-        if (editor && editor.cm) {
-          const pos = editor.cm.posFromIndex(targetMatch.index)
-          editor.cm.scrollIntoView(pos, 100)
+        const cm = getCodeMirror()
+        if (cm) {
+          const from = cm.posFromIndex(targetMatch.index)
+          const to = cm.posFromIndex(targetMatch.index + targetMatch.length)
+          cm.setSelection(from, to)
+          cm.scrollIntoView(from, 100)
+        } else {
+          editorInstance.setSelection([targetMatch.index, targetMatch.index + targetMatch.length])
         }
+        applyHighlights()
       } catch (e) {
         console.debug('Search navigation error:', e)
       }
@@ -386,6 +484,7 @@ function handleClose() {
   matches.value = []
   totalMatches.value = 0
   currentMatchIndex.value = -1
+  clearHighlights()
 }
 </script>
 
@@ -514,5 +613,14 @@ function handleClose() {
 
 :deep(.el-button) {
   font-size: 12px;
+}
+
+:deep(.search-highlight) {
+  background: rgba(255, 215, 0, 0.35);
+}
+
+:deep(.search-highlight-current) {
+  background: rgba(255, 140, 0, 0.45);
+  outline: 1px solid rgba(255, 140, 0, 0.9);
 }
 </style>

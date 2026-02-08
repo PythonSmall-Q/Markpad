@@ -50,6 +50,32 @@ body {
             background: #909399;
         }
     }
+
+    .el-button {
+        background-color: #000000;
+        border-color: #000000;
+        color: #ffffff;
+
+        &:hover,
+        &:focus {
+            background-color: #111111;
+            border-color: #111111;
+            color: #ffffff;
+        }
+
+        &:active {
+            background-color: #1a1a1a;
+            border-color: #1a1a1a;
+        }
+
+        &.is-disabled,
+        &.is-disabled:hover,
+        &.is-disabled:focus {
+            background-color: #1f1f1f;
+            border-color: #1f1f1f;
+            color: #777777;
+        }
+    }
 }
 
 // Element Plus 样式覆盖
