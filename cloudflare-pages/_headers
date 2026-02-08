@@ -4,6 +4,11 @@
   Access-Control-Allow-Headers: Content-Type
   Cache-Control: public, max-age=3600
 
+/*.html
+  Content-Type: text/html; charset=utf-8
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
 /*.yml
   Content-Type: text/yaml
   Access-Control-Allow-Origin: *
@@ -11,6 +16,16 @@
 
 /*.exe
   Content-Type: application/x-msdownload
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=86400
+
+/*.dmg
+  Content-Type: application/x-apple-diskimage
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=86400
+
+/*.AppImage
+  Content-Type: application/x-executable
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=86400
 

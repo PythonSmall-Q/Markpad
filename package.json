@@ -104,7 +104,7 @@
         "publish": [
             {
                 "provider": "generic",
-                "url": "https://markpad.pages.dev"
+                "url": "https://mark-pad.pages.dev"
             },
             {
                 "provider": "github",

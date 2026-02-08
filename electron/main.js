@@ -573,9 +573,9 @@ function initAutoUpdater() {
     // 设置更新源为 Cloudflare Pages (优先) 和 GitHub (备用)
     autoUpdater.setFeedURL({
         provider: 'generic',
-        url: 'https://markpad.pages.dev'
+        url: 'https://mark-pad.pages.dev'
     })
-    console.log('Update feed URL set to: https://markpad.pages.dev')
+    console.log('Update feed URL set to: https://mark-pad.pages.dev')
 
     // 更新检查错误
     autoUpdater.on('error', (error) => {

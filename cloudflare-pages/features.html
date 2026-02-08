@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Markpad 功能详情 - 了解所有强大特性">
+    <title>功能详情 - Markpad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .header .breadcrumb {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .header .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .header .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .feature-detail {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-detail h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .feature-detail h3 {
+            color: #333;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .feature-detail p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .feature-detail ul {
+            margin-left: 25px;
+            color: #666;
+        }
+
+        .feature-detail ul li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        .screenshot {
+            margin: 30px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .screenshot img {
+            width: 100%;
+            display: block;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .footer a:hover {
+            color: #667eea;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>✨ 功能详情</h1>
+        <p class="breadcrumb"><a href="index.html">首页</a> / 功能详情</p>
+    </div>
+
+    <div class="container">
+        <!-- Markdown 编辑 -->
+        <div class="feature-detail">
+            <h2>✍️ Markdown 编辑</h2>
+            <p>Markpad 提供了强大而流畅的 Markdown 编辑体验，让您专注于内容创作。</p>
+
+            <h3>核心功能</h3>
+            <ul>
+                <li><strong>实时预览</strong> - 编辑器和预览窗口同步滚动，所见即所得</li>
+                <li><strong>语法高亮</strong> - 代码块自动识别语言并高亮显示</li>
+                <li><strong>快捷键支持</strong> - 常用操作一键完成（Ctrl+B 加粗、Ctrl+I 斜体等）</li>
+                <li><strong>GFM 语法</strong> - 完整支持 GitHub Flavored Markdown</li>
+                <li><strong>表格编辑</strong> - 可视化表格编辑，自动对齐</li>
+                <li><strong>任务列表</strong> - 支持 - [ ] 和 - [x] 复选框</li>
+                <li><strong>数学公式</strong> - 支持 LaTeX 数学公式渲染（行内和块级）</li>
+                <li><strong>图表支持</strong> - 支持 Mermaid 图表语法</li>
+            </ul>
+
+            <h3>编辑器特性</h3>
+            <ul>
+                <li>自动补全括号、引号</li>
+                <li>智能缩进和格式化</li>
+                <li>代码折叠</li>
+                <li>行号显示</li>
+                <li>查找和替换</li>
+                <li>撤销/重做（无限次）</li>
+            </ul>
+        </div>
+
+        <!-- 文件管理 -->
+        <div class="feature-detail">
+            <h2>📁 文件管理</h2>
+            <p>高效的文件管理系统，让您轻松组织和访问所有笔记。</p>
+
+            <h3>多标签页</h3>
+            <ul>
+                <li>支持同时打开多个文档</li>
+                <li>标签页拖拽排序</li>
+                <li>右键菜单快速操作（关闭、关闭其他、关闭所有）</li>
+                <li>未保存文档标记提示</li>
+            </ul>
+
+            <h3>自动保存</h3>
+            <ul>
+                <li>编辑时自动保存，无需担心数据丢失</li>
+                <li>可配置自动保存间隔</li>
+                <li>保存状态实时提示</li>
+            </ul>
+
+            <h3>最近文件</h3>
+            <ul>
+                <li>记录最近打开的文件</li>
+                <li>快速访问常用文档</li>
+                <li>双击直接打开</li>
+            </ul>
+        </div>
+
+        <!-- 媒体插入 -->
+        <div class="feature-detail">
+            <h2>🖼️ 媒体插入</h2>
+            <p>轻松插入各种媒体文件，丰富您的笔记内容。</p>
+
+            <h3>图片插入</h3>
+            <ul>
+                <li>支持拖拽插入图片</li>
+                <li>支持粘贴剪贴板图片</li>
+                <li>自动转换为 Base64 编码（可配置）</li>
+                <li>Base64 图片自动折叠，保持编辑器整洁</li>
+                <li>支持调整图片大小</li>
+            </ul>
+
+            <h3>音视频</h3>
+            <ul>
+                <li>插入音频文件（MP3、WAV、OGG）</li>
+                <li>插入视频文件（MP4、WebM、OGV）</li>
+                <li>内置播放器控件</li>
+            </ul>
+
+            <h3>文件附件</h3>
+            <ul>
+                <li>插入任意类型文件链接</li>
+                <li>自动生成下载链接</li>
+                <li>显示文件名和大小</li>
+            </ul>
+        </div>
+
+        <!-- 导出功能 -->
+        <div class="feature-detail">
+            <h2>📤 导出功能</h2>
+            <p>一键导出为多种格式，满足不同使用场景。</p>
+
+            <h3>支持格式</h3>
+            <ul>
+                <li><strong>PDF</strong> - 保留完整格式，适合打印和分享</li>
+                <li><strong>HTML</strong> - 嵌入样式，可直接在浏览器查看</li>
+                <li><strong>Markdown</strong> - 原始 Markdown 文件</li>
+                <li><strong>纯文本</strong> - 去除所有格式，纯文本内容</li>
+            </ul>
+
+            <h3>导出选项</h3>
+            <ul>
+                <li>自定义文件名和保存位置</li>
+                <li>选择导出范围（全文或选中部分）</li>
+                <li>PDF 支持页眉页脚和页码</li>
+                <li>HTML 支持自定义 CSS 样式</li>
+            </ul>
+        </div>
+
+        <!-- 搜索替换 -->
+        <div class="feature-detail">
+            <h2>🔍 搜索替换</h2>
+            <p>强大的搜索和替换功能，快速定位和修改内容。</p>
+
+            <h3>搜索功能</h3>
+            <ul>
+                <li>全文搜索</li>
+                <li>大小写敏感/不敏感</li>
+                <li>正则表达式支持</li>
+                <li>高亮显示所有匹配项</li>
+                <li>显示匹配数量</li>
+                <li>上一个/下一个匹配项导航</li>
+            </ul>
+
+            <h3>替换功能</h3>
+            <ul>
+                <li>单个替换</li>
+                <li>全部替换</li>
+                <li>替换前预览</li>
+                <li>支持正则表达式捕获组</li>
+                <li>撤销替换操作</li>
+            </ul>
+        </div>
+
+        <!-- 主题和外观 -->
+        <div class="feature-detail">
+            <h2>🎨 主题和外观</h2>
+            <p>灵活的主题系统，打造专属您的编辑环境。</p>
+
+            <h3>主题选项</h3>
+            <ul>
+                <li><strong>亮色主题</strong> - 明亮清爽，适合日间使用</li>
+                <li><strong>暗色主题</strong> - 护眼舒适，适合夜间使用</li>
+                <li><strong>跟随系统</strong> - 自动切换，与系统保持一致</li>
+            </ul>
+
+            <h3>自定义选项</h3>
+            <ul>
+                <li>调整编辑器字体大小</li>
+                <li>选择代码高亮主题</li>
+                <li>配置行高和间距</li>
+                <li>自定义快捷键</li>
+            </ul>
+        </div>
+
+        <!-- 国际化 -->
+        <div class="feature-detail">
+            <h2>🌍 多语言支持</h2>
+            <p>Markpad 支持 10 种语言，服务全球用户。</p>
+
+            <div class="badge">简体中文</div>
+            <div class="badge">繁体中文</div>
+            <div class="badge">English</div>
+            <div class="badge">日本語</div>
+            <div class="badge">한국어</div>
+            <div class="badge">Español</div>
+            <div class="badge">Français</div>
+            <div class="badge">Deutsch</div>
+            <div class="badge">Русский</div>
+            <div class="badge">Português</div>
+
+            <h3>语言特性</h3>
+            <ul>
+                <li>界面完全本地化</li>
+                <li>日期和时间格式本地化</li>
+                <li>一键切换语言</li>
+                <li>自动检测系统语言</li>
+            </ul>
+        </div>
+
+        <!-- 跨平台 -->
+        <div class="feature-detail">
+            <h2>💻 跨平台支持</h2>
+            <p>Markpad 基于 Electron 构建，完美支持三大主流平台。</p>
+
+            <h3>Windows</h3>
+            <ul>
+                <li>支持 Windows 10/11</li>
+                <li>NSIS 安装程序</li>
+                <li>开始菜单和桌面快捷方式</li>
+                <li>右键菜单集成（即将推出）</li>
+            </ul>
+
+            <h3>macOS</h3>
+            <ul>
+                <li>支持 macOS 10.13+</li>
+                <li>DMG 安装包</li>
+                <li>原生菜单栏</li>
+                <li>Touch Bar 支持（即将推出）</li>
+            </ul>
+
+            <h3>Linux</h3>
+            <ul>
+                <li>AppImage 格式（无需安装）</li>
+                <li>支持主流发行版</li>
+                <li>X11 和 Wayland 兼容</li>
+            </ul>
+        </div>
+
+        <!-- 自动更新 -->
+        <div class="feature-detail">
+            <h2>🔄 自动更新</h2>
+            <p>内置自动更新系统，确保您始终使用最新版本。</p>
+
+            <h3>更新特性</h3>
+            <ul>
+                <li>自动检测新版本</li>
+                <li>后台下载更新包</li>
+                <li>增量更新（节省带宽）</li>
+                <li>退出时自动安装</li>
+                <li>更新日志展示</li>
+            </ul>
+
+            <h3>更新源</h3>
+            <ul>
+                <li><strong>Cloudflare Pages CDN</strong> - 主要更新源，全球加速</li>
+                <li><strong>GitHub Releases</strong> - 备用更新源</li>
+                <li>自动选择最快节点</li>
+            </ul>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>准备好体验了吗？</h2>
+            <p>立即下载 Markpad，开启高效笔记之旅</p>
+            <a href="index.html#download" class="btn">立即下载</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>
+            <a href="index.html">返回首页</a>
+            <a href="https://github.com/PythonSmall-Q/Markpad" target="_blank">GitHub</a>
+            <a href="https://github.com/PythonSmall-Q/Markpad/issues" target="_blank">反馈问题</a>
+        </div>
+        <p style="margin-top: 20px; opacity: 0.7;">
+            © 2026 PythonSmall-Q. All rights reserved.
+        </p>
+    </div>
+</body>
+
+</html>

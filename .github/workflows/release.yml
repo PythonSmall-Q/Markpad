@@ -187,13 +187,25 @@ jobs:
           # 复制静态页面文件
           mkdir -p cloudflare-deploy
           cp cloudflare-pages/index.html cloudflare-deploy/
+          cp cloudflare-pages/features.html cloudflare-deploy/
           cp cloudflare-pages/_headers cloudflare-deploy/
           
-          # 复制 Windows 发布文件
+          # 复制所有平台的发布文件
+          # Windows
           find artifacts -type f -name "*.exe" -exec cp {} cloudflare-deploy/ \;
           find artifacts -type f -name "*.exe.blockmap" -exec cp {} cloudflare-deploy/ \;
-          find artifacts -type f -name "latest.yml" -exec cp {} cloudflare-deploy/ \;
           
+          # macOS
+          find artifacts -type f -name "*.dmg" -exec cp {} cloudflare-deploy/ \;
+          find artifacts -type f -name "*.dmg.blockmap" -exec cp {} cloudflare-deploy/ \;
+          
+          # Linux
+          find artifacts -type f -name "*.AppImage" -exec cp {} cloudflare-deploy/ \;
+          
+          # 复制所有 yml 更新文件
+          find artifacts -type f -name "latest*.yml" -exec cp {} cloudflare-deploy/ \;
+          
+          echo "Files to deploy:"
           ls -lh cloudflare-deploy/
       
       - name: Deploy to Cloudflare Pages
@@ -206,6 +218,6 @@ jobs:
       - name: Output deployment URL
         run: |
           echo "✅ Deployed to Cloudflare Pages"
-          echo "🌐 URL: https://markpad.pages.dev"
+          echo "🌐 URL: https://mark-pad.pages.dev"
           echo "📦 Version: ${{ env.VERSION }}"
  
