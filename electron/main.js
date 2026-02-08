@@ -400,8 +400,6 @@ ipcMain.handle('file:read', async (event, filePath) => {
 ipcMain.handle('asset:import', async (event, type) => {
     const filters = {
         image: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'] }],
-        video: [{ name: 'Videos', extensions: ['mp4', 'webm', 'ogg'] }],
-        audio: [{ name: 'Audio', extensions: ['mp3', 'wav', 'ogg'] }],
         file: [{ name: 'All Files', extensions: ['*'] }]
     }
 

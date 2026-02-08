@@ -108,36 +108,6 @@ function handleEditorChange() {
 }
 
 /**
- * Get MIME type from file extension
- * @param {string} filePath - File path or URL
- * @returns {string} - MIME type
- */
-function getMimeType(filePath) {
-  const ext = filePath.split('.').pop().toLowerCase()
-  
-  const mimeTypes = {
-    // Video
-    'mp4': 'video/mp4',
-    'webm': 'video/webm',
-    'ogg': 'video/ogg',
-    'ogv': 'video/ogg',
-    'mov': 'video/quicktime',
-    'avi': 'video/x-msvideo',
-    
-    // Audio
-    'mp3': 'audio/mpeg',
-    'wav': 'audio/wav',
-    'wave': 'audio/wav',
-    'oga': 'audio/ogg',
-    'm4a': 'audio/mp4',
-    'aac': 'audio/aac',
-    'flac': 'audio/flac'
-  }
-  
-  return mimeTypes[ext] || ''
-}
-
-/**
  * Collapse long base64 image URL, keeping prefix and suffix for identification
  * @param {string} url - Image URL
  * @returns {string} - Collapsed URL or original URL
@@ -175,10 +145,26 @@ function handleToolbarCommand(command) {
       editor.exec('heading', { level: command.level || 1 })
       break
     case 'ul':
-      editor.exec('ul')
+      // Insert unordered list item
+      const ulText = editor.getSelectedText()
+      if (ulText) {
+        const lines = ulText.split('\n')
+        const listItems = lines.map(line => line ? `- ${line}` : '').join('\n')
+        editor.replaceSelection(listItems)
+      } else {
+        editor.insertText('\n- ')
+      }
       break
     case 'ol':
-      editor.exec('ol')
+      // Insert ordered list item
+      const olText = editor.getSelectedText()
+      if (olText) {
+        const lines = olText.split('\n')
+        const listItems = lines.map((line, index) => line ? `${index + 1}. ${line}` : '').join('\n')
+        editor.replaceSelection(listItems)
+      } else {
+        editor.insertText('\n1. ')
+      }
       break
     case 'code':
       editor.exec('code')
@@ -201,24 +187,6 @@ function handleToolbarCommand(command) {
         const displayUrl = collapseBase64Url(command.url)
         const markdown = `![${command.alt}](${displayUrl})`
         editor.insertText(markdown)
-      }
-      break
-    case 'video':
-      if (command.url && command.title) {
-        // Insert HTML5 video player with controls
-        const mimeType = getMimeType(command.url)
-        const typeAttr = mimeType ? ` type="${mimeType}"` : ''
-        const videoHtml = `\n<video controls width="100%" style="max-width: 800px;">\n  <source src="${command.url}"${typeAttr}>\n  Your browser does not support the video tag.\n</video>\n\n*${command.title}*\n`
-        editor.insertText(videoHtml)
-      }
-      break
-    case 'audio':
-      if (command.url && command.title) {
-        // Insert HTML5 audio player with controls
-        const mimeType = getMimeType(command.url)
-        const typeAttr = mimeType ? ` type="${mimeType}"` : ''
-        const audioHtml = `\n<audio controls style="width: 100%; max-width: 500px;">\n  <source src="${command.url}"${typeAttr}>\n  Your browser does not support the audio tag.\n</audio>\n\n*${command.title}*\n`
-        editor.insertText(audioHtml)
       }
       break
     case 'table':
