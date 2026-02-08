@@ -174,5 +174,39 @@ export default {
         matrices: { title: '行列', bracket: { title: '丸括弧' }, square: { title: '角括弧' }, determinant: { title: '行列式' } },
         equations: { title: '方程式', system: { title: '連立方程式' }, align: { title: '配置' } },
         examples: { title: '例', quadratic: '二次方程式', integral: '積分', summation: '総和', limit: '極限', matrix: '行列', system: '連立', derivative: '導関数', partial: '偏導関数', vector: 'ベクトル', set: '集合', logic: '論理', copy: 'コピー', copied: 'コピー完了' }
+    },
+
+    statusBar: {
+        lines: '行数',
+        words: '単語数',
+        chars: '文字数',
+        readTime: '読了時間',
+        minute: '分',
+        minutes: '分',
+        lessThanMinute: '1分未満',
+        outline: 'アウトライン'
+    },
+
+    outline: {
+        title: '文書アウトライン',
+        empty: '見出しが見つかりません',
+        jumpTo: 'ジャンプ'
+    },
+
+    common: {
+        close: '閉じる',
+        open: '開く',
+        save: '保存',
+        cancel: 'キャンセル',
+        confirm: '確認',
+        delete: '削除',
+        edit: '編集',
+        add: '追加',
+        remove: '削除',
+        search: '検索',
+        filter: 'フィルタ',
+        refresh: '更新',
+        export: 'エクスポート',
+        import: 'インポート'
     }
 }

@@ -457,5 +457,39 @@ export default {
             copy: '复制',
             copied: '已复制'
         }
+    },
+
+    statusBar: {
+        lines: '行数',
+        words: '词数',
+        chars: '字符',
+        readTime: '阅读时间',
+        minute: '分钟',
+        minutes: '分钟',
+        lessThanMinute: '不到 1 分钟',
+        outline: '大纲'
+    },
+
+    outline: {
+        title: '文档大纲',
+        empty: '没有找到标题',
+        jumpTo: '跳转至'
+    },
+
+    common: {
+        close: '关闭',
+        open: '打开',
+        save: '保存',
+        cancel: '取消',
+        confirm: '确认',
+        delete: '删除',
+        edit: '编辑',
+        add: '添加',
+        remove: '移除',
+        search: '搜索',
+        filter: '筛选',
+        refresh: '刷新',
+        export: '导出',
+        import: '导入'
     }
 }

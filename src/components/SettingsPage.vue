@@ -103,6 +103,15 @@
               @change="handleSyntaxHighlightChange"
             />
           </el-form-item>
+          
+          <el-form-item :label="t('settings.editor.autoComplete')">
+            <el-switch
+              v-model="localSettings.autoComplete"
+              :active-text="t('settings.editor.enable')"
+              :inactive-text="t('settings.editor.disable')"
+              @change="handleAutoCompleteChange"
+            />
+          </el-form-item>
         </el-form>
       </el-card>
       
@@ -302,6 +311,7 @@ const localSettings = reactive({
   autoSaveInterval: 5,
   showLineNumbers: true,
   syntaxHighlight: true,
+  autoComplete: true,
   defaultFileName: t('editor.untitled'),
   fileExtension: '.md',
   recentFilesLimit: 20,
@@ -381,6 +391,7 @@ function loadSettings() {
     autoSaveInterval: settingsStore.autoSaveInterval,
     showLineNumbers: settingsStore.showLineNumbers,
     syntaxHighlight: settingsStore.syntaxHighlight,
+    autoComplete: settingsStore.autoComplete,
     defaultFileName: settingsStore.defaultFileName,
     autoCheckUpdates: settingsStore.autoCheckUpdates,
     autoDownloadUpdates: settingsStore.autoDownloadUpdates,
@@ -426,6 +437,10 @@ function handleLineNumbersChange(value) {
 
 function handleSyntaxHighlightChange(value) {
   settingsStore.setSyntaxHighlight(value)
+}
+
+function handleAutoCompleteChange(value) {
+  settingsStore.setAutoComplete(value)
 }
 
 function handleDefaultFileNameChange(value) {

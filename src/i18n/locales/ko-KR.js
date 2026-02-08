@@ -177,5 +177,39 @@ export default {
         matrices: { title: '행렬', bracket: { title: '소괄호' }, square: { title: '대괄호' }, determinant: { title: '행렬식' } },
         equations: { title: '방정식', system: { title: '연립방정식' }, align: { title: '정렬' } },
         examples: { title: '예제', quadratic: '이차방정식', integral: '적분', summation: '합', limit: '극한', matrix: '행렬', system: '연립', derivative: '도함수', partial: '편미분', vector: '벡터', set: '집합', logic: '논리', copy: '복사', copied: '복사됨' }
+    },
+
+    statusBar: {
+        lines: '줄 수',
+        words: '단어 수',
+        chars: '글자 수',
+        readTime: '읽기 시간',
+        minute: '분',
+        minutes: '분',
+        lessThanMinute: '1분 미만',
+        outline: '개요'
+    },
+
+    outline: {
+        title: '문서 개요',
+        empty: '제목을 찾을 수 없습니다',
+        jumpTo: '이동'
+    },
+
+    common: {
+        close: '닫기',
+        open: '열기',
+        save: '저장',
+        cancel: '취소',
+        confirm: '확인',
+        delete: '삭제',
+        edit: '편집',
+        add: '추가',
+        remove: '제거',
+        search: '검색',
+        filter: '필터',
+        refresh: '새로고침',
+        export: '내보내기',
+        import: '가져오기'
     }
 }

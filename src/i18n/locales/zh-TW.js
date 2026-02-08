@@ -174,5 +174,39 @@ export default {
         matrices: { title: '矩陣', bracket: { title: '圓括號' }, square: { title: '方括號' }, determinant: { title: '行列式' } },
         equations: { title: '方程式', system: { title: '方程組' }, align: { title: '對齊' } },
         examples: { title: '常用公式示例', quadratic: '二次方程', integral: '積分', summation: '求和', limit: '極限', matrix: '矩陣', system: '方程組', derivative: '導數', partial: '偏導數', vector: '向量', set: '集合', logic: '邏輯', copy: '複製', copied: '已複製' }
+    },
+
+    statusBar: {
+        lines: '行數',
+        words: '詞數',
+        chars: '字元',
+        readTime: '閱讀時間',
+        minute: '分鐘',
+        minutes: '分鐘',
+        lessThanMinute: '不到 1 分鐘',
+        outline: '大綱'
+    },
+
+    outline: {
+        title: '文件大綱',
+        empty: '沒有找到標題',
+        jumpTo: '跳轉至'
+    },
+
+    common: {
+        close: '關閉',
+        open: '開啟',
+        save: '儲存',
+        cancel: '取消',
+        confirm: '確認',
+        delete: '刪除',
+        edit: '編輯',
+        add: '新增',
+        remove: '移除',
+        search: '搜尋',
+        filter: '篩選',
+        refresh: '重新整理',
+        export: '匯出',
+        import: '匯入'
     }
 }

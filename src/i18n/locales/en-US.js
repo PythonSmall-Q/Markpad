@@ -457,5 +457,39 @@ export default {
             copy: 'Copy',
             copied: 'Copied'
         }
+    },
+
+    statusBar: {
+        lines: 'Lines',
+        words: 'Words',
+        chars: 'Characters',
+        readTime: 'Read Time',
+        minute: 'minute',
+        minutes: 'minutes',
+        lessThanMinute: 'Less than 1 minute',
+        outline: 'Outline'
+    },
+
+    outline: {
+        title: 'Document Outline',
+        empty: 'No headings found',
+        jumpTo: 'Jump to'
+    },
+
+    common: {
+        close: 'Close',
+        open: 'Open',
+        save: 'Save',
+        cancel: 'Cancel',
+        confirm: 'Confirm',
+        delete: 'Delete',
+        edit: 'Edit',
+        add: 'Add',
+        remove: 'Remove',
+        search: 'Search',
+        filter: 'Filter',
+        refresh: 'Refresh',
+        export: 'Export',
+        import: 'Import'
     }
 }

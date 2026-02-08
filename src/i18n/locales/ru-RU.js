@@ -176,5 +176,39 @@ export default {
         matrices: { title: 'Матрицы', bracket: { title: 'Круглые скобки' }, square: { title: 'Квадратные скобки' }, determinant: { title: 'Определитель' } },
         equations: { title: 'Уравнения', system: { title: 'Система уравнений' }, align: { title: 'Выравнивание' } },
         examples: { title: 'Примеры', quadratic: 'Квадратное уравнение', integral: 'Интеграл', summation: 'Суммирование', limit: 'Предел', matrix: 'Матрица', system: 'Система', derivative: 'Производная', partial: 'Частная производная', vector: 'Вектор', set: 'Множество', logic: 'Логика', copy: 'Копировать', copied: 'Скопировано' }
+    },
+
+    statusBar: {
+        lines: 'Строк',
+        words: 'Слов',
+        chars: 'Символов',
+        readTime: 'Время чтения',
+        minute: 'минута',
+        minutes: 'минут',
+        lessThanMinute: 'Менее 1 минуты',
+        outline: 'Структура'
+    },
+
+    outline: {
+        title: 'Структура документа',
+        empty: 'Заголовки не найдены',
+        jumpTo: 'Перейти к'
+    },
+
+    common: {
+        close: 'Закрыть',
+        open: 'Открыть',
+        save: 'Сохранить',
+        cancel: 'Отмена',
+        confirm: 'Подтвердить',
+        delete: 'Удалить',
+        edit: 'Изменить',
+        add: 'Добавить',
+        remove: 'Убрать',
+        search: 'Поиск',
+        filter: 'Фильтр',
+        refresh: 'Обновить',
+        export: 'Экспорт',
+        import: 'Импорт'
     }
 }

@@ -21,6 +21,7 @@ export const useSettingsStore = defineStore('settings', () => {
     const recentFilesLimit = ref(20)
     const autoCheckUpdates = ref(true)
     const autoDownloadUpdates = ref(false)
+    const autoComplete = ref(true)
 
     // Methods
     function setTheme(newTheme) {
@@ -143,6 +144,11 @@ export const useSettingsStore = defineStore('settings', () => {
         saveSettings()
     }
 
+    function setAutoComplete(value) {
+        autoComplete.value = value
+        saveSettings()
+    }
+
     function resetSettings() {
         theme.value = 'light'
         locale.value = 'zh-CN'
@@ -160,6 +166,7 @@ export const useSettingsStore = defineStore('settings', () => {
         defaultFileName.value = i18n.global.t('editor.untitled')
         fileExtension.value = '.md'
         recentFilesLimit.value = 20
+        autoComplete.value = true
         saveSettings()
     }
 
@@ -188,7 +195,8 @@ export const useSettingsStore = defineStore('settings', () => {
             fileExtension: fileExtension.value,
             recentFilesLimit: recentFilesLimit.value,
             autoCheckUpdates: autoCheckUpdates.value,
-            autoDownloadUpdates: autoDownloadUpdates.value
+            autoDownloadUpdates: autoDownloadUpdates.value,
+            autoComplete: autoComplete.value
         }
 
         localStorage.setItem('markpad-settings', JSON.stringify(settings))
@@ -223,6 +231,7 @@ export const useSettingsStore = defineStore('settings', () => {
                 defaultFileName.value = settings.defaultFileName || i18n.global.t('editor.untitled')
                 fileExtension.value = settings.fileExtension || '.md'
                 recentFilesLimit.value = settings.recentFilesLimit || 20
+                autoComplete.value = settings.autoComplete !== undefined ? settings.autoComplete : true
             } catch (error) {
                 console.error('Failed to load settings:', error)
             }
@@ -250,6 +259,7 @@ export const useSettingsStore = defineStore('settings', () => {
         recentFilesLimit,
         autoCheckUpdates,
         autoDownloadUpdates,
+        autoComplete,
         setTheme,
         toggleTheme,
         setLocale,
@@ -271,6 +281,7 @@ export const useSettingsStore = defineStore('settings', () => {
         setRecentFilesLimit,
         setAutoCheckUpdates,
         setAutoDownloadUpdates,
+        setAutoComplete,
         resetSettings,
         saveSettings,
         loadSettings

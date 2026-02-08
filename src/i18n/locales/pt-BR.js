@@ -177,5 +177,39 @@ export default {
         matrices: { title: 'Matrizes', bracket: { title: 'Parênteses' }, square: { title: 'Colchetes' }, determinant: { title: 'Determinante' } },
         equations: { title: 'Equações', system: { title: 'Sistema de Equações' }, align: { title: 'Alinhamento' } },
         examples: { title: 'Exemplos', quadratic: 'Equação Quadrática', integral: 'Integral', summation: 'Somatório', limit: 'Limite', matrix: 'Matriz', system: 'Sistema', derivative: 'Derivada', partial: 'Derivada Parcial', vector: 'Vetor', set: 'Conjunto', logic: 'Lógica', copy: 'Copiar', copied: 'Copiado' }
+    },
+
+    statusBar: {
+        lines: 'Linhas',
+        words: 'Palavras',
+        chars: 'Caracteres',
+        readTime: 'Tempo de leitura',
+        minute: 'minuto',
+        minutes: 'minutos',
+        lessThanMinute: 'Menos de 1 minuto',
+        outline: 'Esboço'
+    },
+
+    outline: {
+        title: 'Esboço do documento',
+        empty: 'Nenhum título encontrado',
+        jumpTo: 'Ir para'
+    },
+
+    common: {
+        close: 'Fechar',
+        open: 'Abrir',
+        save: 'Salvar',
+        cancel: 'Cancelar',
+        confirm: 'Confirmar',
+        delete: 'Excluir',
+        edit: 'Editar',
+        add: 'Adicionar',
+        remove: 'Remover',
+        search: 'Pesquisar',
+        filter: 'Filtrar',
+        refresh: 'Atualizar',
+        export: 'Exportar',
+        import: 'Importar'
     }
 }

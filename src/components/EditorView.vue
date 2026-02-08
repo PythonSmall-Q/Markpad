@@ -3,10 +3,26 @@
     <!-- Toolbar -->
     <EditorToolbar @command="handleToolbarCommand" />
     
-    <!-- Editor container -->
-    <div class="editor-container">
-      <div ref="editorRef" class="editor"></div>
+    <!-- Editor container with outline -->
+    <div class="editor-main">
+      <div class="editor-container">
+        <div ref="editorRef" class="editor"></div>
+      </div>
+      
+      <!-- Outline View -->
+      <OutlineView 
+        v-if="showOutline"
+        :content="activeDocument?.content || ''"
+        @close="showOutline = false"
+        @jump-to-line="jumpToLine"
+      />
     </div>
+    
+    <!-- Status Bar -->
+    <StatusBar 
+      :content="activeDocument?.content || ''"
+      @show-outline="showOutline = !showOutline"
+    />
   </div>
 </template>
 
@@ -19,12 +35,15 @@ import 'katex/dist/katex.min.css'
 import { useDocumentsStore } from '@/store/documents'
 import { useSettingsStore } from '@/store/settings'
 import EditorToolbar from './EditorToolbar.vue'
+import StatusBar from './StatusBar.vue'
+import OutlineView from './OutlineView.vue'
 import logger from '@/utils/logger'
 
 const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
 
 const editorRef = ref(null)
+const showOutline = ref(false)
 let editorInstance = null
 let updateTimer = null
 
@@ -81,11 +100,12 @@ function initEditor() {
         handleEditorChange()
         // 延迟渲染数学公式，等待预览更新
         setTimeout(renderMathInPreview, 100)
-      }
+      },
+      keyup: handleKeyUp
     }
   })
   
-  logger.info('Editor initialized', 'Editor created with math support')
+  logger.info('Editor initialized', 'Editor created with math support and autocompletion')
   
   // Apply theme
   if (theme.value === 'dark') {
@@ -101,6 +121,145 @@ function initEditor() {
         setTimeout(renderMathInPreview, 200)
       }
     }, 0)
+  }
+}
+
+// 自动补全处理
+function handleKeyUp(event) {
+  if (!editorInstance || !settingsStore.autoComplete) return
+  
+  const key = event.key
+  const editor = editorInstance
+  
+  try {
+    // 获取当前光标位置和内容
+    const [start, end] = editor.getSelection()
+    const content = editor.getMarkdown()
+    
+    // 获取当前行内容
+    const beforeCursor = content.substring(0, start)
+    const currentLineStart = beforeCursor.lastIndexOf('\n') + 1
+    const currentLine = content.substring(currentLineStart, start)
+    
+    // 检测是否需要自动补全
+    if (key === ']') {
+      // 检测 [] 转为 [ ] (任务列表)
+      if (currentLine.endsWith('[]')) {
+        editor.setSelection([start - 2, start])
+        editor.replaceSelection('[ ] ')
+        editor.setSelection([start + 2, start + 2])
+        logger.info('Autocomplete', 'Task list item created')
+        return
+      }
+      
+      // 检测 [text] 后按 ( 自动补全链接
+      const linkMatch = currentLine.match(/\[([^\]]+)\]$/)
+      if (linkMatch) {
+        // 等待用户输入 (
+        setTimeout(() => {
+          const newContent = editor.getMarkdown()
+          const [newStart] = editor.getSelection()
+          if (newContent.charAt(newStart) !== '(') {
+            // 如果用户没有输入(，提示可以输入
+            return
+          }
+        }, 100)
+      }
+    }
+    
+    if (key === '(') {
+      // 检测 [text]( 自动补全为 [text](url)
+      const linkPattern = /\[([^\]]+)\]\($/
+      if (linkPattern.test(currentLine)) {
+        editor.insertText(')')
+        editor.setSelection([start, start])
+        logger.info('Autocomplete', 'Link parentheses completed')
+        return
+      }
+    }
+    
+    if (key === ']' && currentLine.endsWith('![]')) {
+      // 检测 ![] 自动补全为 ![alt](url)
+      editor.insertText('()')
+      editor.setSelection([start + 1, start + 1])
+      logger.info('Autocomplete', 'Image syntax completed')
+      return
+    }
+    
+    if (key === '`') {
+      // 检测 ``` 自动补全代码块
+      if (currentLine.endsWith('```')) {
+        editor.insertText('\n\n```')
+        editor.setSelection([start + 1, start + 1])
+        logger.info('Autocomplete', 'Code block completed')
+        return
+      }
+      
+      // 检测单个 ` 自动配对
+      if (currentLine.endsWith('`') && !currentLine.endsWith('``')) {
+        const afterCursor = content.substring(start)
+        if (!afterCursor.startsWith('`')) {
+          editor.insertText('`')
+          editor.setSelection([start, start])
+          logger.info('Autocomplete', 'Inline code completed')
+          return
+        }
+      }
+    }
+    
+    if (key === '$') {
+      // 检测 $ 自动配对（数学公式）
+      if (currentLine.endsWith('$')) {
+        const beforeDollar = currentLine.substring(0, currentLine.length - 1)
+        // 避免在已有配对或在行首时自动配对
+        if (!beforeDollar.endsWith('$') && beforeDollar.trim() !== '') {
+          const afterCursor = content.substring(start)
+          if (!afterCursor.startsWith('$')) {
+            editor.insertText('$')
+            editor.setSelection([start, start])
+            logger.info('Autocomplete', 'Math inline completed')
+            return
+          }
+        }
+      }
+      
+      // 检测 $$ 自动配对（块级数学公式）
+      if (currentLine.endsWith('$$')) {
+        editor.insertText('\n\n$$')
+        editor.setSelection([start + 1, start + 1])
+        logger.info('Autocomplete', 'Math block completed')
+        return
+      }
+    }
+    
+    if (key === '*') {
+      // 检测 ** 自动配对（粗体）
+      if (currentLine.endsWith('**')) {
+        const afterCursor = content.substring(start)
+        if (!afterCursor.startsWith('**')) {
+          editor.insertText('**')
+          editor.setSelection([start, start])
+          logger.info('Autocomplete', 'Bold marker completed')
+          return
+        }
+      }
+    }
+    
+    if (key === '_') {
+      // 检测 __ 自动配对（斜体）
+      if (currentLine.endsWith('__')) {
+        const afterCursor = content.substring(start)
+        if (!afterCursor.startsWith('__')) {
+          editor.insertText('__')
+          editor.setSelection([start, start])
+          logger.info('Autocomplete', 'Italic marker completed')
+          return
+        }
+      }
+    }
+    
+  } catch (error) {
+    console.warn('Autocomplete error:', error)
   }
 }
 
@@ -284,6 +443,25 @@ function handleToolbarCommand(command) {
   }
   
   editor.focus()
+}
+
+// 跳转到指定行
+function jumpToLine(lineNumber) {
+  if (!editorInstance) return
+  
+  try {
+    const editor = editorInstance.getCurrentModeEditor()
+    if (editor && editor.cm) {
+      // CodeMirror API
+      const line = lineNumber - 1 // CodeMirror uses 0-based indexing
+      editor.cm.setCursor({ line, ch: 0 })
+      editor.cm.scrollIntoView({ line, ch: 0 }, 100)
+      editor.cm.focus()
+      logger.info('Jump to line', `Jumped to line ${lineNumber}`)
+    }
+  } catch (error) {
+    console.warn('Failed to jump to line:', error)
+  }
 }
 
 // Search and Replace functions
@@ -503,6 +681,12 @@ defineExpose({
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.editor-main {
+  flex: 1;
+  display: flex;
   overflow: hidden;
 }
 
