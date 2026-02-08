@@ -85,6 +85,17 @@ wrangler pages deploy cloudflare-pages --project-name=mark-pad
 4. 项目名称设置为: `mark-pad`
 5. 上传 `cloudflare-pages` 目录的文件
 
+#### 配置生产分支
+
+**重要**：为了让 GitHub Actions 的 release 部署到生产环境，需要配置生产分支：
+
+1. 进入 Cloudflare Pages 项目设置
+2. 找到 **Builds & deployments** 或 **Production branch** 设置
+3. 将生产分支设置为: `production`
+4. 保存配置
+
+这样，当 GitHub Actions 使用 `--branch=production` 部署时，就会自动部署到生产环境（https://mark-pad.pages.dev），而不是预览环境。
+
 ### 第四步：获取部署 URL
 
 项目创建后，Cloudflare 会提供一个 URL：

@@ -206,16 +206,22 @@ jobs:
           echo "=== Files to deploy ==="
           ls -lh cloudflare-deploy/
       
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Pages (Production)
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy cloudflare-deploy --project-name=mark-pad --branch=main
+          command: pages deploy cloudflare-deploy --project-name=mark-pad --branch=production --commit-dirty=true --commit-message="Release ${{ env.VERSION }}"
       
       - name: Output deployment URL
         run: |
-          echo "✅ Deployed to Cloudflare Pages"
-          echo "🌐 URL: https://mark-pad.pages.dev"
+          echo "✅ Deployed to Cloudflare Pages (Production)"
+          echo "🌐 Production URL: https://mark-pad.pages.dev"
           echo "📦 Version: ${{ env.VERSION }}"
+          echo ""
+          echo "⚠️  Note: If this is a preview deployment, please configure production branch in Cloudflare Pages settings:"
+          echo "   1. Go to Cloudflare Pages dashboard"
+          echo "   2. Select 'mark-pad' project"
+          echo "   3. Go to Settings > Builds & deployments"
+          echo "   4. Set Production branch to: production"
  
