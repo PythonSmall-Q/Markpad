@@ -340,6 +340,7 @@ ipcMain.handle('file:open', async () => {
     const result = await dialog.showOpenDialog(mainWindow, {
         properties: ['openFile'],
         filters: [
+            { name: 'All Supported Files', extensions: ['md', 'markdown', 'txt'] },
             { name: 'Markdown Files', extensions: ['md', 'markdown'] },
             { name: 'Text Files', extensions: ['txt'] },
             { name: 'All Files', extensions: ['*'] }

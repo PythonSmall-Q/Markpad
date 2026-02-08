@@ -222,7 +222,9 @@ function handleToolbarCommand(command) {
       }
       break
     case 'table':
-      editor.exec('table')
+      // Insert a basic table template
+      const tableTemplate = '\n| Header 1 | Header 2 | Header 3 |\n| -------- | -------- | -------- |\n| Cell 1   | Cell 2   | Cell 3   |\n| Cell 4   | Cell 5   | Cell 6   |\n\n'
+      editor.insertText(tableTemplate)
       break
     case 'hr':
       editor.insertText('\n---\n')
@@ -425,7 +427,9 @@ function handleFormat(action, data) {
         editorInstance.exec('code')
         break
       case 'insert-table':
-        editorInstance.exec('table')
+        // Insert a basic table template
+        const tableTemplate = '\n| Header 1 | Header 2 | Header 3 |\n| -------- | -------- | -------- |\n| Cell 1   | Cell 2   | Cell 3   |\n| Cell 4   | Cell 5   | Cell 6   |\n\n'
+        editorInstance.insertText(tableTemplate)
         break
     }
   } catch (error) {
