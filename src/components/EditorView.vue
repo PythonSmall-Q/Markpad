@@ -108,6 +108,36 @@ function handleEditorChange() {
 }
 
 /**
+ * Get MIME type from file extension
+ * @param {string} filePath - File path or URL
+ * @returns {string} - MIME type
+ */
+function getMimeType(filePath) {
+  const ext = filePath.split('.').pop().toLowerCase()
+  
+  const mimeTypes = {
+    // Video
+    'mp4': 'video/mp4',
+    'webm': 'video/webm',
+    'ogg': 'video/ogg',
+    'ogv': 'video/ogg',
+    'mov': 'video/quicktime',
+    'avi': 'video/x-msvideo',
+    
+    // Audio
+    'mp3': 'audio/mpeg',
+    'wav': 'audio/wav',
+    'wave': 'audio/wav',
+    'oga': 'audio/ogg',
+    'm4a': 'audio/mp4',
+    'aac': 'audio/aac',
+    'flac': 'audio/flac'
+  }
+  
+  return mimeTypes[ext] || ''
+}
+
+/**
  * Collapse long base64 image URL, keeping prefix and suffix for identification
  * @param {string} url - Image URL
  * @returns {string} - Collapsed URL or original URL
@@ -176,14 +206,18 @@ function handleToolbarCommand(command) {
     case 'video':
       if (command.url && command.title) {
         // Insert HTML5 video player with controls
-        const videoHtml = `\n<video controls width="100%" style="max-width: 800px;">\n  <source src="${command.url}" type="video/mp4">\n  Your browser does not support the video tag.\n</video>\n\n*${command.title}*\n`
+        const mimeType = getMimeType(command.url)
+        const typeAttr = mimeType ? ` type="${mimeType}"` : ''
+        const videoHtml = `\n<video controls width="100%" style="max-width: 800px;">\n  <source src="${command.url}"${typeAttr}>\n  Your browser does not support the video tag.\n</video>\n\n*${command.title}*\n`
         editor.insertText(videoHtml)
       }
       break
     case 'audio':
       if (command.url && command.title) {
         // Insert HTML5 audio player with controls
-        const audioHtml = `\n<audio controls style="width: 100%; max-width: 500px;">\n  <source src="${command.url}" type="audio/mpeg">\n  Your browser does not support the audio tag.\n</audio>\n\n*${command.title}*\n`
+        const mimeType = getMimeType(command.url)
+        const typeAttr = mimeType ? ` type="${mimeType}"` : ''
+        const audioHtml = `\n<audio controls style="width: 100%; max-width: 500px;">\n  <source src="${command.url}"${typeAttr}>\n  Your browser does not support the audio tag.\n</audio>\n\n*${command.title}*\n`
         editor.insertText(audioHtml)
       }
       break
