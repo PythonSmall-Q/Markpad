@@ -163,7 +163,8 @@ export default {
             wordWrap: '자동 줄 바꿈',
             lineNumbers: '줄 번호 표시',
             autoSave: '자동 저장',
-            autoSaveInterval: '자동 저장 간격(초)'
+            autoSaveInterval: '자동 저장 간격(초)',
+            autoComplete: '자동 완성'
         },
         file: {
             title: '파일',

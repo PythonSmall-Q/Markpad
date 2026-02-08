@@ -160,7 +160,8 @@ export default {
             wordWrap: '自動換行',
             lineNumbers: '顯示行號',
             autoSave: '自動儲存',
-            autoSaveInterval: '自動儲存間隔（秒）'
+            autoSaveInterval: '自動儲存間隔（秒）',
+            autoComplete: '自動補全'
         },
         file: {
             title: '檔案',

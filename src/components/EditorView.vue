@@ -101,6 +101,7 @@ function initEditor() {
         // 延迟渲染数学公式，等待预览更新
         setTimeout(renderMathInPreview, 100)
       },
+      keydown: handleKeyDown,
       keyup: handleKeyUp
     }
   })
@@ -121,6 +122,59 @@ function initEditor() {
         setTimeout(renderMathInPreview, 200)
       }
     }, 0)
+  }
+}
+
+// 基本字符配对处理（keydown）
+function handleKeyDown(event) {
+  if (!editorInstance || !settingsStore.autoComplete) return
+  
+  const key = event.key
+  const editor = editorInstance
+  
+  // 定义需要自动配对的字符
+  const pairs = {
+    '(': ')',
+    '[': ']',
+    '{': '}',
+    "'": "'",
+    '"': '"',
+    '`': '`'
+  }
+  
+  try {
+    // 检查是否是需要配对的字符
+    if (pairs[key]) {
+      const [start, end] = editor.getSelection()
+      
+      // 如果有选中文本，用括号包围
+      if (start !== end) {
+        event.preventDefault()
+        const selectedText = editor.getMarkdown().substring(start, end)
+        editor.replaceSelection(`${key}${selectedText}${pairs[key]}`)
+        editor.setSelection([start + 1, end + 1])
+        logger.info('Autocomplete', `Wrapped selection with ${key}${pairs[key]}`)
+        return
+      }
+      
+      // 检查光标后是否已经有闭合字符
+      const content = editor.getMarkdown()
+      const afterCursor = content.substring(start)
+      
+      // 如果光标后就是相同的闭合字符（对于引号和反引号），跳过配对
+      if ((key === "'" || key === '"' || key === '`') && afterCursor.startsWith(key)) {
+        // 让默认行为发生，不进行配对
+        return
+      }
+      
+      // 自动插入配对字符
+      event.preventDefault()
+      editor.insertText(`${key}${pairs[key]}`)
+      editor.setSelection([start + 1, start + 1])
+      logger.info('Autocomplete', `Auto-paired ${key}${pairs[key]}`)
+    }
+  } catch (error) {
+    console.warn('Autocomplete keydown error:', error)
   }
 }
 

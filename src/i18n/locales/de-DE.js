@@ -163,7 +163,8 @@ export default {
             wordWrap: 'Zeilenumbruch',
             lineNumbers: 'Zeilennummern anzeigen',
             autoSave: 'Automatisches Speichern',
-            autoSaveInterval: 'Automatisches Speicherintervall (Sekunden)'
+            autoSaveInterval: 'Automatisches Speicherintervall (Sekunden)',
+            autoComplete: 'Autovervollständigung'
         },
         file: {
             title: 'Datei',

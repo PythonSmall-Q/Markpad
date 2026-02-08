@@ -210,8 +210,7 @@ export default {
             autoSaveInterval: 'Auto Save Interval',
             seconds: 'seconds',
             showLineNumbers: 'Line Numbers',
-            syntaxHighlight: 'Syntax Highlight',
-            show: 'Show',
+            syntaxHighlight: 'Syntax Highlight', autoComplete: 'Auto-complete', show: 'Show',
             hide: 'Hide',
             enable: 'Enable',
             disable: 'Disable'

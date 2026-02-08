@@ -211,6 +211,7 @@ export default {
             seconds: '秒',
             showLineNumbers: '行号',
             syntaxHighlight: '代码高亮',
+            autoComplete: '自动补全',
             show: '显示',
             hide: '隐藏',
             enable: '开启',

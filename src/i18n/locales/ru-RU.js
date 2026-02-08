@@ -162,7 +162,8 @@ export default {
             wordWrap: 'Перенос слов',
             lineNumbers: 'Показать номера строк',
             autoSave: 'Автосохранение',
-            autoSaveInterval: 'Интервал автосохранения (секунды)'
+            autoSaveInterval: 'Интервал автосохранения (секунды)',
+            autoComplete: 'Автозавершение'
         },
         file: {
             title: 'Файл',

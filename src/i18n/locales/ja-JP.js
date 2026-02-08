@@ -160,7 +160,8 @@ export default {
             wordWrap: 'ワードラップ',
             lineNumbers: '行番号を表示',
             autoSave: '自動保存',
-            autoSaveInterval: '自動保存間隔（秒）'
+            autoSaveInterval: '自動保存間隔（秒）',
+            autoComplete: '自動補完'
         },
         file: {
             title: 'ファイル',

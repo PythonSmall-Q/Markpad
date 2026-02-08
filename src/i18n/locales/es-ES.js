@@ -163,7 +163,8 @@ export default {
             wordWrap: 'Ajuste de línea',
             lineNumbers: 'Mostrar números de línea',
             autoSave: 'Guardado automático',
-            autoSaveInterval: 'Intervalo de guardado automático (segundos)'
+            autoSaveInterval: 'Intervalo de guardado automático (segundos)',
+            autoComplete: 'Autocompletar'
         },
         file: {
             title: 'Archivo',

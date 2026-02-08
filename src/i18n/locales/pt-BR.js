@@ -163,7 +163,8 @@ export default {
             wordWrap: 'Quebra de linha',
             lineNumbers: 'Mostrar números de linha',
             autoSave: 'Salvamento automático',
-            autoSaveInterval: 'Intervalo de salvamento automático (segundos)'
+            autoSaveInterval: 'Intervalo de salvamento automático (segundos)',
+            autoComplete: 'Autocompletar'
         },
         file: {
             title: 'Arquivo',
