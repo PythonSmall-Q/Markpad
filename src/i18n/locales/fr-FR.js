@@ -11,6 +11,75 @@ export default {
         help: 'Aide'
     },
 
+    menuBar: {
+        app: {
+            about: 'À propos de Markpad',
+            services: 'Services',
+            hide: 'Masquer Markpad',
+            hideOthers: 'Masquer les autres',
+            unhide: 'Tout afficher',
+            quit: 'Quitter Markpad'
+        },
+        file: {
+            title: 'Fichier',
+            newDocument: 'Nouveau document',
+            open: 'Ouvrir...',
+            save: 'Enregistrer',
+            saveAs: 'Enregistrer sous...',
+            export: 'Exporter',
+            exportHtml: 'Exporter en HTML',
+            exportPdf: 'Exporter en PDF',
+            exportMarkdown: 'Exporter en Markdown',
+            closeDocument: 'Fermer le document',
+            exit: 'Quitter'
+        },
+        edit: {
+            title: 'Édition',
+            undo: 'Annuler',
+            redo: 'Rétablir',
+            cut: 'Couper',
+            copy: 'Copier',
+            paste: 'Coller',
+            selectAll: 'Tout sélectionner',
+            find: 'Rechercher',
+            replace: 'Remplacer'
+        },
+        view: {
+            title: 'Affichage',
+            toggleSidebar: 'Afficher/Masquer la barre latérale',
+            togglePreview: 'Afficher/Masquer l\'aperçu',
+            reload: 'Recharger',
+            forceReload: 'Forcer le rechargement',
+            toggleDevTools: 'Afficher/Masquer les outils de développement',
+            actualSize: 'Taille réelle',
+            zoomIn: 'Agrandir',
+            zoomOut: 'Réduire',
+            toggleFullScreen: 'Basculer en plein écran'
+        },
+        format: {
+            title: 'Format',
+            bold: 'Gras',
+            italic: 'Italique',
+            strikethrough: 'Barré',
+            heading1: 'Titre 1',
+            heading2: 'Titre 2',
+            heading3: 'Titre 3',
+            insertLink: 'Insérer un lien',
+            insertImage: 'Insérer une image',
+            insertCode: 'Insérer un bloc de code',
+            insertTable: 'Insérer un tableau'
+        },
+        help: {
+            title: 'Aide',
+            help: 'Aide',
+            mathTutorial: 'Tutoriel mathématique',
+            documentation: 'Documentation',
+            checkUpdates: 'Vérifier les mises à jour',
+            reportIssue: 'Signaler un problème',
+            about: 'À propos de Markpad'
+        }
+    },
+
     header: {
         new: 'Nouveau',
         open: 'Ouvrir',

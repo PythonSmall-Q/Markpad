@@ -94,108 +94,178 @@ function createWindow() {
 }
 
 // 创建应用菜单
-function createMenu() {
+function createMenu(translations = null) {
     const isMac = process.platform === 'darwin'
+
+    // 默认英文翻译
+    const t = translations || {
+        app: {
+            about: 'About Markpad',
+            services: 'Services',
+            hide: 'Hide Markpad',
+            hideOthers: 'Hide Others',
+            unhide: 'Show All',
+            quit: 'Quit Markpad'
+        },
+        file: {
+            title: 'File',
+            newDocument: 'New Document',
+            open: 'Open...',
+            save: 'Save',
+            saveAs: 'Save As...',
+            export: 'Export',
+            exportHtml: 'Export as HTML',
+            exportPdf: 'Export as PDF',
+            exportMarkdown: 'Export as Markdown',
+            closeDocument: 'Close Document',
+            exit: 'Exit'
+        },
+        edit: {
+            title: 'Edit',
+            undo: 'Undo',
+            redo: 'Redo',
+            cut: 'Cut',
+            copy: 'Copy',
+            paste: 'Paste',
+            selectAll: 'Select All',
+            find: 'Find',
+            replace: 'Replace'
+        },
+        view: {
+            title: 'View',
+            toggleSidebar: 'Toggle Sidebar',
+            togglePreview: 'Toggle Preview',
+            reload: 'Reload',
+            forceReload: 'Force Reload',
+            toggleDevTools: 'Toggle Developer Tools',
+            actualSize: 'Actual Size',
+            zoomIn: 'Zoom In',
+            zoomOut: 'Zoom Out',
+            toggleFullScreen: 'Toggle Full Screen'
+        },
+        format: {
+            title: 'Format',
+            bold: 'Bold',
+            italic: 'Italic',
+            strikethrough: 'Strikethrough',
+            heading1: 'Heading 1',
+            heading2: 'Heading 2',
+            heading3: 'Heading 3',
+            insertLink: 'Insert Link',
+            insertImage: 'Insert Image',
+            insertCode: 'Insert Code Block',
+            insertTable: 'Insert Table'
+        },
+        help: {
+            title: 'Help',
+            help: 'Help',
+            mathTutorial: 'Math Tutorial',
+            documentation: 'Documentation',
+            checkUpdates: 'Check for Updates',
+            reportIssue: 'Report Issue',
+            about: 'About Markpad'
+        }
+    }
 
     const template = [
         // macOS 应用菜单
         ...(isMac ? [{
             label: app.name,
             submenu: [
-                { role: 'about', label: 'About Markpad' },
+                { role: 'about', label: t.app.about },
                 { type: 'separator' },
-                { role: 'services' },
+                { role: 'services', label: t.app.services },
                 { type: 'separator' },
-                { role: 'hide' },
-                { role: 'hideOthers' },
-                { role: 'unhide' },
+                { role: 'hide', label: t.app.hide },
+                { role: 'hideOthers', label: t.app.hideOthers },
+                { role: 'unhide', label: t.app.unhide },
                 { type: 'separator' },
-                { role: 'quit' }
+                { role: 'quit', label: t.app.quit }
             ]
         }] : []),
         // File 菜单
         {
-            label: 'File',
+            label: t.file.title,
             submenu: [
                 {
-                    label: 'New Document',
+                    label: t.file.newDocument,
                     accelerator: 'CmdOrCtrl+N',
                     click: () => mainWindow?.webContents.send('menu:new-document')
                 },
                 { type: 'separator' },
                 {
-                    label: 'Open...',
+                    label: t.file.open,
                     accelerator: 'CmdOrCtrl+O',
                     click: () => mainWindow?.webContents.send('menu:open-file')
                 },
                 { type: 'separator' },
                 {
-                    label: 'Save',
+                    label: t.file.save,
                     accelerator: 'CmdOrCtrl+S',
                     click: () => mainWindow?.webContents.send('menu:save-file')
                 },
                 {
-                    label: 'Save As...',
+                    label: t.file.saveAs,
                     accelerator: 'CmdOrCtrl+Shift+S',
                     click: () => mainWindow?.webContents.send('menu:save-file-as')
                 },
                 { type: 'separator' },
                 {
-                    label: 'Export',
+                    label: t.file.export,
                     submenu: [
                         {
-                            label: 'Export as HTML',
+                            label: t.file.exportHtml,
                             click: () => mainWindow?.webContents.send('menu:export-html')
                         },
                         {
-                            label: 'Export as PDF',
+                            label: t.file.exportPdf,
                             click: () => mainWindow?.webContents.send('menu:export-pdf')
                         },
                         {
-                            label: 'Export as Markdown',
+                            label: t.file.exportMarkdown,
                             click: () => mainWindow?.webContents.send('menu:export-markdown')
                         }
                     ]
                 },
                 { type: 'separator' },
                 {
-                    label: 'Close Document',
+                    label: t.file.closeDocument,
                     accelerator: 'CmdOrCtrl+W',
                     click: () => mainWindow?.webContents.send('menu:close-document')
                 },
                 ...(!isMac ? [
                     { type: 'separator' },
-                    { role: 'quit', label: 'Exit' }
+                    { role: 'quit', label: t.file.exit }
                 ] : [])
             ]
         },
         // Edit 菜单
         {
-            label: 'Edit',
+            label: t.edit.title,
             submenu: [
                 {
-                    label: 'Undo',
+                    label: t.edit.undo,
                     accelerator: 'CmdOrCtrl+Z',
                     click: () => mainWindow?.webContents.send('menu:undo')
                 },
                 {
-                    label: 'Redo',
+                    label: t.edit.redo,
                     accelerator: process.platform === 'darwin' ? 'Cmd+Shift+Z' : 'Ctrl+Y',
                     click: () => mainWindow?.webContents.send('menu:redo')
                 },
                 { type: 'separator' },
-                { role: 'cut', label: 'Cut' },
-                { role: 'copy', label: 'Copy' },
-                { role: 'paste', label: 'Paste' },
-                { role: 'selectAll', label: 'Select All' },
+                { role: 'cut', label: t.edit.cut },
+                { role: 'copy', label: t.edit.copy },
+                { role: 'paste', label: t.edit.paste },
+                { role: 'selectAll', label: t.edit.selectAll },
                 { type: 'separator' },
                 {
-                    label: 'Find',
+                    label: t.edit.find,
                     accelerator: 'CmdOrCtrl+F',
                     click: () => mainWindow?.webContents.send('menu:find')
                 },
                 {
-                    label: 'Replace',
+                    label: t.edit.replace,
                     accelerator: 'CmdOrCtrl+H',
                     click: () => mainWindow?.webContents.send('menu:replace')
                 }
@@ -203,112 +273,112 @@ function createMenu() {
         },
         // View 菜单
         {
-            label: 'View',
+            label: t.view.title,
             submenu: [
                 {
-                    label: 'Toggle Sidebar',
+                    label: t.view.toggleSidebar,
                     accelerator: 'CmdOrCtrl+Shift+B',
                     click: () => mainWindow?.webContents.send('menu:toggle-sidebar')
                 },
                 {
-                    label: 'Toggle Preview',
+                    label: t.view.togglePreview,
                     accelerator: 'CmdOrCtrl+Shift+P',
                     click: () => mainWindow?.webContents.send('menu:toggle-preview')
                 },
                 { type: 'separator' },
-                { role: 'reload', label: 'Reload' },
-                { role: 'forceReload', label: 'Force Reload' },
-                { role: 'toggleDevTools', label: 'Toggle Developer Tools' },
+                { role: 'reload', label: t.view.reload },
+                { role: 'forceReload', label: t.view.forceReload },
+                { role: 'toggleDevTools', label: t.view.toggleDevTools },
                 { type: 'separator' },
-                { role: 'resetZoom', label: 'Actual Size' },
-                { role: 'zoomIn', label: 'Zoom In' },
-                { role: 'zoomOut', label: 'Zoom Out' },
+                { role: 'resetZoom', label: t.view.actualSize },
+                { role: 'zoomIn', label: t.view.zoomIn },
+                { role: 'zoomOut', label: t.view.zoomOut },
                 { type: 'separator' },
-                { role: 'togglefullscreen', label: 'Toggle Full Screen' }
+                { role: 'togglefullscreen', label: t.view.toggleFullScreen }
             ]
         },
         // Format 菜单
         {
-            label: 'Format',
+            label: t.format.title,
             submenu: [
                 {
-                    label: 'Bold',
+                    label: t.format.bold,
                     accelerator: 'CmdOrCtrl+B',
                     click: () => mainWindow?.webContents.send('menu:format-bold')
                 },
                 {
-                    label: 'Italic',
+                    label: t.format.italic,
                     accelerator: 'CmdOrCtrl+I',
                     click: () => mainWindow?.webContents.send('menu:format-italic')
                 },
                 {
-                    label: 'Strikethrough',
+                    label: t.format.strikethrough,
                     click: () => mainWindow?.webContents.send('menu:format-strikethrough')
                 },
                 { type: 'separator' },
                 {
-                    label: 'Heading 1',
+                    label: t.format.heading1,
                     click: () => mainWindow?.webContents.send('menu:format-heading', 1)
                 },
                 {
-                    label: 'Heading 2',
+                    label: t.format.heading2,
                     click: () => mainWindow?.webContents.send('menu:format-heading', 2)
                 },
                 {
-                    label: 'Heading 3',
+                    label: t.format.heading3,
                     click: () => mainWindow?.webContents.send('menu:format-heading', 3)
                 },
                 { type: 'separator' },
                 {
-                    label: 'Insert Link',
+                    label: t.format.insertLink,
                     click: () => mainWindow?.webContents.send('menu:insert-link')
                 },
                 {
-                    label: 'Insert Image',
+                    label: t.format.insertImage,
                     click: () => mainWindow?.webContents.send('menu:insert-image')
                 },
                 {
-                    label: 'Insert Code Block',
+                    label: t.format.insertCode,
                     click: () => mainWindow?.webContents.send('menu:insert-code')
                 },
                 {
-                    label: 'Insert Table',
+                    label: t.format.insertTable,
                     click: () => mainWindow?.webContents.send('menu:insert-table')
                 }
             ]
         },
         // Help 菜单
         {
-            label: 'Help',
+            label: t.help.title,
             submenu: [
                 {
-                    label: 'Help',
+                    label: t.help.help,
                     accelerator: 'F1',
                     click: () => mainWindow?.webContents.send('menu:help')
                 },
                 {
-                    label: 'Math Tutorial',
+                    label: t.help.mathTutorial,
                     accelerator: 'F2',
                     click: () => mainWindow?.webContents.send('menu:math-tutorial')
                 },
                 {
-                    label: 'Documentation',
+                    label: t.help.documentation,
                     click: () => shell.openExternal('https://github.com/PythonSmall-Q/Markpad')
                 },
                 { type: 'separator' },
                 {
-                    label: 'Check for Updates',
+                    label: t.help.checkUpdates,
                     click: () => mainWindow?.webContents.send('menu:check-updates')
                 },
                 { type: 'separator' },
                 {
-                    label: 'Report Issue',
+                    label: t.help.reportIssue,
                     click: () => shell.openExternal('https://github.com/PythonSmall-Q/Markpad/issues')
                 },
                 ...(!isMac ? [
                     { type: 'separator' },
                     {
-                        label: 'About Markpad',
+                        label: t.help.about,
                         click: () => mainWindow?.webContents.send('menu:about')
                     }
                 ] : [])
@@ -710,6 +780,17 @@ ipcMain.handle('updater:install', () => {
 
 ipcMain.handle('updater:get-version', () => {
     return { version: app.getVersion() }
+})
+
+// 菜单更新
+ipcMain.handle('menu:update-translations', (event, translations) => {
+    try {
+        createMenu(translations)
+        return { success: true }
+    } catch (error) {
+        console.error('Failed to update menu:', error)
+        return { success: false, error: error.message }
+    }
 })
 
 // 系统信息

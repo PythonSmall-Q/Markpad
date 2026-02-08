@@ -11,6 +11,75 @@ export default {
         help: '帮助'
     },
 
+    menuBar: {
+        app: {
+            about: '关于 Markpad',
+            services: '服务',
+            hide: '隐藏 Markpad',
+            hideOthers: '隐藏其他',
+            unhide: '全部显示',
+            quit: '退出 Markpad'
+        },
+        file: {
+            title: '文件',
+            newDocument: '新建文档',
+            open: '打开...',
+            save: '保存',
+            saveAs: '另存为...',
+            export: '导出',
+            exportHtml: '导出为 HTML',
+            exportPdf: '导出为 PDF',
+            exportMarkdown: '导出为 Markdown',
+            closeDocument: '关闭文档',
+            exit: '退出'
+        },
+        edit: {
+            title: '编辑',
+            undo: '撤销',
+            redo: '重做',
+            cut: '剪切',
+            copy: '复制',
+            paste: '粘贴',
+            selectAll: '全选',
+            find: '查找',
+            replace: '替换'
+        },
+        view: {
+            title: '查看',
+            toggleSidebar: '切换侧边栏',
+            togglePreview: '切换预览',
+            reload: '重新加载',
+            forceReload: '强制重新加载',
+            toggleDevTools: '切换开发者工具',
+            actualSize: '实际大小',
+            zoomIn: '放大',
+            zoomOut: '缩小',
+            toggleFullScreen: '切换全屏'
+        },
+        format: {
+            title: '格式',
+            bold: '加粗',
+            italic: '斜体',
+            strikethrough: '删除线',
+            heading1: '标题 1',
+            heading2: '标题 2',
+            heading3: '标题 3',
+            insertLink: '插入链接',
+            insertImage: '插入图片',
+            insertCode: '插入代码块',
+            insertTable: '插入表格'
+        },
+        help: {
+            title: '帮助',
+            help: '帮助',
+            mathTutorial: '数学公式教程',
+            documentation: '文档',
+            checkUpdates: '检查更新',
+            reportIssue: '报告问题',
+            about: '关于 Markpad'
+        }
+    },
+
     header: {
         new: '新建',
         open: '打开',

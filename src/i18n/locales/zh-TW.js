@@ -11,6 +11,75 @@ export default {
         help: '說明'
     },
 
+    menuBar: {
+        app: {
+            about: '關於 Markpad',
+            services: '服務',
+            hide: '隱藏 Markpad',
+            hideOthers: '隱藏其他',
+            unhide: '全部顯示',
+            quit: '結束 Markpad'
+        },
+        file: {
+            title: '檔案',
+            newDocument: '新增文件',
+            open: '開啟...',
+            save: '儲存',
+            saveAs: '另存新檔...',
+            export: '匯出',
+            exportHtml: '匯出為 HTML',
+            exportPdf: '匯出為 PDF',
+            exportMarkdown: '匯出為 Markdown',
+            closeDocument: '關閉文件',
+            exit: '結束'
+        },
+        edit: {
+            title: '編輯',
+            undo: '復原',
+            redo: '重做',
+            cut: '剪下',
+            copy: '複製',
+            paste: '貼上',
+            selectAll: '全選',
+            find: '尋找',
+            replace: '取代'
+        },
+        view: {
+            title: '檢視',
+            toggleSidebar: '切換側邊欄',
+            togglePreview: '切換預覽',
+            reload: '重新載入',
+            forceReload: '強制重新載入',
+            toggleDevTools: '切換開發者工具',
+            actualSize: '實際大小',
+            zoomIn: '放大',
+            zoomOut: '縮小',
+            toggleFullScreen: '切換全螢幕'
+        },
+        format: {
+            title: '格式',
+            bold: '粗體',
+            italic: '斜體',
+            strikethrough: '刪除線',
+            heading1: '標題 1',
+            heading2: '標題 2',
+            heading3: '標題 3',
+            insertLink: '插入連結',
+            insertImage: '插入圖片',
+            insertCode: '插入程式碼區塊',
+            insertTable: '插入表格'
+        },
+        help: {
+            title: '說明',
+            help: '說明',
+            mathTutorial: '數學公式教程',
+            documentation: '文件',
+            checkUpdates: '檢查更新',
+            reportIssue: '回報問題',
+            about: '關於 Markpad'
+        }
+    },
+
     header: {
         new: '新建',
         open: '開啟',

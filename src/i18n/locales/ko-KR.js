@@ -11,6 +11,75 @@ export default {
         help: '도움말'
     },
 
+    menuBar: {
+        app: {
+            about: 'Markpad 정보',
+            services: '서비스',
+            hide: 'Markpad 숨기기',
+            hideOthers: '다른 항목 숨기기',
+            unhide: '모두 표시',
+            quit: 'Markpad 종료'
+        },
+        file: {
+            title: '파일',
+            newDocument: '새 문서',
+            open: '열기...',
+            save: '저장',
+            saveAs: '다른 이름으로 저장...',
+            export: '내보내기',
+            exportHtml: 'HTML로 내보내기',
+            exportPdf: 'PDF로 내보내기',
+            exportMarkdown: 'Markdown으로 내보내기',
+            closeDocument: '문서 닫기',
+            exit: '종료'
+        },
+        edit: {
+            title: '편집',
+            undo: '실행 취소',
+            redo: '다시 실행',
+            cut: '잘라내기',
+            copy: '복사',
+            paste: '붙여넣기',
+            selectAll: '모두 선택',
+            find: '찾기',
+            replace: '바꾸기'
+        },
+        view: {
+            title: '보기',
+            toggleSidebar: '사이드바 토글',
+            togglePreview: '미리보기 토글',
+            reload: '다시 로드',
+            forceReload: '강제 다시 로드',
+            toggleDevTools: '개발자 도구 토글',
+            actualSize: '실제 크기',
+            zoomIn: '확대',
+            zoomOut: '축소',
+            toggleFullScreen: '전체 화면 토글'
+        },
+        format: {
+            title: '서식',
+            bold: '굵게',
+            italic: '기울임꼴',
+            strikethrough: '취소선',
+            heading1: '제목 1',
+            heading2: '제목 2',
+            heading3: '제목 3',
+            insertLink: '링크 삽입',
+            insertImage: '이미지 삽입',
+            insertCode: '코드 블록 삽입',
+            insertTable: '표 삽입'
+        },
+        help: {
+            title: '도움말',
+            help: '도움말',
+            mathTutorial: '수학 튜토리얼',
+            documentation: '문서',
+            checkUpdates: '업데이트 확인',
+            reportIssue: '문제 보고',
+            about: 'Markpad 정보'
+        }
+    },
+
     header: {
         new: '새로 만들기',
         open: '열기',

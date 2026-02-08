@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import i18n from '@/i18n'
+import { isElectron } from '@/utils/electron'
 
 export const useSettingsStore = defineStore('settings', () => {
     // State
@@ -174,6 +175,15 @@ export const useSettingsStore = defineStore('settings', () => {
         locale.value = newLocale
         localStorage.setItem('markpad-locale', newLocale)
         saveSettings()
+
+        // 更新 Electron 菜单栏翻译
+        if (isElectron()) {
+            nextTick(() => {
+                const menuTranslations = i18n.global.t('menuBar')
+                window.electronAPI.updateMenuTranslations(menuTranslations)
+                    .catch(err => console.error('Failed to update menu translations:', err))
+            })
+        }
     }
 
     // Save settings to localStorage

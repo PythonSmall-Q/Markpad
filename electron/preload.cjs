@@ -102,7 +102,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
     // 系统信息 API
     getSystemInfo: () => ipcRenderer.invoke('system:getInfo'),
-    exportLogs: (content) => ipcRenderer.invoke('system:exportLogs', content)
+    exportLogs: (content) => ipcRenderer.invoke('system:exportLogs', content),
+
+    // 菜单更新 API
+    updateMenuTranslations: (translations) => ipcRenderer.invoke('menu:update-translations', translations)
 })
 
 console.log('=== electronAPI exposed successfully ===')

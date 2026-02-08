@@ -11,6 +11,75 @@ export default {
         help: 'Ayuda'
     },
 
+    menuBar: {
+        app: {
+            about: 'Acerca de Markpad',
+            services: 'Servicios',
+            hide: 'Ocultar Markpad',
+            hideOthers: 'Ocultar otros',
+            unhide: 'Mostrar todo',
+            quit: 'Salir de Markpad'
+        },
+        file: {
+            title: 'Archivo',
+            newDocument: 'Nuevo documento',
+            open: 'Abrir...',
+            save: 'Guardar',
+            saveAs: 'Guardar como...',
+            export: 'Exportar',
+            exportHtml: 'Exportar como HTML',
+            exportPdf: 'Exportar como PDF',
+            exportMarkdown: 'Exportar como Markdown',
+            closeDocument: 'Cerrar documento',
+            exit: 'Salir'
+        },
+        edit: {
+            title: 'Editar',
+            undo: 'Deshacer',
+            redo: 'Rehacer',
+            cut: 'Cortar',
+            copy: 'Copiar',
+            paste: 'Pegar',
+            selectAll: 'Seleccionar todo',
+            find: 'Buscar',
+            replace: 'Reemplazar'
+        },
+        view: {
+            title: 'Ver',
+            toggleSidebar: 'Alternar barra lateral',
+            togglePreview: 'Alternar vista previa',
+            reload: 'Recargar',
+            forceReload: 'Forzar recarga',
+            toggleDevTools: 'Alternar herramientas de desarrollador',
+            actualSize: 'Tamaño real',
+            zoomIn: 'Acercar',
+            zoomOut: 'Alejar',
+            toggleFullScreen: 'Alternar pantalla completa'
+        },
+        format: {
+            title: 'Formato',
+            bold: 'Negrita',
+            italic: 'Cursiva',
+            strikethrough: 'Tachado',
+            heading1: 'Encabezado 1',
+            heading2: 'Encabezado 2',
+            heading3: 'Encabezado 3',
+            insertLink: 'Insertar enlace',
+            insertImage: 'Insertar imagen',
+            insertCode: 'Insertar bloque de código',
+            insertTable: 'Insertar tabla'
+        },
+        help: {
+            title: 'Ayuda',
+            help: 'Ayuda',
+            mathTutorial: 'Tutorial de matemáticas',
+            documentation: 'Documentación',
+            checkUpdates: 'Buscar actualizaciones',
+            reportIssue: 'Informar problema',
+            about: 'Acerca de Markpad'
+        }
+    },
+
     header: {
         new: 'Nuevo',
         open: 'Abrir',

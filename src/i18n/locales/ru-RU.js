@@ -11,6 +11,75 @@ export default {
         help: 'Справка'
     },
 
+    menuBar: {
+        app: {
+            about: 'О Markpad',
+            services: 'Службы',
+            hide: 'Скрыть Markpad',
+            hideOthers: 'Скрыть другие',
+            unhide: 'Показать все',
+            quit: 'Выйти из Markpad'
+        },
+        file: {
+            title: 'Файл',
+            newDocument: 'Новый документ',
+            open: 'Открыть...',
+            save: 'Сохранить',
+            saveAs: 'Сохранить как...',
+            export: 'Экспорт',
+            exportHtml: 'Экспорт в HTML',
+            exportPdf: 'Экспорт в PDF',
+            exportMarkdown: 'Экспорт в Markdown',
+            closeDocument: 'Закрыть документ',
+            exit: 'Выход'
+        },
+        edit: {
+            title: 'Правка',
+            undo: 'Отменить',
+            redo: 'Повторить',
+            cut: 'Вырезать',
+            copy: 'Копировать',
+            paste: 'Вставить',
+            selectAll: 'Выбрать всё',
+            find: 'Найти',
+            replace: 'Заменить'
+        },
+        view: {
+            title: 'Вид',
+            toggleSidebar: 'Переключить боковую панель',
+            togglePreview: 'Переключить предпросмотр',
+            reload: 'Перезагрузить',
+            forceReload: 'Принудительная перезагрузка',
+            toggleDevTools: 'Переключить инструменты разработчика',
+            actualSize: 'Реальный размер',
+            zoomIn: 'Увеличить',
+            zoomOut: 'Уменьшить',
+            toggleFullScreen: 'Переключить полноэкранный режим'
+        },
+        format: {
+            title: 'Формат',
+            bold: 'Жирный',
+            italic: 'Курсив',
+            strikethrough: 'Зачёркнутый',
+            heading1: 'Заголовок 1',
+            heading2: 'Заголовок 2',
+            heading3: 'Заголовок 3',
+            insertLink: 'Вставить ссылку',
+            insertImage: 'Вставить изображение',
+            insertCode: 'Вставить блок кода',
+            insertTable: 'Вставить таблицу'
+        },
+        help: {
+            title: 'Справка',
+            help: 'Справка',
+            mathTutorial: 'Учебник по математике',
+            documentation: 'Документация',
+            checkUpdates: 'Проверить обновления',
+            reportIssue: 'Сообщить о проблеме',
+            about: 'О Markpad'
+        }
+    },
+
     header: {
         new: 'Создать',
         open: 'Открыть',

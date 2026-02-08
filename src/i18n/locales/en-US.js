@@ -11,6 +11,75 @@ export default {
         help: 'Help'
     },
 
+    menuBar: {
+        app: {
+            about: 'About Markpad',
+            services: 'Services',
+            hide: 'Hide Markpad',
+            hideOthers: 'Hide Others',
+            unhide: 'Show All',
+            quit: 'Quit Markpad'
+        },
+        file: {
+            title: 'File',
+            newDocument: 'New Document',
+            open: 'Open...',
+            save: 'Save',
+            saveAs: 'Save As...',
+            export: 'Export',
+            exportHtml: 'Export as HTML',
+            exportPdf: 'Export as PDF',
+            exportMarkdown: 'Export as Markdown',
+            closeDocument: 'Close Document',
+            exit: 'Exit'
+        },
+        edit: {
+            title: 'Edit',
+            undo: 'Undo',
+            redo: 'Redo',
+            cut: 'Cut',
+            copy: 'Copy',
+            paste: 'Paste',
+            selectAll: 'Select All',
+            find: 'Find',
+            replace: 'Replace'
+        },
+        view: {
+            title: 'View',
+            toggleSidebar: 'Toggle Sidebar',
+            togglePreview: 'Toggle Preview',
+            reload: 'Reload',
+            forceReload: 'Force Reload',
+            toggleDevTools: 'Toggle Developer Tools',
+            actualSize: 'Actual Size',
+            zoomIn: 'Zoom In',
+            zoomOut: 'Zoom Out',
+            toggleFullScreen: 'Toggle Full Screen'
+        },
+        format: {
+            title: 'Format',
+            bold: 'Bold',
+            italic: 'Italic',
+            strikethrough: 'Strikethrough',
+            heading1: 'Heading 1',
+            heading2: 'Heading 2',
+            heading3: 'Heading 3',
+            insertLink: 'Insert Link',
+            insertImage: 'Insert Image',
+            insertCode: 'Insert Code Block',
+            insertTable: 'Insert Table'
+        },
+        help: {
+            title: 'Help',
+            help: 'Help',
+            mathTutorial: 'Math Tutorial',
+            documentation: 'Documentation',
+            checkUpdates: 'Check for Updates',
+            reportIssue: 'Report Issue',
+            about: 'About Markpad'
+        }
+    },
+
     header: {
         new: 'New',
         open: 'Open',

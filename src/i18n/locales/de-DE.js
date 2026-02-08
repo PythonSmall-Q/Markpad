@@ -11,6 +11,75 @@ export default {
         help: 'Hilfe'
     },
 
+    menuBar: {
+        app: {
+            about: 'Über Markpad',
+            services: 'Dienste',
+            hide: 'Markpad ausblenden',
+            hideOthers: 'Andere ausblenden',
+            unhide: 'Alle einblenden',
+            quit: 'Markpad beenden'
+        },
+        file: {
+            title: 'Datei',
+            newDocument: 'Neues Dokument',
+            open: 'Öffnen...',
+            save: 'Speichern',
+            saveAs: 'Speichern unter...',
+            export: 'Exportieren',
+            exportHtml: 'Als HTML exportieren',
+            exportPdf: 'Als PDF exportieren',
+            exportMarkdown: 'Als Markdown exportieren',
+            closeDocument: 'Dokument schließen',
+            exit: 'Beenden'
+        },
+        edit: {
+            title: 'Bearbeiten',
+            undo: 'Rückgängig',
+            redo: 'Wiederholen',
+            cut: 'Ausschneiden',
+            copy: 'Kopieren',
+            paste: 'Einfügen',
+            selectAll: 'Alles auswählen',
+            find: 'Suchen',
+            replace: 'Ersetzen'
+        },
+        view: {
+            title: 'Ansicht',
+            toggleSidebar: 'Seitenleiste umschalten',
+            togglePreview: 'Vorschau umschalten',
+            reload: 'Neu laden',
+            forceReload: 'Erzwingen Neu laden',
+            toggleDevTools: 'Entwicklertools umschalten',
+            actualSize: 'Tatsächliche Größe',
+            zoomIn: 'Vergrößern',
+            zoomOut: 'Verkleinern',
+            toggleFullScreen: 'Vollbild umschalten'
+        },
+        format: {
+            title: 'Format',
+            bold: 'Fett',
+            italic: 'Kursiv',
+            strikethrough: 'Durchgestrichen',
+            heading1: 'Überschrift 1',
+            heading2: 'Überschrift 2',
+            heading3: 'Überschrift 3',
+            insertLink: 'Link einfügen',
+            insertImage: 'Bild einfügen',
+            insertCode: 'Codeblock einfügen',
+            insertTable: 'Tabelle einfügen'
+        },
+        help: {
+            title: 'Hilfe',
+            help: 'Hilfe',
+            mathTutorial: 'Mathe-Tutorial',
+            documentation: 'Dokumentation',
+            checkUpdates: 'Nach Updates suchen',
+            reportIssue: 'Problem melden',
+            about: 'Über Markpad'
+        }
+    },
+
     header: {
         new: 'Neu',
         open: 'Öffnen',

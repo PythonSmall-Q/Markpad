@@ -11,6 +11,75 @@ export default {
         help: 'ヘルプ'
     },
 
+    menuBar: {
+        app: {
+            about: 'Markpadについて',
+            services: 'サービス',
+            hide: 'Markpadを隠す',
+            hideOthers: '他を隠す',
+            unhide: 'すべて表示',
+            quit: 'Markpadを終了'
+        },
+        file: {
+            title: 'ファイル',
+            newDocument: '新規ドキュメント',
+            open: '開く...',
+            save: '保存',
+            saveAs: '名前を付けて保存...',
+            export: 'エクスポート',
+            exportHtml: 'HTMLとしてエクスポート',
+            exportPdf: 'PDFとしてエクスポート',
+            exportMarkdown: 'Markdownとしてエクスポート',
+            closeDocument: 'ドキュメントを閉じる',
+            exit: '終了'
+        },
+        edit: {
+            title: '編集',
+            undo: '元に戻す',
+            redo: 'やり直す',
+            cut: '切り取り',
+            copy: 'コピー',
+            paste: '貼り付け',
+            selectAll: 'すべて選択',
+            find: '検索',
+            replace: '置換'
+        },
+        view: {
+            title: '表示',
+            toggleSidebar: 'サイドバーを切り替え',
+            togglePreview: 'プレビューを切り替え',
+            reload: '再読み込み',
+            forceReload: '強制再読み込み',
+            toggleDevTools: '開発者ツールを切り替え',
+            actualSize: '実際のサイズ',
+            zoomIn: '拡大',
+            zoomOut: '縮小',
+            toggleFullScreen: 'フルスクリーン切り替え'
+        },
+        format: {
+            title: '書式',
+            bold: '太字',
+            italic: '斜体',
+            strikethrough: '取り消し線',
+            heading1: '見出し1',
+            heading2: '見出し2',
+            heading3: '見出し3',
+            insertLink: 'リンクを挿入',
+            insertImage: '画像を挿入',
+            insertCode: 'コードブロックを挿入',
+            insertTable: '表を挿入'
+        },
+        help: {
+            title: 'ヘルプ',
+            help: 'ヘルプ',
+            mathTutorial: '数式チュートリアル',
+            documentation: 'ドキュメント',
+            checkUpdates: 'アップデートを確認',
+            reportIssue: '問題を報告',
+            about: 'Markpadについて'
+        }
+    },
+
     header: {
         new: '新規',
         open: '開く',

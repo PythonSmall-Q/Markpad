@@ -92,6 +92,13 @@ onMounted(async () => {
   // Load settings
   settingsStore.loadSettings()
   
+  // 初始化菜单翻译（在 Electron 环境下）
+  if (window.electronAPI && window.electronAPI.updateMenuTranslations) {
+    const menuTranslations = t('menuBar')
+    window.electronAPI.updateMenuTranslations(menuTranslations)
+      .catch(err => console.error('Failed to initialize menu translations:', err))
+  }
+  
   // 恢复临时保存的文档
   const restoredCount = await documentsStore.restoreTempDocuments()
   if (restoredCount > 0) {
