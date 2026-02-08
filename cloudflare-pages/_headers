@@ -1,0 +1,20 @@
+/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, HEAD, OPTIONS
+  Access-Control-Allow-Headers: Content-Type
+  Cache-Control: public, max-age=3600
+
+/*.yml
+  Content-Type: text/yaml
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+
+/*.exe
+  Content-Type: application/x-msdownload
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=86400
+
+/*.blockmap
+  Content-Type: application/octet-stream
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=86400

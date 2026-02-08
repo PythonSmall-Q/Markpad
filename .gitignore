@@ -27,6 +27,9 @@ dist-electron
 out/
 build/
 
+# Cloudflare Pages deployment directory
+cloudflare-deploy/
+
 # Code signing certificates (NEVER commit these!)
 *.pfx
 *.p12

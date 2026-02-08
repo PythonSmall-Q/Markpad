@@ -147,4 +147,65 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-cloudflare:
+    needs: release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Set version from package.json
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Using version: $VERSION"
+      
+      - name: Override version from tag
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Override version from tag: $VERSION"
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      
+      - name: Prepare Cloudflare Pages deployment
+        run: |
+          # 复制静态页面文件
+          mkdir -p cloudflare-deploy
+          cp cloudflare-pages/index.html cloudflare-deploy/
+          cp cloudflare-pages/_headers cloudflare-deploy/
+          
+          # 复制 Windows 发布文件
+          find artifacts -type f -name "*.exe" -exec cp {} cloudflare-deploy/ \;
+          find artifacts -type f -name "*.exe.blockmap" -exec cp {} cloudflare-deploy/ \;
+          find artifacts -type f -name "latest.yml" -exec cp {} cloudflare-deploy/ \;
+          
+          ls -lh cloudflare-deploy/
+      
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy cloudflare-deploy --project-name=markpad --branch=main
+      
+      - name: Output deployment URL
+        run: |
+          echo "✅ Deployed to Cloudflare Pages"
+          echo "🌐 URL: https://markpad.pages.dev"
+          echo "📦 Version: ${{ env.VERSION }}"
  

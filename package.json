@@ -103,6 +103,10 @@
         },
         "publish": [
             {
+                "provider": "generic",
+                "url": "https://markpad.pages.dev"
+            },
+            {
                 "provider": "github",
                 "owner": "PythonSmall-Q",
                 "repo": "Markpad"

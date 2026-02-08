@@ -52,6 +52,18 @@ git push origin v1.0.0
 # 3. GitHub Actions automatically builds and releases
 ```
 
+### Cloudflare Pages Deployment
+
+This project uses Cloudflare Pages to host release files and provide auto-update service with global CDN acceleration.
+
+**Setup Instructions:** [CLOUDFLARE_SETUP.md](CLOUDFLARE_SETUP.md)
+
+Features:
+- 🌍 Global CDN acceleration for faster downloads
+- 🚀 Automatic deployment after each release
+- 📦 Independent update service (no reliance on GitHub Releases)
+- 🔒 HTTPS with automatic SSL certificates
+
 See detailed release guide: [docs/RELEASE.md](docs/RELEASE.md)
 
 ## Project Structure
