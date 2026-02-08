@@ -42,6 +42,8 @@ export default {
             codeBlock: '코드 블록',
             link: '링크 삽입',
             image: '이미지 삽입',
+            video: '비디오 삽입',
+            audio: '오디오 삽입',
             table: '표 삽입',
             hr: '구분선',
             preview: '미리보기',

@@ -138,6 +138,12 @@ function setupMenuListeners() {
         break
       
       // 编辑菜单
+      case 'undo':
+        editorViewRef.value?.undo()
+        break
+      case 'redo':
+        editorViewRef.value?.redo()
+        break
       case 'find':
         showSearchDialog.value = true
         showReplaceMode.value = false
@@ -279,6 +285,19 @@ async function handleWindowClose(event) {
 }
 
 function handleKeyDown(e) {
+  // Ctrl/Cmd + Z: Undo
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+    e.preventDefault()
+    editorViewRef.value?.undo()
+  }
+  
+  // Ctrl/Cmd + Shift + Z 或 Ctrl+Y: Redo
+  if (((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'Z' || e.key === 'z')) ||
+      (e.ctrlKey && e.key === 'y' && !e.shiftKey && !e.metaKey)) {
+    e.preventDefault()
+    editorViewRef.value?.redo()
+  }
+  
   // Ctrl/Cmd + N: New document
   if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
     e.preventDefault()

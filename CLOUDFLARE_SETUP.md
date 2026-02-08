@@ -91,10 +91,10 @@ wrangler pages deploy cloudflare-pages --project-name=mark-pad
 
 1. 进入 Cloudflare Pages 项目设置
 2. 找到 **Builds & deployments** 或 **Production branch** 设置
-3. 将生产分支设置为: `production`
+3. 将生产分支设置为: `master`（与 GitHub 仓库的主分支一致）
 4. 保存配置
 
-这样，当 GitHub Actions 使用 `--branch=production` 部署时，就会自动部署到生产环境（https://mark-pad.pages.dev），而不是预览环境。
+这样，当 GitHub Actions 使用 `--branch=master` 部署时，就会自动部署到生产环境（https://mark-pad.pages.dev），而不是预览环境。
 
 ### 第四步：获取部署 URL
 

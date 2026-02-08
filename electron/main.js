@@ -173,8 +173,16 @@ function createMenu() {
         {
             label: 'Edit',
             submenu: [
-                { role: 'undo', label: 'Undo' },
-                { role: 'redo', label: 'Redo' },
+                {
+                    label: 'Undo',
+                    accelerator: 'CmdOrCtrl+Z',
+                    click: () => mainWindow?.webContents.send('menu:undo')
+                },
+                {
+                    label: 'Redo',
+                    accelerator: process.platform === 'darwin' ? 'Cmd+Shift+Z' : 'Ctrl+Y',
+                    click: () => mainWindow?.webContents.send('menu:redo')
+                },
                 { type: 'separator' },
                 { role: 'cut', label: 'Cut' },
                 { role: 'copy', label: 'Copy' },

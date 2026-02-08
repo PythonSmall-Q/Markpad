@@ -48,6 +48,8 @@ export default {
             codeBlock: 'Code Block',
             link: 'Insert Link',
             image: 'Insert Image',
+            video: 'Insert Video',
+            audio: 'Insert Audio',
             table: 'Insert Table',
             hr: 'Horizontal Rule',
             preview: 'Preview',

@@ -83,6 +83,14 @@
         <el-button size="small" :icon="Picture" @click="handleInsertImage" />
       </el-tooltip>
       
+      <el-tooltip :content="t('editor.toolbar.video')" placement="bottom">
+        <el-button size="small" :icon="VideoPlay" @click="handleInsertVideo" />
+      </el-tooltip>
+      
+      <el-tooltip :content="t('editor.toolbar.audio')" placement="bottom">
+        <el-button size="small" :icon="Headset" @click="handleInsertAudio" />
+      </el-tooltip>
+      
       <el-tooltip :content="t('editor.toolbar.table')" placement="bottom">
         <el-button size="small" :icon="Grid" @click="emit('command', { type: 'table' })" />
       </el-tooltip>
@@ -109,7 +117,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { 
   List, Menu, ChatLineSquare, Link, Picture, Grid, 
-  Document, View, ArrowDown 
+  Document, View, ArrowDown, VideoPlay, Headset 
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useSettingsStore } from '@/store/settings'
@@ -155,6 +163,30 @@ async function handleInsertImage() {
       type: 'image', 
       url: result.filePath, 
       alt: fileName 
+    })
+  }
+}
+
+async function handleInsertVideo() {
+  const result = await assetAPI.importVideo()
+  if (result.success && result.filePath) {
+    const fileName = result.filePath.split(/[/\\]/).pop()
+    emit('command', { 
+      type: 'video', 
+      url: result.filePath, 
+      title: fileName 
+    })
+  }
+}
+
+async function handleInsertAudio() {
+  const result = await assetAPI.importAudio()
+  if (result.success && result.filePath) {
+    const fileName = result.filePath.split(/[/\\]/).pop()
+    emit('command', { 
+      type: 'audio', 
+      url: result.filePath, 
+      title: fileName 
     })
   }
 }

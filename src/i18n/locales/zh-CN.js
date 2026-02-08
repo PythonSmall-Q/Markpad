@@ -48,6 +48,8 @@ export default {
             codeBlock: '代码块',
             link: '插入链接',
             image: '插入图片',
+            video: '插入视频',
+            audio: '插入音频',
             table: '插入表格',
             hr: '分隔线',
             preview: '预览',

@@ -211,7 +211,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy cloudflare-deploy --project-name=mark-pad --branch=production --commit-dirty=true --commit-message="Release ${{ env.VERSION }}"
+          command: pages deploy cloudflare-deploy --project-name=mark-pad --branch=master --commit-dirty=true --commit-message="Release ${{ env.VERSION }}"
       
       - name: Output deployment URL
         run: |
@@ -223,5 +223,5 @@ jobs:
           echo "   1. Go to Cloudflare Pages dashboard"
           echo "   2. Select 'mark-pad' project"
           echo "   3. Go to Settings > Builds & deployments"
-          echo "   4. Set Production branch to: production"
+          echo "   4. Set Production branch to: master"
  

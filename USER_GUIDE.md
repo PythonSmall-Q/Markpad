@@ -247,7 +247,7 @@ A: 当前版本不内置云同步，但你可以将文档保存在 OneDrive、Dr
 - `Ctrl+I`: 斜体
 - `Ctrl+F`: 搜索
 - `Ctrl+Z`: 撤销
-- `Ctrl+Y`: 重做
+- `Ctrl+Shift+Z` 或 `Ctrl+Y`: 重做
 
 ### 视图操作
 - `F11`: 全屏

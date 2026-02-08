@@ -48,6 +48,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
         ipcRenderer.on('menu:close-document', () => callback('close-document'))
 
         // 编辑菜单
+        ipcRenderer.on('menu:undo', () => callback('undo'))
+        ipcRenderer.on('menu:redo', () => callback('redo'))
         ipcRenderer.on('menu:find', () => callback('find'))
         ipcRenderer.on('menu:replace', () => callback('replace'))
 

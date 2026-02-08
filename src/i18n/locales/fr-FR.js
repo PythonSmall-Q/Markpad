@@ -42,6 +42,8 @@ export default {
             codeBlock: 'Bloc de code',
             link: 'Insérer un lien',
             image: 'Insérer une image',
+            video: 'Insérer une vidéo',
+            audio: 'Insérer un audio',
             table: 'Insérer un tableau',
             hr: 'Ligne horizontale',
             preview: 'Aperçu',

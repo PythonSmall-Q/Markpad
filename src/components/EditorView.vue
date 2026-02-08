@@ -71,7 +71,7 @@ function initEditor() {
     usageStatistics: false,
     toolbarItems: [],
     hideModeSwitch: false,
-    // 禁用编辑器默认快捷键以避免与应用快捷键冲突
+    // 禁用编辑器默认快捷键，使用自定义的快捷键处理
     useCommandShortcut: false,
     events: {
       change: handleEditorChange
@@ -171,6 +171,20 @@ function handleToolbarCommand(command) {
         const displayUrl = collapseBase64Url(command.url)
         const markdown = `![${command.alt}](${displayUrl})`
         editor.insertText(markdown)
+      }
+      break
+    case 'video':
+      if (command.url && command.title) {
+        // Insert HTML5 video player with controls
+        const videoHtml = `\n<video controls width="100%" style="max-width: 800px;">\n  <source src="${command.url}" type="video/mp4">\n  Your browser does not support the video tag.\n</video>\n\n*${command.title}*\n`
+        editor.insertText(videoHtml)
+      }
+      break
+    case 'audio':
+      if (command.url && command.title) {
+        // Insert HTML5 audio player with controls
+        const audioHtml = `\n<audio controls style="width: 100%; max-width: 500px;">\n  <source src="${command.url}" type="audio/mpeg">\n  Your browser does not support the audio tag.\n</audio>\n\n*${command.title}*\n`
+        editor.insertText(audioHtml)
       }
       break
     case 'table':
@@ -330,6 +344,26 @@ function togglePreview() {
   }
 }
 
+function undo() {
+  if (!editorInstance) return
+  try {
+    editorInstance.exec('undo')
+    editorInstance.focus()
+  } catch (error) {
+    console.warn('Undo not available:', error)
+  }
+}
+
+function redo() {
+  if (!editorInstance) return
+  try {
+    editorInstance.exec('redo')
+    editorInstance.focus()
+  } catch (error) {
+    console.warn('Redo not available:', error)
+  }
+}
+
 function handleFormat(action, data) {
   if (!editorInstance) return
   
@@ -373,7 +407,9 @@ defineExpose({
   performSearch,
   performReplace,
   togglePreview,
-  handleFormat
+  handleFormat,
+  undo,
+  redo
 })
 </script>
 
