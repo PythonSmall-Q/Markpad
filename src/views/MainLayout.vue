@@ -85,6 +85,9 @@ onMounted(async () => {
   // 监听窗口关闭事件
   windowAPI.onBeforeClose(handleWindowClose)
   
+  // 监听菜单事件
+  setupMenuListeners()
+  
   // Setup auto-update event listeners
   setupAutoUpdate()
   
@@ -98,8 +101,111 @@ onMounted(async () => {
   }
 })
 
+function setupMenuListeners() {
+  // 只在 Electron 环境下设置菜单监听
+  if (!window.electronAPI || !window.electronAPI.onMenuEvent) return
+  
+  window.electronAPI.onMenuEvent((action, data) => {
+    console.log('Menu action:', action, data)
+    
+    switch (action) {
+      // 文件菜单
+      case 'new-document':
+        headerBarRef.value?.handleNewFile()
+        break
+      case 'open-file':
+        headerBarRef.value?.handleOpenFile()
+        break
+      case 'save-file':
+        headerBarRef.value?.handleSaveFile()
+        break
+      case 'save-file-as':
+        headerBarRef.value?.handleSaveAs()
+        break
+      case 'export-html':
+        headerBarRef.value?.handleExport('html')
+        break
+      case 'export-pdf':
+        headerBarRef.value?.handleExport('pdf')
+        break
+      case 'export-markdown':
+        headerBarRef.value?.handleExport('markdown')
+        break
+      case 'close-document':
+        if (activeDocument.value) {
+          documentsStore.closeDocument(activeDocument.value.id)
+        }
+        break
+      
+      // 编辑菜单
+      case 'find':
+        showSearchDialog.value = true
+        showReplaceMode.value = false
+        break
+      case 'replace':
+        showSearchDialog.value = true
+        showReplaceMode.value = true
+        break
+      
+      // 视图菜单
+      case 'toggle-sidebar':
+        // TODO: 实现侧边栏切换
+        ElMessage.info('Toggle sidebar - Coming soon')
+        break
+      case 'toggle-preview':
+        editorViewRef.value?.togglePreview()
+        break
+      
+      // 格式菜单（这些需要编辑器支持）
+      case 'format-bold':
+      case 'format-italic':
+      case 'format-strikethrough':
+      case 'insert-link':
+      case 'insert-image':
+      case 'insert-code':
+      case 'insert-table':
+        editorViewRef.value?.handleFormat(action)
+        break
+      case 'format-heading':
+        editorViewRef.value?.handleFormat('heading', data)
+        break
+      
+      // 帮助菜单
+      case 'welcome':
+        if (activeDocument.value) {
+          documentsStore.closeDocument(activeDocument.value.id)
+        }
+        break
+      case 'check-updates':
+        if (updateAPI) {
+          window.__manualUpdateCheck = true
+          updateAPI.check()
+        }
+        break
+      case 'about':
+        showSettingsPage.value = true
+        break
+    }
+  })
+}
+
 function setupAutoUpdate() {
   if (!updateAPI) return
+  
+  // Listen for checking update
+  updateAPI.onChecking(() => {
+    console.log('Checking for updates...')
+  })
+  
+  // Listen for update not available
+  updateAPI.onUpdateNotAvailable((info) => {
+    console.log('No updates available, current version:', info?.version)
+    // Only show message if user manually checked
+    if (window.__manualUpdateCheck) {
+      ElMessage.success(t('settings.about.latestVersion'))
+      window.__manualUpdateCheck = false
+    }
+  })
   
   // Listen for update available
   updateAPI.onUpdateAvailable((info) => {
@@ -113,12 +219,8 @@ function setupAutoUpdate() {
       }
     ).then(() => {
       // User chose to download
-      if (settingsStore.autoDownloadUpdates) {
-        updateAPI.download()
-      } else {
-        ElMessage.info(t('settings.update.downloading'))
-        updateAPI.download()
-      }
+      ElMessage.info(t('settings.update.downloading'))
+      updateAPI.download()
     }).catch(() => {
       // User chose to remind later
       ElMessage.info(t('settings.update.downloadLater'))
@@ -128,7 +230,11 @@ function setupAutoUpdate() {
   // Listen for download progress
   updateAPI.onDownloadProgress((progress) => {
     const percent = Math.round(progress.percent)
-    ElMessage.info(`${t('settings.update.downloading')}: ${percent}%`)
+    console.log(`Download progress: ${percent}%`)
+    // Show progress message every 25%
+    if (percent % 25 === 0) {
+      ElMessage.info(`${t('settings.update.downloading')}: ${percent}%`)
+    }
   })
   
   // Listen for update downloaded
@@ -148,6 +254,12 @@ function setupAutoUpdate() {
       // User chose to restart later
       ElMessage.info(t('settings.update.restartLater'))
     })
+  })
+  
+  // Listen for errors
+  updateAPI.onError((error) => {
+    console.error('Update error:', error)
+    ElMessage.error(`${t('settings.update.checkFailed')}: ${error.error || 'Unknown error'}`)
   })
 }
 

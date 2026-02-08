@@ -319,13 +319,61 @@ function performReplace(options) {
   }
 }
 
+function togglePreview() {
+  if (!editorInstance) return
+  
+  const currentMode = editorInstance.getCurrentPreviewStyle()
+  if (currentMode === 'vertical') {
+    editorInstance.changePreviewStyle('tab')
+  } else {
+    editorInstance.changePreviewStyle('vertical')
+  }
+}
+
+function handleFormat(action, data) {
+  if (!editorInstance) return
+  
+  try {
+    switch (action) {
+      case 'format-bold':
+        editorInstance.exec('bold')
+        break
+      case 'format-italic':
+        editorInstance.exec('italic')
+        break
+      case 'format-strikethrough':
+        editorInstance.exec('strike')
+        break
+      case 'format-heading':
+        editorInstance.exec('heading', { level: data || 1 })
+        break
+      case 'insert-link':
+        editorInstance.exec('link')
+        break
+      case 'insert-image':
+        editorInstance.exec('image')
+        break
+      case 'insert-code':
+        editorInstance.exec('code')
+        break
+      case 'insert-table':
+        editorInstance.exec('table')
+        break
+    }
+  } catch (error) {
+    console.warn('Format action not supported:', action, error)
+  }
+}
+
 defineExpose({
   getContent: () => editorInstance?.getMarkdown() || '',
   setContent: (content) => editorInstance?.setMarkdown(content || ''),
   insertText: (text) => editorInstance?.insertText(text),
   getEditorInstance: () => editorInstance,
   performSearch,
-  performReplace
+  performReplace,
+  togglePreview,
+  handleFormat
 })
 </script>
 

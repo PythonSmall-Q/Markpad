@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import fs from 'fs/promises'
 import { existsSync } from 'fs'
+import os from 'os'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -198,12 +199,12 @@ function createMenu() {
             submenu: [
                 {
                     label: 'Toggle Sidebar',
-                    accelerator: 'CmdOrCtrl+B',
+                    accelerator: 'CmdOrCtrl+Shift+B',
                     click: () => mainWindow?.webContents.send('menu:toggle-sidebar')
                 },
                 {
                     label: 'Toggle Preview',
-                    accelerator: 'CmdOrCtrl+P',
+                    accelerator: 'CmdOrCtrl+Shift+P',
                     click: () => mainWindow?.webContents.send('menu:toggle-preview')
                 },
                 { type: 'separator' },
@@ -572,56 +573,62 @@ function initAutoUpdater() {
     // 更新检查错误
     autoUpdater.on('error', (error) => {
         console.error('Update error:', error)
-        sendUpdateMessage('error', { error: error.message })
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('updater:error', { error: error.message })
+        }
     })
 
     // 检查更新
     autoUpdater.on('checking-for-update', () => {
         console.log('Checking for updates...')
-        sendUpdateMessage('checking')
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('updater:checking')
+        }
     })
 
     // 发现新版本
     autoUpdater.on('update-available', (info) => {
         console.log('Update available:', info)
-        sendUpdateMessage('available', {
-            version: info.version,
-            releaseDate: info.releaseDate,
-            releaseName: info.releaseName,
-            releaseNotes: info.releaseNotes
-        })
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('updater:update-available', {
+                version: info.version,
+                releaseDate: info.releaseDate,
+                releaseName: info.releaseName,
+                releaseNotes: info.releaseNotes
+            })
+        }
     })
 
     // 没有新版本
     autoUpdater.on('update-not-available', (info) => {
         console.log('Update not available')
-        sendUpdateMessage('not-available', { version: info.version })
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('updater:not-available', { version: info.version })
+        }
     })
 
     // 下载进度
     autoUpdater.on('download-progress', (progressObj) => {
-        sendUpdateMessage('download-progress', {
-            percent: progressObj.percent,
-            transferred: progressObj.transferred,
-            total: progressObj.total,
-            bytesPerSecond: progressObj.bytesPerSecond
-        })
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('updater:download-progress', {
+                percent: progressObj.percent,
+                transferred: progressObj.transferred,
+                total: progressObj.total,
+                bytesPerSecond: progressObj.bytesPerSecond
+            })
+        }
     })
 
     // 下载完成
     autoUpdater.on('update-downloaded', (info) => {
         console.log('Update downloaded:', info)
-        sendUpdateMessage('downloaded', {
-            version: info.version,
-            releaseDate: info.releaseDate
-        })
+        if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.send('updater:update-downloaded', {
+                version: info.version,
+                releaseDate: info.releaseDate
+            })
+        }
     })
-}
-
-function sendUpdateMessage(action, data = {}) {
-    if (mainWindow && !mainWindow.isDestroyed()) {
-        mainWindow.webContents.send('update-message', { action, ...data })
-    }
 }
 
 // IPC 处理器 - 更新相关
@@ -659,8 +666,6 @@ ipcMain.handle('updater:get-version', () => {
 
 // 系统信息
 ipcMain.handle('system:get-info', () => {
-    const os = require('os')
-
     return {
         platform: process.platform,
         platformName: getPlatformName(),

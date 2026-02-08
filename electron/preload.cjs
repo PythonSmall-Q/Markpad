@@ -35,20 +35,65 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onBeforeClose: (callback) => ipcRenderer.on('window:before-close', callback),
     closeConfirmed: (shouldClose) => ipcRenderer.send('window:close-confirmed', shouldClose),
 
+    // 菜单事件监听
+    onMenuEvent: (callback) => {
+        // 文件菜单
+        ipcRenderer.on('menu:new-document', () => callback('new-document'))
+        ipcRenderer.on('menu:open-file', () => callback('open-file'))
+        ipcRenderer.on('menu:save-file', () => callback('save-file'))
+        ipcRenderer.on('menu:save-file-as', () => callback('save-file-as'))
+        ipcRenderer.on('menu:export-html', () => callback('export-html'))
+        ipcRenderer.on('menu:export-pdf', () => callback('export-pdf'))
+        ipcRenderer.on('menu:export-markdown', () => callback('export-markdown'))
+        ipcRenderer.on('menu:close-document', () => callback('close-document'))
+
+        // 编辑菜单
+        ipcRenderer.on('menu:find', () => callback('find'))
+        ipcRenderer.on('menu:replace', () => callback('replace'))
+
+        // 视图菜单
+        ipcRenderer.on('menu:toggle-sidebar', () => callback('toggle-sidebar'))
+        ipcRenderer.on('menu:toggle-preview', () => callback('toggle-preview'))
+
+        // 格式菜单
+        ipcRenderer.on('menu:format-bold', () => callback('format-bold'))
+        ipcRenderer.on('menu:format-italic', () => callback('format-italic'))
+        ipcRenderer.on('menu:format-strikethrough', () => callback('format-strikethrough'))
+        ipcRenderer.on('menu:format-heading', (event, level) => callback('format-heading', level))
+        ipcRenderer.on('menu:insert-link', () => callback('insert-link'))
+        ipcRenderer.on('menu:insert-image', () => callback('insert-image'))
+        ipcRenderer.on('menu:insert-code', () => callback('insert-code'))
+        ipcRenderer.on('menu:insert-table', () => callback('insert-table'))
+
+        // 帮助菜单
+        ipcRenderer.on('menu:welcome', () => callback('welcome'))
+        ipcRenderer.on('menu:check-updates', () => callback('check-updates'))
+        ipcRenderer.on('menu:about', () => callback('about'))
+    },
+
     // 自动更新 API
     updateAPI: {
         check: () => ipcRenderer.invoke('updater:check'),
         download: () => ipcRenderer.invoke('updater:download'),
         install: () => ipcRenderer.invoke('updater:install'),
         getVersion: () => ipcRenderer.invoke('updater:get-version'),
+        onChecking: (callback) => {
+            ipcRenderer.on('updater:checking', () => callback())
+        },
         onUpdateAvailable: (callback) => {
             ipcRenderer.on('updater:update-available', (event, info) => callback(info))
+        },
+        onUpdateNotAvailable: (callback) => {
+            ipcRenderer.on('updater:not-available', (event, info) => callback(info))
         },
         onDownloadProgress: (callback) => {
             ipcRenderer.on('updater:download-progress', (event, progress) => callback(progress))
         },
         onUpdateDownloaded: (callback) => {
             ipcRenderer.on('updater:update-downloaded', (event, info) => callback(info))
+        },
+        onError: (callback) => {
+            ipcRenderer.on('updater:error', (event, error) => callback(error))
         }
     },
 

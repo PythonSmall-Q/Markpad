@@ -475,9 +475,21 @@ async function checkUpdate() {
   }
   
   try {
+    // Set flag for manual update check
+    window.__manualUpdateCheck = true
     ElMessage.info(t('settings.update.checking'))
-    await window.electronAPI.updateAPI.check()
+    const result = await window.electronAPI.updateAPI.check()
+    
+    if (result && !result.success) {
+      window.__manualUpdateCheck = false
+      if (result.error.includes('development')) {
+        ElMessage.warning(t('settings.update.desktopOnly'))
+      } else {
+        ElMessage.error(`${t('settings.update.checkFailed')}: ${result.error}`)
+      }
+    }
   } catch (error) {
+    window.__manualUpdateCheck = false
     console.error('Check update failed:', error)
     ElMessage.error(t('settings.update.checkFailed'))
   }

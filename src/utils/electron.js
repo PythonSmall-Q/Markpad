@@ -294,12 +294,30 @@ export const updateAPI = {
         }
     },
 
+    onChecking(callback) {
+        if (!isElectron()) {
+            return
+        }
+        if (window.electronAPI.updateAPI) {
+            window.electronAPI.updateAPI.onChecking(callback)
+        }
+    },
+
     onUpdateAvailable(callback) {
         if (!isElectron()) {
             return
         }
         if (window.electronAPI.updateAPI) {
             window.electronAPI.updateAPI.onUpdateAvailable(callback)
+        }
+    },
+
+    onUpdateNotAvailable(callback) {
+        if (!isElectron()) {
+            return
+        }
+        if (window.electronAPI.updateAPI) {
+            window.electronAPI.updateAPI.onUpdateNotAvailable(callback)
         }
     },
 
@@ -318,6 +336,15 @@ export const updateAPI = {
         }
         if (window.electronAPI.updateAPI) {
             window.electronAPI.updateAPI.onUpdateDownloaded(callback)
+        }
+    },
+
+    onError(callback) {
+        if (!isElectron()) {
+            return
+        }
+        if (window.electronAPI.updateAPI) {
+            window.electronAPI.updateAPI.onError(callback)
         }
     }
 }

@@ -192,7 +192,8 @@ defineExpose({
   handleSaveFile,
   handleSaveAs,
   handleOpenFile,
-  handleNewFile
+  handleNewFile,
+  handleExport
 })
 </script>
 
