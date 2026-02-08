@@ -14,9 +14,12 @@
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css'
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
 import { useDocumentsStore } from '@/store/documents'
 import { useSettingsStore } from '@/store/settings'
 import EditorToolbar from './EditorToolbar.vue'
+import logger from '@/utils/logger'
 
 const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
@@ -73,10 +76,29 @@ function initEditor() {
     hideModeSwitch: false,
     // 禁用编辑器默认快捷键，使用自定义的快捷键处理
     useCommandShortcut: false,
+    // 启用数学公式支持
+    customHTMLRenderer: {
+      latex(node) {
+        const generator = node.literal ? katex.renderToString(node.literal, {
+          displayMode: false,
+          throwOnError: false
+        }) : ''
+        return [{ type: 'html', content: generator }]
+      },
+      latexBlock(node) {
+        const generator = node.literal ? katex.renderToString(node.literal, {
+          displayMode: true,
+          throwOnError: false
+        }) : ''
+        return [{ type: 'html', content: generator }]
+      }
+    },
     events: {
       change: handleEditorChange
     }
   })
+  
+  logger.info('Editor initialized', 'Editor created with math support')
   
   // Apply theme
   if (theme.value === 'dark') {
@@ -193,6 +215,19 @@ function handleToolbarCommand(command) {
       // Insert a basic table template
       const tableTemplate = '\n| Header 1 | Header 2 | Header 3 |\n| -------- | -------- | -------- |\n| Cell 1   | Cell 2   | Cell 3   |\n| Cell 4   | Cell 5   | Cell 6   |\n\n'
       editor.insertText(tableTemplate)
+      logger.info('Insert table', 'Table template inserted')
+      break
+    case 'inlineMath':
+      // Insert inline math formula
+      const inlineMath = command.formula || 'E = mc^2'
+      editor.insertText(`$${inlineMath}$`)
+      logger.info('Insert inline math', `Formula: ${inlineMath}`)
+      break
+    case 'blockMath':
+      // Insert block math formula
+      const blockMath = command.formula || 'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}'
+      editor.insertText(`\n$$\n${blockMath}\n$$\n`)
+      logger.info('Insert block math', `Formula: ${blockMath}`)
       break
     case 'hr':
       editor.insertText('\n---\n')

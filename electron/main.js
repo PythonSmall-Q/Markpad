@@ -282,10 +282,6 @@ function createMenu() {
             label: 'Help',
             submenu: [
                 {
-                    label: 'Welcome Guide',
-                    click: () => mainWindow?.webContents.send('menu:welcome')
-                },
-                {
                     label: 'Help',
                     accelerator: 'F1',
                     click: () => mainWindow?.webContents.send('menu:help')

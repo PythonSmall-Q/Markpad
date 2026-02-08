@@ -40,6 +40,11 @@
       <AboutPage @close="showAboutPage = false" />
     </div>
     
+    <!-- Math Tutorial page (full screen overlay) -->
+    <div v-if="showMathTutorial" class="settings-overlay">
+      <MathTutorial @close="showMathTutorial = false" />
+    </div>
+    
     <!-- Search Dialog -->
     <SearchDialog 
       v-model="showSearchDialog"
@@ -64,6 +69,7 @@ import WelcomePage from '@/components/WelcomePage.vue'
 import SettingsPage from '@/components/SettingsPage.vue'
 import HelpPage from '@/components/HelpPage.vue'
 import AboutPage from '@/components/AboutPage.vue'
+import MathTutorial from '@/components/MathTutorial.vue'
 import SearchDialog from '@/components/SearchDialog.vue'
 import logger from '@/utils/logger'
 
@@ -74,6 +80,7 @@ const { t } = useI18n()
 const showSettingsPage = ref(false)
 const showHelpPage = ref(false)
 const showAboutPage = ref(false)
+const showMathTutorial = ref(false)
 const showSearchDialog = ref(false)
 const showReplaceMode = ref(false)
 const headerBarRef = ref(null)
@@ -192,15 +199,13 @@ function setupMenuListeners() {
         break
       
       // 帮助菜单
-      case 'welcome':
-        if (activeDocument.value) {
-          documentsStore.closeDocument(activeDocument.value.id)
-        }
-        logger.info('Menu action', 'Show welcome page')
-        break
       case 'help':
         showHelpPage.value = true
         logger.info('Menu action', 'Show help page')
+        break
+      case 'math-tutorial':
+        showMathTutorial.value = true
+        logger.info('Menu action', 'Show math tutorial')
         break
       case 'check-updates':
         if (updateAPI) {

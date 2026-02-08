@@ -87,6 +87,18 @@
         <el-button size="small" :icon="Grid" @click="emit('command', { type: 'table' })" />
       </el-tooltip>
       
+      <el-dropdown @command="handleInsertMath">
+        <el-button size="small">
+          <el-icon><Operation /></el-icon>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="inline">{{ t('editor.toolbar.inlineMath') }}</el-dropdown-item>
+            <el-dropdown-item command="block">{{ t('editor.toolbar.blockMath') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      
       <el-tooltip :content="t('editor.toolbar.hr')" placement="bottom">
         <el-button size="small" @click="emit('command', { type: 'hr' })">
           —
@@ -109,11 +121,12 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { 
   List, Menu, ChatLineSquare, Link, Picture, Grid, 
-  Document, View, ArrowDown 
+  Document, View, ArrowDown, Operation 
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import { useSettingsStore } from '@/store/settings'
 import { assetAPI } from '@/utils/electron'
+import logger from '@/utils/logger'
 
 const settingsStore = useSettingsStore()
 const { t } = useI18n()
@@ -156,6 +169,30 @@ async function handleInsertImage() {
       url: result.filePath, 
       alt: fileName 
     })
+    logger.info('Insert image', `Image inserted: ${fileName}`)
+  }
+}
+
+async function handleInsertMath(type) {
+  try {
+    const { value } = await ElMessageBox.prompt(
+      t('editor.dialog.enterFormula'), 
+      type === 'inline' ? t('editor.dialog.inlineMath') : t('editor.dialog.blockMath'),
+      {
+        confirmButtonText: t('editor.dialog.confirm'),
+        cancelButtonText: t('editor.dialog.cancel'),
+        inputPlaceholder: type === 'inline' ? 'E = mc^2' : 'x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}'
+      }
+    )
+    
+    if (value) {
+      emit('command', { 
+        type: type === 'inline' ? 'inlineMath' : 'blockMath',
+        formula: value
+      })
+    }
+  } catch {
+    // User cancelled
   }
 }
 </script>
