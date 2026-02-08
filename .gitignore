@@ -26,3 +26,11 @@ dist-electron
 # Electron
 out/
 build/
+
+# Code signing certificates (NEVER commit these!)
+*.pfx
+*.p12
+*.cer
+*.crt
+*.key
+sign.bat

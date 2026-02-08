@@ -96,8 +96,10 @@
                     ]
                 }
             ],
-            "publisherName": "PythonSmall-Q",
-            "verifyUpdateCodeSignature": false
+            "verifyUpdateCodeSignature": false,
+            "signtoolOptions": {
+                "publisherName": "PythonSmall-Q"
+            }
         },
         "publish": [
             {
