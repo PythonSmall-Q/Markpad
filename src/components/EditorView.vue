@@ -43,7 +43,7 @@ const documentsStore = useDocumentsStore()
 const settingsStore = useSettingsStore()
 
 const editorRef = ref(null)
-const showOutline = ref(false)
+const showOutline = ref(true)
 let editorInstance = null
 let updateTimer = null
 
